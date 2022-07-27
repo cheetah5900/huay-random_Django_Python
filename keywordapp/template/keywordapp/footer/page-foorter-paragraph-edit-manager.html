@@ -1,0 +1,80 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} แก้ไข Paragraph {%endblock title%} {%block content%}
+<h1 class="display-4 text-center">แก้ไข Paragraph ของ Footer</h1>
+<h2 class="text-center">Keyword : {{editData}}</h2>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} 
+{%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<section class="pink-bg padding-10 mt-5">
+  {%if footerId%}
+<form
+  method="POST"
+  action="{%url 'longtail-footer-edit-page' pageId footerId editData.id%}"
+>
+{%else%}
+<form
+  method="POST"
+  action="{%url 'longtail-sub-footer-edit-page' pageId subFooterId editData.id%}"
+>
+{%endif%}
+  {%csrf_token%}  
+  <div class="row mt-5">
+    <div class="col-md-6">
+  <label class="pt-3">Keyword แบบเต็ม</label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData}}"
+    name="longtail_name"
+  />
+  </div>
+  <div class="col-md-6">
+    <label class="pt-3">Link ของ Keyword แบบเต็ม</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{editData.link_href}}"
+      name="link_href"
+    />
+  </div>
+  <div class="col-md-6">
+  <label class="pt-3">Keyword แบบย่อ <span style="color:red;"> * ถ้าไม่กรอกจะเหมือนคำเต็ม</span></label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData.shorten_name}}"
+    name="shorten_name"
+  />
+  </div>
+  <div class="col-md-6">
+    <label class="pt-3">Link ของ Keyword แบบย่อ</label>
+    {%if editData.link_href_shorten_name == None%}
+    <input
+      type="text"
+      class="form-control"
+      value=""
+      name="link_href_shorten_name"
+    />
+    {%else%}
+    <input
+      type="text"
+      class="form-control"
+      value="{{editData.link_href_shorten_name}}"
+      name="link_href_shorten_name"
+    />
+    {%endif%}
+  </div>
+  <div class="text-center mt-3">
+    <button class="btn btn-blue" type="submit">ยืนยันการแก้ไข</button>
+    {%if footerId%}
+    <a href="{%url 'longtail-footer-page' pageId footerId%}" class="btn btn-red">ยกเลิก</a>
+    {%else%}
+    <a href="{%url 'longtail-sub-footer-page' pageId subFooterId%}" class="btn btn-red">ยกเลิก</a>
+    {%endif%}
+  </div>
+</form>
+</section>
+{%endblock content%}

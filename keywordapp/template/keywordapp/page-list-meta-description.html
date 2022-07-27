@@ -1,0 +1,289 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} จัดการ Meta Description {%endblock title%} {%block content%}
+{%load static%}
+<h1 class="display-3 text-center">จัดการ Meta Description</h1>
+<h3 class="text-center">หน้า : {{pageName}}</h3>
+<h3 class="text-center">Title ของหน้า : <span class="select-all">{{titleOfPage}}</span></h3>
+
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<!-- Button back -->
+<div class="pb-5 d-flex justify-content-between">
+  <a class="btn btn-gray" href="{%url 'pagelist-page' weblistId %}">
+    ย้อนกลับ
+  </a>
+  <button class="btn btn-blue" data-bs-toggle="modal" data-bs-target="#addMetaDescriptionModal">
+    เพิ่มคำ
+  </button>
+</div>
+<div class="row">
+  <div class="col-3">
+    <section class="pink-bg padding-30 mt-5">
+      <h2><span class="badge text-bg-primary">ความหนาแน่นคำ แบบเต็ม</span></h2>
+      <div class="table-responsive height-300">
+        <table class="table">
+          <tr>
+            <td class="table-primary text-center">Keyword แบบเต็ม</td>
+            <td class="table-primary text-center">จำนวน</td>
+          </tr>
+          {%for key,values in countFullKwKey.items %}
+          <tr>
+            <td>
+              {{key}}
+            </td>
+            <td class="text-center">
+              {{values}}
+            </td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+    </section>
+  </div>
+  <div class="col-3">
+    <section class="pink-bg padding-30 mt-5">
+      <h2><span class="badge text-bg-primary">ความหนาแน่นคำ แบบย่อ</span></h2>
+      <div class="table-responsive height-300">
+        <table class="table">
+          <tr>
+            <td class="table-primary text-center">Keyword แบบย่อ</td>
+            <td class="table-primary text-center">จำนวน</td>
+          </tr>
+          {%for key,values in countShortKwKey.items %}
+          <tr>
+            <td>
+              {{key}}
+            </td>
+            <td class="text-center">
+              {{values}}
+            </td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+    </section>
+  </div>
+  <div class="col-6">
+    <section class="pink-bg padding-30 mt-5">
+      <div class="table-responsive height-300">
+        <h2><span class="badge text-bg-primary">รวมคำ</span></h2>
+        <div>
+          <span class="header-22 fw-bold">จำนวน Keyword แบบเต็ม ({{lengthFullKeyword}})</span><br>
+          {%for x in metaDescription%}
+          <span class="select-all">{{x.full_keyword}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-2">
+          <span class="header-22 fw-bold">จำนวน Keyword แบบย่อ ({{lengthShortKeyword}})</span><br>
+          {%for x in metaDescription%}
+          <span class="select-all">{{x.shorten_keyword}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-2">
+          <form method="POST" action="{%url 'apply-short-keyword-page'%}">
+            {%csrf_token%}
+            <input type="hidden" name="page_id" value="{{pageId}}">
+            <input type="hidden" name="add_mode" value="not duplicate">
+            <input type="hidden" name="come_from" value="meta description">
+            <span class="header-22 fw-bold">แต่ละคำ ซ้ำไม่เกิน 1 ({{numberOfUniqueDataListToString}})</span>
+            <button type="submit" class="btn btn-blue">ใช้คำชุดนี้</button>
+          </form>
+          {%for x in uniqueDataList%}
+          <span class="select-all">{{x}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-2">
+          <form method="POST" action="{%url 'apply-short-keyword-page'%}">
+            {%csrf_token%}
+            <input type="hidden" name="page_id" value="{{pageId}}">
+            <input type="hidden" name="add_mode" value="not duplicate exceed 2">
+            <input type="hidden" name="come_from" value="meta description">
+            <span class="header-22 fw-bold">แต่ละคำ ซ้ำไม่เกิน 2 ({{numberOfUniqueDataListToString2WordExceed}})</span>
+            <button type="submit" class="btn btn-blue">ใช้คำชุดนี้</button>
+          </form>
+          {%for x in uniqueDataList2WordExceedList%}
+          <span class="select-all">{{x}}</span>
+          {%endfor%}
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="col-6">
+    <section class="pink-bg padding-30 mt-5">
+      <div class="table-responsive height-600">
+        {%if refinePopularListConverted or longtailListConverted or refineAndReplatedListConverted%}
+        <div class="text-center">
+          <span class="display-4">Keyword : <span class="select-all">{{keywordSearch}}</span></span>
+        </div>
+        <div class="row mt-5">
+          <div class="col-sm-4">
+            <table class="table table-hover mt-2 table-borderless">
+              <tr class="table-dark">
+                <td class="text-center" colspan="2">Refine Popular</td>
+              </tr>
+              {%for x in refinePopularListConverted %}
+              <tr class="table-info">
+                <form method="POST" href="{%url 'pagelist-meta-page' pageId %}">
+                  <td>
+                    {%csrf_token%}
+                    <span class="select-all">{{x}}</span>
+                    <input type="hidden" name="full_keyword" value="{{x}}">
+                    <input type="hidden" name="re_add" value="True" />
+                    <input type="hidden" name="keywordSearch" value="{{keywordSearch}}">
+                    <input type="hidden" name="refinePopularList" value="{{refinePopularList}}">
+                    <input type="hidden" name="longtailList" value="{{longtailList}}">
+                    <input type="hidden" name="refineAndReplatedList" value="{{refineAndReplatedList}}">
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-yellow"><i class="bi bi-plus-circle"></i></button>
+                  </td>
+                </form>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+          <div class="col-sm-4">
+            <table class="table table-hover mt-2 table-borderless">
+              <tr class="table-dark">
+                <td class="text-center" colspan="2">Longtail</td>
+              </tr>
+              {%for x in longtailListConverted %}
+              <tr class="table-info">
+                <form method="POST" href="{%url 'pagelist-meta-page' pageId %}">
+                  <td>
+                    {%csrf_token%}
+                    <span class="select-all">{{x}}</span>
+                    <input type="hidden" name="full_keyword" value="{{x}}">
+                    <input type="hidden" name="re_add" value="True" />
+                    <input type="hidden" name="keywordSearch" value="{{keywordSearch}}">
+                    <input type="hidden" name="refinePopularList" value="{{refinePopularList}}">
+                    <input type="hidden" name="longtailList" value="{{longtailList}}">
+                    <input type="hidden" name="refineAndReplatedList" value="{{refineAndReplatedList}}">
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-yellow"><i class="bi bi-plus-circle"></i></button>
+                  </td>
+                </form>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+          <div class="col-sm-4">
+            <table class="table table-hover mt-2 table-borderless">
+              <tr class="table-dark">
+                <td class="text-center" colspan="2">Refine/Related</td>
+              </tr>
+              {%for x in refineAndReplatedListConverted %}
+              <tr class="table-info">
+                <form method="POST" href="{%url 'pagelist-meta-page' pageId %}">
+                  <td>
+                    {%csrf_token%}
+                    <span class="select-all">{{x}}</span>
+                    <input type="hidden" name="full_keyword" value="{{x}}">
+                    <input type="hidden" name="re_add" value="True" />
+                    <input type="hidden" name="keywordSearch" value="{{keywordSearch}}">
+                    <input type="hidden" name="refinePopularList" value="{{refinePopularList}}">
+                    <input type="hidden" name="longtailList" value="{{longtailList}}">
+                    <input type="hidden" name="refineAndReplatedList" value="{{refineAndReplatedList}}">
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-yellow"><i class="bi bi-plus-circle"></i></button>
+                  </td>
+                </form>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+        </div>
+        {%endif%}
+        <h2><span class="badge text-bg-primary">
+            ผลการค้นหาล่าสุดจาก Google</span></h2>
+      </div>
+    </section>
+  </div>
+  <div class="col-6">
+    <section class="pink-bg padding-30 mt-5">
+      <div class="table-responsive height-600">
+        <h2><span class="badge text-bg-primary">ตารางข้อมูล</span></h2>
+        <table class="table mt-3">
+          <tr class="table-primary">
+            <th class="text-center" rowspan="2"><br>ลำดับ</th>
+            <th class="text-center" rowspan="2"><br>Keyword แบบเต็ม</th>
+            <th colspan="2" class="text-center">จำนวนคำที่ใช้</th>
+            <th class="text-center" rowspan="2"><br>Keyword แบบย่อ</th>
+            <th colspan="2" class="text-center">จำนวนคำที่ใช้</th>
+            <th class="text-center" rowspan="2"><br>ดำเนินการ</th>
+          </tr>
+          <tr class="table-primary">
+            <th class="text-center">หน้านี้</th>
+            <th class="text-center">ทุกหน้า</th>
+            <th class="text-center">หน้านี้</th>
+            <th class="text-center">ทุกหน้า</th>
+          </tr>
+          {%for md_id,b,c,d,e,f,g in zipDataForLoop %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td class="select-all">{{b}}</td>
+            <td class="text-center">{{c}}</td>
+            <td class="text-center">{{d}}</td>
+            <td class="text-center">{{e}}</td>
+            <td class="text-center">{{f}}</td>
+            <td class="text-center">{{g}}</td>
+            <td><a href="{% url 'pagelist-meta-edit-page' pageId md_id %}" class="btn btn-yellow"><i
+                  class="bi bi-pencil-square"></i></a> <a href="{% url 'pagelist-meta-del-page' pageId md_id %}"
+                class="btn btn-red" onclick="confirmDelete(event)"><i class="bi bi-trash"></i></a></td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+{% if alert %}
+<script>
+  Swal.fire("เสร็จแล้ว", "Keyword : {{alert}}", "{{status_alert}}");
+</script>
+{%endif%}
+{%endblock content%}
+
+{%block modal%}
+<div class="modal fade" id="addMetaDescriptionModal" tabindex="-1" aria-labelledby="aaa" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aaa">เพิ่มข้อมูล</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST">
+        {%csrf_token%}
+        <div class="modal-body">
+          <label class="">ค้นหา Keyword จาก Google</label>
+          <input type="text" class="form-control" value="" name="keyword_search" />
+          <input type="hidden" name="search_from" value="paragraph">
+          <input type="hidden" name="search_mode" value="ตัวเดียว">
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-blue" data-bs-dismiss="modal" onclick="ExecuteTimerAlert()">
+              ค้นหา
+            </button>
+          </div>
+      </form>
+
+      <form method="POST">
+        {%csrf_token%}
+        <label>Keyword แบบเต็ม</label>
+        <input type="text" class="form-control" name="full_keyword" />
+        <div class="text-center mt-3">
+          <button type="submit" class="btn btn-blue">เพิ่มข้อมูล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{%endblock modal%}
+
+{%block javascript%}
+<script src="{% static 'assets/js/custom/sweet-alert/sweet-alert.js' %}"></script>
+{%endblock javascript%}

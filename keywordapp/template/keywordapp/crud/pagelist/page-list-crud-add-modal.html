@@ -1,0 +1,49 @@
+<div
+class="modal fade"
+id="addPagelistModal"
+tabindex="-1"
+aria-labelledby="aaa"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="aaa">เพิ่มข้อมูล</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <form id="addPagelist" action="">
+      <div class="modal-body">
+    <label class="pt-3">ชื่อหน้า</label>
+    <input type="text" class="form-control" value="" name="page_name" />
+    <label class="pt-3">Title ของหน้า</label>
+    <input type="text" class="form-control" value="" name="title" />
+    <!-- ตัวแปรใส่ absolute url ไปให้ไฟล์ js -->
+    <input
+      type="hidden"
+      id="url_page_list_create"
+      data-url="{%url 'ajax_page_list_create'%}"
+    />
+      </div>
+      <div class="modal-footer">
+        <!-- ตัวแปรใส่ absolute url ไปให้ไฟล์ js -->
+        <input
+          type="hidden"
+          id="url_crud_ajax_update"
+          data-url="{%url 'crud_ajax_update'%}"
+        />
+        <button type="submit" class="btn btn-blue" data-bs-dismiss="modal">
+          บันทึก
+        </button>
+        <button type="button" class="btn btn-red" data-bs-dismiss="modal">
+          ยกเลิก
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

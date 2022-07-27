@@ -1,0 +1,116 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} จัดการโพสต์และเนื้อหา
+{%endblock title%} {%block header%}
+<script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+{%endblock header%} {%block content%} {%if message%}
+<div class="alert alert-success" role="alert">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<div class="text-center mt-3">
+  <h1 class="display-2">จัดการโพสต์</h1>
+</div>
+<br />
+<section class="pink-bg padding-30 mt-5">
+  <div class="text-center">
+    <h2><span class="badge text-bg-primary">เพิ่มบทความ</span></h2>
+  </div>
+  <form method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+    <div class="row">
+      <div class="col-sm-12 mb-2">
+        <h3>ชื่อบทความ</h3>
+        <input type="text" class="form-control" value="" name="article_title" />
+      </div>
+      <div class="col-sm-6 mb-2">
+        <h3>รูปปก</h3>
+        <input type="file" class="form-control" value="" name="article_image" />
+      </div>
+      <div class="col-sm-6 mb-2">
+        <h3>Alt รูปปก</h3>
+        <input type="text" class="form-control" value="" name="article_alt" />
+      </div>
+      <div class="col-sm-12">
+        <h3>เนื้อหา</h3>
+        <textarea id="editor" name="article_content"></textarea>
+      </div>
+      <div class="col-sm-12">
+        <h3>แท็ก (ใส่ได้ 3 อัน)</h3>
+        <div class="mt-3">
+          <label for="tag1">อันที่ 1</label>
+          <select name="tag1" class="form-control">
+            <option value="none">ไม่เลือก</option>
+            {%for x in tagData%}
+            <option value="{{x.tag_name}}">{{x.tag_name}}</option>
+            {%endfor%}
+          </select>
+        </div>
+        <div class="mt-3">
+          <label for="tag2">อันที่ 2</label>
+          <select name="tag2" class="form-control">
+            <option value="none">ไม่เลือก</option>
+            {%for x in tagData%}
+            <option value="{{x.tag_name}}">{{x.tag_name}}</option>
+            {%endfor%}
+          </select>
+        </div>
+        <div class="mt-3">
+          <label for="tag3">อันที่ 3</label>
+          <select name="tag3" class="form-control">
+            <option value="none">ไม่เลือก</option>
+            {%for x in tagData%}
+            <option value="{{x.tag_name}}">{{x.tag_name}}</option>
+            {%endfor%}
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-12 text-center mt-5">
+        <!-- <input type="hidden" name="search_mode" value="ตัวเดียว"> -->
+        <button type="submit" class="btn btn-blue">บันทึก</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<section class="my-5 pink-bg padding-50">
+  <h2><span class="badge text-bg-primary">ตารางข้อมูล</span></h2>
+  <div class="table-responsive">
+  <table class="table">
+    <tr class="table-primary">
+      <th>ลำดับ</th>
+      <th>ชื่อบทความ</th>
+      <th>ดูตัวอย่างหน้า</th>
+      <th>ดำเนินการ</th>
+    </tr>
+    {%for data in articleData%}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{data.article_title}}</td>
+      <td>
+        <a href="{%url 'article-post-page' data.id%}" class="btn btn-green"
+          >ดูตัวอย่าง</a
+        >
+      </td>
+      <td>
+        <a href="{%url 'article-post-page' data.id%}" class="btn btn-yellow"
+          ><i class="bi bi-pencil-square"></i
+        ></a>
+        <a
+          href="{%url 'article-post-page' data.id%}"
+          class="btn btn-red"
+          onclick="confirmDelete(event)"
+          ><i class="bi bi-trash"></i
+        ></a>
+      </td>
+    </tr>
+    {%endfor%}
+  </table>
+  </div>
+</section>
+
+<script>
+  ClassicEditor.create(document.querySelector("#editor")).catch((error) => {
+    console.error(error);
+  });
+</script>
+{%endblock content%} {%block javascript%} {%endblock javascript%}

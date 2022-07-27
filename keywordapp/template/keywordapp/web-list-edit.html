@@ -1,0 +1,27 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} แก้ไขชื่อเว็บ
+{%endblock title%} {%block content%}
+<h1 class="display-4 text-center">แก้ไขชื่อเว็บ</h1>
+<h2 class="text-center">เว็บ : {{editData.website_name}}</h2>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+<section class="pink-bg padding-30">
+  <form method="POST" action="{%url 'weblist-edit' editData.id%}">
+    {%csrf_token%}
+    <label class="pt-3">ชื่อเว็บ</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{editData.website_name}}"
+      name="website_name"
+    />
+    <br /><br />
+    <center>
+      <button class="btn btn-blue" type="submit">ยืนยันการแก้ไข</button>
+      <a href="{%url 'weblist-page' %}" class="btn btn-red">ยกเลิก</a>
+    </center>
+  </form>
+</section>
+{%endblock content%}

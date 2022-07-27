@@ -1,0 +1,43 @@
+<div
+class="modal fade"
+id="addMetaDescriptionModal"
+tabindex="-1"
+aria-labelledby="aaa"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="aaa">เพิ่มข้อมูล</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <form id="addMetaDescription" action="">
+      <div class="modal-body">
+    <label class="pt-3">Keyword แบบเต็ม</label>
+    <input type="text" class="form-control" value="" name="full_keyword_meta_des_create" />
+    <input type="hidden" value="{{pageData.id}}" name="page_id_meta_des_create" />
+    
+    <!-- ตัวแปรใส่ absolute url ไปให้ไฟล์ js -->
+    <input
+      type="hidden"
+      id="url_meta_des_create"
+      data-url="{%url 'ajax_meta_des_create'%}"
+    />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-blue" data-bs-dismiss="modal">
+          บันทึก
+        </button>
+        <button type="button" class="btn btn-red" data-bs-dismiss="modal">
+          ยกเลิก
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

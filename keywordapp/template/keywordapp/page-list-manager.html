@@ -1,0 +1,112 @@
+{%extends 'keywordapp/layout.html'%} {%block title%}จัดการข้อมูลหน้าทั้งหมด
+{%endblock title%} {%block content%} {%load static%}
+<h1 class="display-2 text-center">จัดการหน้า</h1>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<div class="d-flex justify-content-between mb-3">
+  <a class="btn btn-gray" href="{%url 'weblist-page' %}"> ย้อนกลับ </a>
+  <button class="btn btn-blue" data-bs-toggle="modal" data-bs-target="#addPagelistModal">เพิ่มหน้า</button>
+</div>
+<section class="my-5 pink-bg padding-10">
+  <h2><span class="badge text-bg-primary">ตารางข้อมูล</span></h2>
+  <div class="table-responsive">
+    <table class="table">
+      <tr class="table-primary">
+        <th class="text-center">ลำดับ</th>
+        <th class="text-center">ชื่อหน้า</th>
+        <th class="text-center">Title</th>
+        <th class="text-center">Description</th>
+        <th class="text-center">เนื้อหาของหน้า</th>
+        <th class="text-center">Footer</th>
+        <th class="text-center">ดูตัวอย่างหน้า</th>
+        <th class="text-center">ดำเนินการ</th>
+      </tr>
+      {%for data in pageListModel%}
+      <tr>
+        <td class="text-center">{{forloop.counter}}</td>
+        <td>{{data.page_name}}</td>
+        <td class="select-all">{{data.title}}</td>
+        <td class="text-center">
+          <a href="{%url 'pagelist-meta-page' data.id%}" class="btn btn-yellow"
+            ><i class="bi bi-search"></i
+          ></a>
+        </td>
+        <td class="text-center">
+          <a href="{%url 'page-header-page' data.id%}" class="btn btn-blue"
+            ><i class="bi bi-search"></i
+          ></a>
+        </td>
+        <td class="text-center">
+          <a href="{%url 'page-footer-page' data.id%}" class="btn btn-gray"
+            ><i class="bi bi-search"></i
+          ></a>
+        </td>
+        <td class="text-center">
+          <a href="{%url 'page-detail-page' data.id%}" class="btn btn-green"
+            ><i class="bi bi-search"></i
+          ></a>
+        </td>
+        <td class="text-center">
+          <a href="{%url 'pagelist-edit' data.id%}" class="btn btn-yellow"
+            ><i class="bi bi-pencil-square"></i
+          ></a>
+          <a
+            href="{%url 'pagelist-delete' data.id%}"
+            class="btn btn-red"
+            onclick="confirmDelete(event)"
+            ><i class="bi bi-trash"></i
+          ></a>
+        </td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+</section>
+
+{%endblock content%}
+{%block modal%}
+<div
+class="modal fade"
+id="addPagelistModal"
+tabindex="-1"
+aria-labelledby="aaa"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="aaa">เพิ่มข้อมูล</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <form method="POST" action="{%url 'pagelist-page' weblistId %}">
+      {%csrf_token%}
+      <div class="modal-body">
+    <label class="pt-3">ชื่อหน้า</label>
+    <input type="text" class="form-control" value="" name="page_name" />
+    <label class="pt-3">Title ของหน้า</label>
+    <input type="text" class="form-control" value="" name="title" />
+    <input type="hidden" value="{{weblistId}}" name="website_id" />
+   
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-blue" data-bs-dismiss="modal">
+          บันทึก
+        </button>
+        <button type="button" class="btn btn-red" data-bs-dismiss="modal">
+          ยกเลิก
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+{%endblock modal%}

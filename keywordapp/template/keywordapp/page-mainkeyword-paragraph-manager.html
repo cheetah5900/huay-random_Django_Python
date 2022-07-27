@@ -1,0 +1,302 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} จัดการ Header {%endblock title%} {%block content%}
+{%load static%}
+<h1 class="display-3 text-center">จัดการ Paragraph</h1>
+<h3 class="text-center">Header : <span class="select-all">{{keywordModel.keyword_name}}</span></h3>
+{%if status%}
+<div class="alert alert-success" role="success">{{status}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<!-- Button back -->
+<div class="pb-5 d-flex justify-content-between">
+  <a class="btn btn-gray" href="{%url 'page-header-page' pageId%}">
+    ย้อนกลับ
+  </a>
+  <button class="btn btn-blue" data-bs-toggle="modal" data-bs-target="#addLongtailModal">
+    เพิ่มคำ
+  </button>
+</div>
+
+<div class="row">
+  <div class="col-3">
+    <section class="pink-bg padding-30 mt-5">
+      <h2><span class="badge text-bg-primary">ความหนาแน่นคำ แบบเต็ม</span></h2>
+      <div class="table-responsive height-300">
+        <table class="table">
+          <tr>
+            <td class="table-primary text-center">Keyword แบบเต็ม</td>
+            <td class="table-primary text-center">จำนวน</td>
+          </tr>
+          {%for key,values in countFullKwKey.items %}
+          <tr>
+            <td>
+              {{key}}
+            </td>
+            <td class="text-center">
+              {{values}}
+            </td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+    </section>
+  </div>
+  <div class="col-3">
+    <section class="pink-bg padding-30 mt-5">
+      <h2><span class="badge text-bg-primary">ความหนาแน่นคำ แบบย่อ</span></h2>
+      <div class="table-responsive height-300">
+        <table class="table">
+          <tr>
+            <td class="table-primary text-center">Keyword แบบย่อ</td>
+            <td class="table-primary text-center">จำนวน</td>
+          </tr>
+          {%for key,values in countShortKwKey.items %}
+          <tr>
+            <td>
+              {{key}}
+            </td>
+            <td class="text-center">
+              {{values}}
+            </td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+    </section>
+  </div>
+  <div class="col-6">
+    <section class="pink-bg padding-30 mt-5">
+      <div class="table-responsive height-300">
+        <h2><span class="badge text-bg-primary">รวมคำ</span></h2>
+        <div>
+          <span class="header-22 fw-bold">จำนวน Keyword แบบเต็ม ({{lengthFullKeyword}})</span><br>
+          {%for x in longtailKeywordModel%}
+          <span class="select-all">{{x.longtail_name}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-2">
+          <span class="header-22 fw-bold">จำนวน Keyword แบบย่อ ({{lengthShortKeyword}})</span><br>
+          {%for x in longtailKeywordModel%}
+          <span class="select-all">{{x.shorten_name}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-2">
+          <form method="POST" action="{%url 'apply-short-keyword-page'%}">
+            {%csrf_token%}
+            <input type="hidden" name="page_id" value="{{pageId}}">
+            <input type="hidden" name="keyword_id" value="{{mainKeywordId}}">
+            <input type="hidden" name="add_mode" value="not duplicate">
+            <input type="hidden" name="come_from" value="main keyword paragraph">
+            <span class="header-22 fw-bold">แต่ละคำ ซ้ำไม่เกิน 1 ({{numberOfUniqueDataListToString}})</span>
+            <button type="submit" class="btn btn-blue">ใช้คำชุดนี้</button>
+          </form>
+          {%for x in uniqueDataList%}
+          <span class="select-all">{{x}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-2">
+          <form method="POST" action="{%url 'apply-short-keyword-page'%}">
+            {%csrf_token%}
+            <input type="hidden" name="page_id" value="{{pageId}}">
+            <input type="hidden" name="keyword_id" value="{{mainKeywordId}}">
+            <input type="hidden" name="add_mode" value="not duplicate exceed 2">
+            <input type="hidden" name="come_from" value="main keyword paragraph">
+            <span class="header-22 fw-bold">แต่ละคำ ซ้ำไม่เกิน 2 ({{numberOfUniqueDataListToString2WordExceed}})</span>
+            <button type="submit" class="btn btn-blue">ใช้คำชุดนี้</button>
+          </form>
+          {%for x in uniqueDataList2WordExceedList%}
+          <span class="select-all">{{x}}</span>
+          {%endfor%}
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="col-6">
+    <section class="pink-bg padding-30 mt-5">
+      <h2><span class="badge text-bg-primary">
+          ผลการค้นหาล่าสุดจาก Google</span></h2>
+      <div class="table-responsive height-600">
+        {%if refinePopularList or longtailList or refineAndReplatedList%}
+        <div class="text-center">
+          <span class="display-4">Keyword : <span class="select-all">{{keywordSearch}}</span></span>
+        </div>
+        <div class="row mt-5">
+          <div class="col-sm-4">
+            <table class="table table-hover mt-2 table-borderless">
+              <tr class="table-dark">
+                <td class="text-center" colspan="2">Refine Popular</td>
+              </tr>
+              {%for x in refinePopularList %}
+              <tr class="table-info">
+                <form method="POST" href="{%url 'longtail-mainkeyword-page' pageId  mainKeywordId %}">
+                  <td>
+                    {%csrf_token%}
+                    <span class="select-all">{{x}}</span>
+                    <input type="hidden" name="full_lt_keyword" value="{{x}}">
+                    <input type="hidden" name="re_add" value="True" />
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-yellow"><i class="bi bi-plus-circle"></i></button>
+                  </td>
+                </form>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+          <div class="col-sm-4">
+            <table class="table table-hover mt-2 table-borderless">
+              <tr class="table-dark">
+                <td class="text-center" colspan="2">Longtail</td>
+              </tr>
+              {%for x in longtailList %}
+              <tr class="table-info">
+                <form method="POST" href="{%url 'longtail-mainkeyword-page' pageId  mainKeywordId %}">
+                  <td>
+                    {%csrf_token%}
+                    <span class="select-all">{{x}}</span>
+                    <input type="hidden" name="full_lt_keyword" value="{{x}}">
+                    <input type="hidden" name="re_add" value="True" />
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-yellow"><i class="bi bi-plus-circle"></i></button>
+                  </td>
+                </form>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+          <div class="col-sm-4">
+            <table class="table table-hover mt-2 table-borderless">
+              <tr class="table-dark">
+                <td class="text-center" colspan="2">Refine/Related</td>
+              </tr>
+              {%for x in refineAndReplatedList %}
+              <tr class="table-info">
+                <form method="POST" href="{%url 'longtail-mainkeyword-page' pageId  mainKeywordId %}">
+                  <td>
+                    {%csrf_token%}
+                    <span class="select-all">{{x}}</span>
+                    <input type="hidden" name="full_lt_keyword" value="{{x}}">
+                    <input type="hidden" name="re_add" value="True" />
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-yellow"><i class="bi bi-plus-circle"></i></button>
+                  </td>
+                </form>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+        </div>
+        {%endif%}
+      </div>
+    </section>
+  </div>
+  <div class="col-6">
+    <section class="pink-bg padding-30 mt-5">
+      <div class="table-responsive height-600">
+        <h2><span class="badge text-bg-primary">ตารางข้อมูล</span></h2>
+        <table class="table mt-3">
+          <tr class="table-primary">
+            <th class="text-center" rowspan="2"><br>ลำดับ</th>
+            <th class="text-center" rowspan="2"><br>Keyword แบบเต็ม</th>
+            <th class="text-center" rowspan="2"><br>Link</th>
+            <th colspan="2" class="text-center">จำนวนคำที่ใช้</th>
+            <th class="text-center" rowspan="2"><br>Keyword แบบย่อ</th>
+            <th class="text-center" rowspan="2"><br>Link</th>
+            <th colspan="2" class="text-center">จำนวนคำที่ใช้</th>
+            <th class="text-center" rowspan="2"><br>ดำเนินการ</th>
+          </tr>
+          <tr class="table-primary">
+            <th class="text-center">หน้านี้</th>
+            <th class="text-center">ทุกหน้า</th>
+            <th class="text-center">หน้านี้</th>
+            <th class="text-center">ทุกหน้า</th>
+          </tr>
+          {%for lt_id,b,c,d,e,f,g,h,i in zipDataForLoop %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td class="select-all">{{b}}</td>
+            <td class="text-center">{{c}}</td>
+            <td class="text-center">{{d}}</td>
+            <td class="text-center">{{e}}</td>
+            <td class="text-center">{{f}}</td>
+            <td class="text-center">{{g}}</td>
+            <td class="text-center">{{h}}</td>
+            <td class="text-center">{{i}}</td>
+            <td>
+
+              {%if mainKeywordId%}
+              <a href="{%url 'longtail-mainkeyword-edit-page' pageId mainKeywordId lt_id%}" class="btn btn-yellow"><i
+                  class="bi bi-pencil-square"></i></a>
+              <a href="{%url 'longtail-mainkeyword-del-page' pageId mainKeywordId lt_id%}" class="btn btn-red"
+                onclick="confirmDelete(event)"><i class="bi bi-trash"></i></a>
+              {%else%}
+              <a href="{%url 'longtail-subkeyword-edit-page' pageId subKeywordId lt_id%}" class="btn btn-yellow"><i
+                  class="bi bi-pencil-square"></i></a>
+              <a href="{%url 'longtail-subkeyword-del-page' pageId subKeywordId lt_id%}" class="btn btn-red"
+                onclick="confirmDelete(event)"><i class="bi bi-trash"></i></a>
+              {%endif%}
+            </td>
+          </tr>
+          {%endfor%}
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+
+{%if alert%}
+<script>
+  Swal.fire("{{title}}", "Keyword : {{alert}}", "{{status_alert}}");
+</script>
+{%endif%}
+<script src="{% static 'assets/js/custom/sweet-alert/sweet-alert.js' %}"></script>
+{%endblock content%}
+
+{%block modal%}
+<div class="modal fade" id="addLongtailModal" tabindex="-1" aria-labelledby="aaa" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aaa">เพิ่มข้อมูล</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST">
+        {%csrf_token%}
+        <div class="modal-body">
+          <label class="">ค้นหา Keyword จาก Google</label>
+          <input type="text" class="form-control" value="" name="keyword_search" />
+          <input type="hidden" name="search_from" value="paragraph">
+          <input type="hidden" name="search_mode" value="ตัวเดียว">
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-blue" data-bs-dismiss="modal" onclick="ExecuteTimerAlert()">
+              ค้นหา
+            </button>
+          </div>
+      </form>
+
+      {%if mainKeywordId%}
+      <form method="POST" href="{%url 'longtail-mainkeyword-page' pageId mainKeywordId %}">
+        {%else%}
+        <form method="POST" href="{%url 'longtail-subkeyword-page' pageId subKeywordId%}">
+          {%endif%}
+          {%csrf_token%}
+          {%if subKeywordId%}
+          <input type="hidden" name="sub_keyword_id" value="{{subKeywordId}}">
+          {%endif%}
+          {%csrf_token%}
+          <label>Keyword แบบเต็ม</label>
+          <input type="text" class="form-control" name="full_lt_keyword" />
+          <input type="hidden" value="" name="short_lt_keyword" />
+          <input type="hidden" value="" name="link_href" />
+          <input type="hidden" value="" name="link_href_shorten_name" />
+          <div class="text-center mt-3">
+            <button type="submit" class="btn btn-blue">เพิ่มข้อมูล</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{%endblock modal%}

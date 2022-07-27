@@ -1,0 +1,27 @@
+<!--extends layout page-->
+{%extends 'keywordapp/layout.html'%} {%block title%} CRUD Content Manager
+{%endblock title%} {% load static%} {%block header%} {%endblock header%}
+-{%block content%}
+
+{% include 'keywordapp/crud/meta-description/meta-description-crud.html' %}
+
+{%endblock content%} 
+
+{%block modal%}
+{% include 'keywordapp/crud/meta-description/meta-description-crud-add-modal.html' %}
+{% include 'keywordapp/crud/meta-description/meta-description-crud-edit-modal.html' %}
+{%endblock modal%}
+ {%block javascript%}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="{%static 'assets/js/crud/pagelist/page-list-create.js'%}"></script>
+<script src="{%static 'assets/js/crud/metadescription/meta-des-create.js'%}"></script>
+<script src="{%static 'assets/js/crud/metadescription/meta-des-edit-getdatatoshow.js'%}"></script>
+<script src="{%static 'assets/js/crud/metadescription/meta-des-edit-update.js'%}"></script>
+<script src="{%static 'assets/js/crud/metadescription/meta-des-delete.js'%}"></script>
+<script src="{%static 'assets/js/crud/metadescription/meta-des-shorten-keyword.js'%}"></script>
+<script src="{%static 'assets/js/crud/example-edit-update.js'%}"></script>
+<script src="{%static 'assets/js/crud/example-edit-getdatatoshow.js'%}"></script>
+<script src="{%static 'assets/js/crud/example-delete.js'%}"></script>
+{%endblock javascript%}

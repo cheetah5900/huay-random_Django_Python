@@ -1,0 +1,145 @@
+<section class="pink-bg padding-30 mt-5">
+  <div class="row">
+    <div class="col-12">
+      <h3>ข้อมูลหน้า</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table class="table">
+        <tr>
+          <td class="table-primary" width="80px">ชื่อหน้า</td>
+          <td class="table-info">{{pageData.page_name}}</td>
+        </tr>
+        <tr>
+          <td class="table-primary" width="80px" style="border-bottom: 0px">
+            Title
+          </td>
+          <td class="table-info">{{pageData.title}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+<div class="mt-3">
+  <span class="text-center display-5">Meta Description</span>
+</div>
+<section class="pink-bg padding-30 mt-5">
+  <h2><span class="badge text-bg-primary">ตารางข้อมูล</span></h2>
+  <button data-bs-toggle="collapse" data-bs-target="#metaDescriptionSection" class="btn btn-warning collapse-button"
+    aria-controls="metaDesTable" aria-expanded="false" aria-label="Meta description table">
+    ย่อ/ขยาย
+  </button>
+  <div class="row collapse" id="metaDescriptionSection">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end mt-3 mb-2">
+        <button class="btn btn-blue" data-bs-toggle="modal" data-bs-target="#addMetaDescriptionModal">
+          เพิ่มข้อมูล
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table mt-3" id="metaDesTable">
+          <tr class="table-primary">
+            <th class="text-center" rowspan="2"><br />ลำดับ</th>
+            <th class="text-center" rowspan="2"><br />Keyword แบบเต็ม</th>
+            <th colspan="2" class="text-center">จำนวนคำที่ใช้</th>
+            <th rowspan="2"><br />Keyword แบบย่อ</th>
+            <th colspan="2" class="text-center">จำนวนคำที่ใช้</th>
+            <th class="text-center" rowspan="2"><br />ดำเนินการ</th>
+          </tr>
+          <tr class="table-primary">
+            <th class="text-center">หน้านี้</th>
+            <th class="text-center">ทุกหน้า</th>
+            <th class="text-center">หน้านี้</th>
+            <th class="text-center">ทุกหน้า</th>
+          </tr>
+          {%if pagelistMetaDesList %}
+          {%for md_id,b,c,d,e,f,g in pagelistMetaDesList %}
+          <tr id="meta-{{md_id}}">
+            <td>{{forloop.counter}}</td>
+            <td class="fullKeyword metaDesData" name="full_keyword">{{b}}</td>
+            <td class="text-center metaDesData" name="amount_this_page_fk">
+              {{c}}
+            </td>
+            <td class="text-center metaDesData" name="amount_all_page_fk">
+              {{d}}
+            </td>
+            <td class="shortKeyword metaDesData" name="shorten_keyword">
+              {{e}}
+            </td>
+            <td class="text-center metaDesData" name="amount_this_page_sk">
+              {{f}}
+            </td>
+            <td class="text-center metaDesData" name="amount_all_page_sk">
+              {{g}}
+            </td>
+            <td class="text-center">
+              <!-- EDIT DATA BUTTON -->
+              <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#editData"
+                onClick="editMetaDes({{md_id}})">
+                แก้ไข
+              </button>
+              <!-- ตัวแปรใส่ absolute url ไปให้ไฟล์ js -->
+              <input type="hidden" id="url_meta_des_delete" data-url="{%url 'ajax_meta_des_delete'%}" />
+              <button class="btn btn-red" onClick="deleteMetaDes({{md_id}},{{pageData.id}})">
+                ลบ
+              </button>
+            </td>
+          </tr>
+          {%endfor%}{%else%} ไม่มี Meta Description {%endif%}
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pink-bg padding-30 mt-5">
+  <h2><span class="badge text-bg-primary">รวมคำ</span></h2>
+  <button class="btn btn-warning collapse-button" data-bs-toggle="collapse" data-bs-target="#sumKeywordMetaDes">
+    ย่อ/ขยาย
+  </button>
+  <div class="row collapse" id="sumKeywordMetaDes">
+    <div class="col-12">
+      <div class="table-responsive">
+        <div class="mt-3">
+          <span class="header-22 fw-bold">จำนวน Keyword แบบเต็ม ({{lengthFullKeyword}})</span><br />
+          <span class="select-all">{{concatenateFk}}</span>
+        </div>
+        <div class="mt-5">
+          <span class="header-22 fw-bold">จำนวน Keyword แบบย่อ</span>
+          <span class="header-22 fw-bold" id="amount_shorten_kw_meta_des">({{lengthShortKeyword}})</span>
+          <br />
+          <span class="select-all" id="shorten_kw_meta_des">{{concatenateSk}}</span>
+        </div>
+        <div class="mt-5">
+          <form id="shortenUniqueKwMetaDes" action="">
+            <input type="hidden" name="page_id_meta_des_shorten_kw" value="{{pageData.id}}" />
+            <input type="hidden" name="add_mode_meta_des" value="not duplicate" />
+            <input type="hidden" name="come_from_meta_des" value="meta description" />
+
+            <!-- ตัวแปรใส่ absolute url ไปให้ไฟล์ js -->
+            <input type="hidden" id="url_meta_des_shorten_kw" data-url="{%url 'ajax_meta_des_shorten_kw'%}" />
+            <span class="header-22 fw-bold">แต่ละคำ ซ้ำไม่เกิน 1 ({{numberOfUniqueDataListToString}})</span>
+            <button type="submit" class="btn btn-blue">ใช้คำชุดนี้</button>
+          </form>
+          {%for x in uniqueDataList%}
+          <span class="select-all">{{x}}</span>
+          {%endfor%}
+        </div>
+        <div class="mt-5">
+          <form id="shortenUnique2ExceedKwMetaDes">
+            <input type="hidden" name="page_id" value="{{pageData.id}}" />
+            <input type="hidden" name="add_mode" value="not duplicate exceed 2" />
+            <input type="hidden" name="come_from" value="meta description" />
+            <span class="header-22 fw-bold" name="unique_2exceed_kw_meta_des">แต่ละคำ ซ้ำไม่เกิน 2
+              ({{numberOfUniqueDataListToString2WordExceed}})</span>
+            <button type="submit" class="btn btn-blue">ใช้คำชุดนี้</button>
+          </form>
+          {%for x in uniqueDataList2WordExceedList%}
+          <span class="select-all">{{x}}</span>
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

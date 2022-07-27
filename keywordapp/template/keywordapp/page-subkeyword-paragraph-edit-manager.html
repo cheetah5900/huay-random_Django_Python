@@ -1,0 +1,47 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} Sub Keyword Paragraph Edit
+{%endblock title%} {%block content%}
+<h1 class="display-4 text-center">Sub Keyword Paragraph Edit</h1>
+<h2 class="text-center">{{editData}}</h2>
+{%if message%}dd
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<form method="POST" action="">
+  {%csrf_token%}
+  <label class="pt-3">Full Keyword</label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData}}"
+    name="longtail_name"
+  />
+  <label class="pt-3"
+    >Shorten Keyword
+    <span style="color: red"> * ถ้าไม่กรอกจะเหมือนคำเต็ม</span></label
+  >
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData.shorten_name}}"
+    name="shorten_name"
+  />
+  <label class="pt-3">Link</label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData.link_href}}"
+    name="link_href"
+  />
+  <br /><br />
+  <div class="text-align:center;">
+    <button class="btn btn-blue" type="submit">ยืนยันการแก้ไข</button>
+    <a
+      href="{%url 'longtail-subkeyword-page' pageId subKeywordId%}"
+      class="btn btn-red"
+      >ยกเลิก</a
+    >
+  </div>
+</form>
+{%endblock content%}

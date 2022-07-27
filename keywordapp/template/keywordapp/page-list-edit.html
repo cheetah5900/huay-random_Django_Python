@@ -1,0 +1,34 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} แก้ไขรายละเอียดหน้า
+{%endblock title%} {%block content%}
+<h1 class="display-4 text-center">แก้ไขรายละเอียดหน้า</h1>
+<h2 class="text-center">หน้า : {{editData}}</h2>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+<section class="pink-bg padding-30">
+  <form method="POST" action="{%url 'pagelist-edit' editData.id%}">
+    {%csrf_token%}
+    <label class="pt-3">Page name</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{editData}}"
+      name="page_name"
+    />
+    <label class="pt-3">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      value="{{editData.title}}"
+      name="title"
+    />
+    <br /><br />
+    <center>
+      <button class="btn btn-blue" type="submit">ยืนยันการแก้ไข</button>
+      <a href="{%url 'pagelist-page' weblistId %}" class="btn btn-red">ยกเลิก</a>
+    </center>
+  </form>
+</section>
+{%endblock content%}

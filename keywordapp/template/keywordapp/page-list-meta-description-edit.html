@@ -1,0 +1,47 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} Meta Description Edit
+{%endblock title%}
+{%load static%}
+{%block content%}
+<h1 class="display-4 text-center">แก้ไข Meta Description</h1>
+<h2 class="text-center">{{editData}}</h2>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<section class="pink-bg padding-10 mt-5">
+<form
+  method="POST"
+  action="{%url 'pagelist-meta-edit-page' pageId editData.id%}"
+>
+  {%csrf_token%}  
+  <div class="row mt-5">
+    <div class="col-6">
+  <label class="pt-3">Keyword แบบเต็ม</label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData}}"
+    name="full_keyword"
+  />
+  </div>
+  <div class="col-6">
+  <label class="pt-3">Keyword แบบย่อ <span style="color:red;"> * ถ้าไม่กรอกจะเหมือนคำเต็ม</span></label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData.shorten_keyword}}"
+    name="shorten_keyword"
+  />
+</div>
+
+  <div class="text-center mt-3">
+    <button class="btn btn-blue" type="submit">ยืนยันการแก้ไข</button>
+    <a href="{%url 'pagelist-meta-page' pageId%}" class="btn btn-red"
+      >ยกเลิก</a
+    >
+  </div>
+</form>
+</section>
+{%endblock content%}

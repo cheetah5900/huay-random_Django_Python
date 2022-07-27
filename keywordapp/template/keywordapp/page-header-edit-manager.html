@@ -1,0 +1,50 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} Page Header Edit
+{%endblock title%} {%block content%}
+<h1 class="display-4 text-center">แก้ไข Header</h1>
+<h2 class="text-center">Header : {{editData}}</h2>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+<section class="pink-bg padding-10 mt-5">
+  {%if mainKeywordId%}
+<form method="POST" action="{%url 'page-header-edit-page' pageId mainKeywordId%}">
+  {%else%}
+  <form method="POST" action="{%url 'page-sub-header-edit-page' pageId mainKeywordId editData.id%}">
+  {%endif%}
+  {%csrf_token%}
+  <div class="row mt-5">
+    <div class="col-6">
+  <label class="pt-3">Keyword</label>
+  <input
+    type="text"
+    class="form-control"
+    value="{{editData}}"
+    name="keyword_name"
+  />
+  </div>
+    <div class="col-6">
+  <label class="pt-3">ระดับ Header</label>
+  <select
+    name="header"
+    class="form-control selectpicker"
+    id=""
+    data-live-search="true"
+  >
+    <option value="H1" {%if editData.header == "H1"%} selected {%endif%}>H1</option>
+    <option value="H2" {%if editData.header == "H2"%} selected {%endif%}>H2</option>
+    <option value="H3" {%if editData.header == "H3"%} selected {%endif%}>H3</option>
+    <option value="H4" {%if editData.header == "H4"%} selected {%endif%}>H4</option>
+    <option value="H5" {%if editData.header == "H5"%} selected {%endif%}>H5</option>
+    <option value="H6" {%if editData.header == "H6"%} selected {%endif%}>H6</option>
+    <option value="P" {%if editData.header == "P"%} selected {%endif%}>P</option>
+  </select>
+  </div>
+  <div class="text-center mt-3">
+    <button class="btn btn-blue" type="submit">ยืนยันการแก้ไข</button>
+    <a href="{%url 'page-header-page' pageId%}" class="btn btn-red">ยกเลิก</a>
+  </div>
+</form>
+</section>
+{%endblock content%}

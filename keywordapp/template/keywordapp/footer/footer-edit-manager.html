@@ -1,0 +1,60 @@
+{%extends 'keywordapp/layout.html'%} {%block title%} แก้ไข Footer {%endblock title%} {%block content%}
+{%load static%}
+<h1 class="display-3 text-center">แก้ไข Footer</h1>
+<h3 class="text-center">หน้า : {{pageName}}</h3>
+<h3 class="text-center">Title ของหน้า : {{titleOfPage}}</h3>
+<h3 class="text-center">Footer : {{footerData.keyword_name}}</h3>
+
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<!-- Button back -->
+<div class="pb-5">
+  <a class="btn btn-gray" href="{%url 'page-footer-page' pageId%}">
+    ย้อนกลับ
+  </a>
+</div>
+<section class="pink-bg padding-30 mt-5">
+  <h2><span class="badge text-bg-primary">เพิ่มคำ {{footerIdForSubFooter}}</span></h2>
+  {%if footerId %}
+  <form method="POST" action="{%url 'page-footer-edit-page' pageId footerId%}">
+    {%else%}
+    <form method="POST" action="{%url 'page-sub-footer-edit-page' pageId footerIdForSubFooter subFooterId %}">
+      {%endif%}
+      {%csrf_token%}
+      <div class="row">
+        <div class="col-6">
+          <label>Keyword</label>
+          {%if footerId %}
+          <input type="text" class="form-control" name="footer_keyword" value="{{footerData.keyword_name}}" />
+          {%else%}
+          <input type="text" class="form-control" name="footer_keyword" value="{{footerData.keyword_name}}" />
+          {%endif%}
+        </div>
+        <div class="col-6">
+          <label class="">ระดับ Header</label>
+          <select name="header" class="form-control selectpicker" id="" data-live-search="true">
+            <option value="H1" {%if footerData.header == "H1" %} selected {%endif%}>H1</option>
+            <option value="H2" {%if footerData.header == "H2" %} selected {%endif%}>H2</option>
+            <option value="H3" {%if footerData.header == "H3" %} selected {%endif%}>H3</option>
+            <option value="H4" {%if footerData.header == "H4" %} selected {%endif%}>H4</option>
+            <option value="H5" {%if footerData.header == "H5" %} selected {%endif%}>H5</option>
+            <option value="H6" {%if footerData.header == "H6" %} selected {%endif%}>H6</option>
+            <option value="P" {%if footerData.header == "P" %} selected {%endif%}>P</option>
+          </select>
+        </div>
+        <div class="text-center mt-3">
+          <input type="hidden" name="page_name" value="{{pageId}}">
+          <button type="submit" class="btn btn-blue">แก้ไขข้อมูล</button>
+          <a class="btn btn-danger" href="{%url 'page-footer-page' pageId%}">
+            ยกเลิก
+          </a>
+        </div>
+    </form>
+</section>
+
+
+{%endblock content%}

@@ -1,0 +1,102 @@
+{%extends 'keywordapp/layout.html'%} {%block title%}จัดการข้อมูลหน้าทั้งหมด
+{%endblock title%} {%block content%} {%load static%}
+<h1 class="display-2 text-center">จัดการเว็บ</h1>
+{%if message%}
+<div class="alert alert-success" role="success">{{message}}</div>
+{%endif%} {%if error%}
+<div class="alert alert-danger" role="alert">{{error}}</div>
+{%endif%}
+
+<div class="d-flex justify-content-end">
+  <button class="btn btn-blue" data-bs-toggle="modal" data-bs-target="#addWeblistModal">เพิ่มเว็บ</button>
+</div>
+<section class="mb-5 mt-2 pink-bg padding-10">
+  <h2><span class="badge text-bg-primary">ตารางข้อมูล</span></h2>
+  <div class="table-responsive">
+    <table class="table">
+      <tr class="table-primary">
+        <th class="text-center">ลำดับ</th>
+        <th class="text-center">ชื่อเว็บ</th>
+        <th class="text-center">รายละเอียด</th>
+        <th class="text-center">ดำเนินการ</th>
+      </tr>
+      {%for data in webListModel%}
+      <tr>
+        <td class="text-center">{{forloop.counter}}</td>
+        <td>{{data.website_name}}</td>
+        <td class="text-center">
+          <a href="{% url 'pagelist-page' data.id%}" class="btn btn-blue"
+            ><i class="bi bi-search"></i
+          ></a>
+        </td>
+        <td class="text-center">
+          <a href="{%url 'weblist-edit' data.id%}" class="btn btn-yellow"
+            ><i class="bi bi-pencil-square"></i
+          ></a>
+          <a
+            href="{%url 'weblist-delete' data.id%}"
+            class="btn btn-red"
+            onclick="confirmDelete(event)"
+            ><i class="bi bi-trash"></i
+          ></a>
+        </td>
+      </tr>
+      {%endfor%}
+    </table>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{%endblock content%}
+{%block modal%}
+<!-- MODAL -->
+<div
+class="modal fade"
+id="addWeblistModal"
+tabindex="-1"
+aria-labelledby="aaa"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="aaa">เพิ่มข้อมูล</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <form method="POST" action="{%url 'weblist-page' %}">
+      {%csrf_token%}
+      <div class="modal-body">
+    <label class="pt-3">ชื่อเว็บ</label>
+    <input type="text" class="form-control" value="" name="website_name" />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-blue" data-bs-dismiss="modal">
+          บันทึก
+        </button>
+        <button type="button" class="btn btn-red" data-bs-dismiss="modal">
+          ยกเลิก
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+{%endblock modal%}
+
