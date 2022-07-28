@@ -1,0 +1,46 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+
+<div class="wrap">
+ <section class="slot-home-body">
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <div class="navbar-header-feature d-flex justify-content-center mt-5">
+      <div class="navbar-header-login-logout">
+       <h1 class="text-center">เข้าสู่ระบบ โปรแกรมหวย</h1>
+       <form class="form_login" method="post">
+        {%csrf_token%}
+        <div class="col-sm-12 mt-5">
+         <label for="username">Username</label>
+         <input type="text" class="form-control" id="username" placeholder="Enter" name="username" />
+        </div>
+        <div class="col-sm-12 mt-5">
+         <label for="password">Password</label>
+         <input type="password" class="form-control" id="password" placeholder="Enter" name="password" />
+        </div>
+        <div class="col-sm-12 d-flex justify-content-center mt-5">
+         <div class="login-button-container">
+          <button type="submit">เข้าสู่ระบบ</button>
+         </div>
+        </div>
+       </form>
+      </div>
+     </div>
+    </div>
+
+   </div>
+  </div>
+</div>
+</div>
+
+{%if error%}
+<script>
+ swal("ข้อมูลไม่ถูกต้อง", "กรุณาตรวจสอบชื่อหรือรหัสผ่าน", "error");
+</script>
+{%endif%}
+
+{%endblock content%}
+{%block javascripts%}
+{%endblock javascripts%}

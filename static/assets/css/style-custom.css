@@ -1,0 +1,380 @@
+/* CUSTOM CSS BY CHEETAH */
+/* set padding header nav bar */
+.header {
+  padding: 0px !important;
+  background: none;
+}
+/* change font all web */
+body {
+  font-family: "Prompt-Light" !important;
+  font-size: 10px !important;
+  background-image: url("/static/images/background/bdg.webp");
+}
+.table-striped>tbody>tr:nth-of-type(odd){
+  background-color: #f9f9f940;
+}
+/* SET of pastel button */
+.btn-purple{
+  color:#000;
+  background-color: #B2A4FF;
+  border-color:#7f6bf5;
+}
+.btn-pink{
+  color:#000;
+  background-color: #FFB4B4;
+  border-color:#ee7272;
+}
+.btn-orange{
+  color:#000;
+  background-color: #FFDEB4;
+  border-color:#e1a250;
+}
+.btn-yellow{
+  color:#000;
+  background-color: #FFF9CA;
+  border-color:#e5d246;
+}
+.btn-light-blue{
+  color:#000;
+  background-color: #a8e1e5;
+  border-color:#81CACF;
+}
+.btn-green{
+  color:#000;
+  background-color: #8fb5a6;
+  border-color:#5A8F7B;
+}
+/* force h4 topic is prompt */
+h4 {
+  font-family: "Prompt" !important;
+}
+/* set font for p tag */
+p {
+  font-family: "Prompt-Light", sans-serif !important;
+}
+/* change font size nav bar */
+.menu .nav li {
+  font-size: 16px;
+  font-weight: 600;
+}
+/* set navbar footer at right */
+.footer .menu .nav li {
+  padding: 0px 5px !important;
+  float: right;
+}
+/* separator of header navbar */
+.seperator {
+  float: left;
+  width: 2px;
+  height: 25px;
+  background-color: #5d5d5d;
+  margin: 4px 15px 4px 15px;
+}
+/* remove border bottom */
+.menu .nav li:hover a,
+.menu .nav li.active a {
+  border-bottom: 0px;
+  padding: 10px 0px 8px 0px;
+}
+/* set default nav bar */
+.menu .nav li a,
+.menu .nav li.active a {
+  border-bottom: 0px;
+  padding: 0px 0px 8px 0px;
+}
+/* set default nav bar in mobile*/
+.menu .nav li a,
+.menu .nav li.active a {
+  padding: 10px 0px 8px 0px;
+}
+/* reset padding when hover */
+.p-0 {
+  padding: 0px !important;
+}
+/* set logo nav at bottom */
+.header .logo {
+  height: 135px;
+}
+/* when mobile will reduce logo height */
+@media (max-width: 767px) {
+  .header .logo {
+    height: auto;
+  }
+}
+/* set link to yellow text */
+.yellow-text {
+  color: #f3c600;
+}
+/* set font of button */
+.navbar-header-feature
+  .navbar-header-login-logout
+  .login-button-container
+  button {
+  font-size: 16px;
+}
+
+input {
+  font-size: 16px !important;
+}
+/* set footer text */
+.footer,
+.footer a,
+.footer p {
+  color: #707071 !important;
+  font-size: 12px !important;
+}
+.text-gray {
+  color: #707071 !important;
+  font-size: 12px !important;
+}
+/* set navbar footer padding */
+.nav > li > a {
+  padding: 10px 10px;
+}
+/* set navbar bg color empty */
+.nav-pills > li > a,
+.nav-pills > li > a:focus,
+.nav-pills > li > a:hover,
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:focus,
+.nav-pills > li.active > a:hover {
+  background-color: transparent;
+}
+/* margin top */
+.mt-0 {
+  margin-top: 0px;
+}
+.mt-1 {
+  margin-top: 3px;
+}
+.mt-2 {
+  margin-top: 3px;
+}
+.mt-3 {
+  margin-top: 7px;
+}
+.mt-5 {
+  margin-top: 20px;
+}
+.mb-0 {
+  margin-bottom: 0px;
+}
+.mb-1 {
+  margin-bottom: 3px;
+}
+.mb-2 {
+  margin-bottom: 5px;
+}
+.mb-3 {
+  margin-bottom: 7px;
+}
+.mb-4 {
+  margin-bottom: 10px;
+}
+.mr-3 {
+  margin-right: 14px;
+}
+/* jackpot relative move */
+.img-text-jackpot {
+  width: 261px !important;
+  margin-left: 60px !important;
+}
+.game-jackpot-container .center-container {
+  left: 120px !important;
+}
+.game-jackpot-container .jackpot {
+  left: 120px !important;
+}
+
+/* when mobile will reduce logo height */
+/* jackpot relative move */
+@media (max-width: 992px) {
+  .img-text-jackpot {
+    margin-left: 145px !important;
+  }
+  .game-jackpot-container {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  .img-text-jackpot {
+    margin-left: 90px !important;
+  }
+}
+@media (max-width: 430px) {
+  .img-text-jackpot {
+    margin-left: 60px !important;
+  }
+}
+/* image jackpot*/
+.main .img-text-jackpot {
+  background-image: url("/static/images/component/jackpot/text_Jackpot_th.webp") !important;
+}
+/* search input */
+.search-container:after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  background: url("/static/images/component/bkg_search.webp") no-repeat;
+ 
+  width: 230px;
+  height: 42px;
+}
+/* set font color of choose game type tab */
+.category-item a {
+  color: #999 !important;
+}
+/* hover to show yellow in category tab in demo page */
+#game_category_with_more li a:hover {
+  color: #e6c41a !important;
+}
+/* if active will show yellow */
+.game-container .game-categories > ul.category > li.active > a {
+  color: #e6c41a !important;
+}
+/* set font size in slot page */
+.img-play-now {
+  font-size: 12px !important;
+}
+/* image topic size */
+.img-size-topic {
+  height: 40px;
+}
+/* reset font in download page */
+.site-download .step,
+.tutorial-detail .step {
+  font-family: "Prompt", sans-serif !important;
+  font-size: 16px !important;
+}
+/* indent paragraph*/
+.paragraph {
+  text-indent: 36px !important;
+}
+/* all a tag should be yellow*/
+.paragraph a {
+  color: #e6c41a !important;
+}
+/* game's text */
+.slot-list .slot-item .slot-title,
+.top-slot-list .slot-item .slot-title {
+  font-size: 14px !important;
+}
+/* set span has underline */
+span.title {
+  font-size: 24px;
+  border-bottom: 1px solid #e6c41a !important;
+}
+/* set span has underline */
+h1.big-font {
+  font-size: 60px !important;
+}
+.font-size-18 {
+  font-size: 18px;
+}
+@media (max-width: 767px) {
+  /* reset footer nav style */
+  #mobile-menu-collapse2 {
+    display: none;
+  }
+  .result-hua-img{
+    width:300px!important;
+  }
+  /* hide game category when in mobile */
+  .game-container .game-categories {
+    display: none;
+  }
+}
+  .result-hua-img{
+    width:50%;
+  }
+/* reset min height of demo game */
+.game-container .index-game-select {
+  min-height: 200px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  top: 20px;
+  position: absolute;
+  background-color: #000000;
+  border: 1px solid
+    rgba(253, 218.99999999999994, 113.99999999999999, 0.9490196078431372);
+  min-width: 160px;
+  border-radius: 10px 10px 10px 10px;
+  padding: 10px 10px;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  display: block;
+}
+
+/* START : LINE POPUP */
+/* edit line height from bottom */
+div[id^="gb-widget-"] {
+  bottom: 130px !important;
+}
+/* remove word Get button of line popup */
+.sbsi7l-0 {
+  display: none !important;
+}
+/* increase size of line popup */
+.q8c6tt-0 {
+  width: 70px !important;
+  height: 70px !important;
+  position: absolute;
+  bottom: 20px;
+}
+/*reduce font size in button */
+.navbar-header-feature
+  .navbar-header-login-logout
+  .login-button-container
+  button {
+  font-size: 14px;
+}
+/* display flex */
+.d-flex {
+  display: flex !important;
+}
+.justify-content-center {
+  justify-content: center;
+}
+/* line height mobile */
+.footer + .navigation-mobile {
+  line-height: 2;
+}
+/* bigger font mobile */
+.navigation-mobile .list-menu li .link-nav {
+  font-size: 14px;
+}
+/* bigger awesome icon */
+.fa {
+  font-size: 24px;
+}
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  color: #e6c41a !important;
+}
+.dropdown-content a {
+  color: #ffffff !important;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* reset demo problem */
+.game-container .index-game-select .index-game-box {
+  display: block !important;
+}
+/* Justiy content center */
+.row .col-lg-3,
+.row .col-md-4,
+.row .col-sm-6 {
+  justify-content: center;
+  display: flex;
+}
