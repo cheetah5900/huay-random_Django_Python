@@ -55,8 +55,7 @@ def Home(request):
 
 
 def Result(request, type):
-    context = {}
-    
+    context = {}    
 
     resultCheckExpire = CheckExpireDate(request.user.id)
     if resultCheckExpire == "หมดเขตแล้ว":
@@ -74,7 +73,6 @@ def Result(request, type):
 
 
     profileObject = ProfileModel.objects.get(user_id=request.user.id)
-    day = profileObject.expire_date.strftime("%d")
     month = profileObject.expire_date.strftime("%m")
     year = profileObject.expire_date.strftime("%Y")
     thaiMonth = ConvertToThaiMonth(month)

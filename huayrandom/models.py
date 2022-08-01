@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 # Profile
 class ProfileModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    house_name = models.CharField(default='None', max_length=255)
     usertype = models.CharField(default='random', max_length=255)
     status = models.BooleanField(default=True)
     expire_date = models.DateTimeField(null=True, blank=True)
