@@ -80,6 +80,22 @@
           <div class="hidden-xs">
             <div class="navbar-header-feature d-flex justify-content-center">
               <div class="navbar-header-login-logout">
+                {%if user.is_authenticated%}
+                <form class="form_login" method="post">
+                  {%if user.profilemodel.usertype == 'admin' %}
+                  <div class="login-button-container ml-3">
+                    <a href="/adddata">
+                      <button type="button">เพิ่มข้อมูล</button>
+                    </a>
+                  </div>
+                  {%endif%}
+                  <div class="login-button-container">
+                    <a href="/logout">
+                      <button type="button">ออกจากระบบ</button>
+                    </a>
+                  </div>
+                </form>
+                {%endif%}
               </div>
             </div>
             </ul>

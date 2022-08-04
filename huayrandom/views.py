@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
 from .models import *
 from PIL import Image
 from PIL import ImageDraw
@@ -38,7 +40,7 @@ def Login(request):
 
     return render(request, 'login.html', context)
 
-
+@login_required
 def Home(request):
     context = {}
     resultCheckExpire = CheckExpireDate(request.user.id)
@@ -53,7 +55,7 @@ def Home(request):
 
     return render(request, 'index.html', context)
 
-
+@login_required
 def Result(request, type):
     context = {}    
 
@@ -63,7 +65,7 @@ def Result(request, type):
         pass
     else:
         resultCheckExpire = ""
-    #  Get Huay Data
+    #  Get Huay Datac
     data = HuayTypeModel.objects.get(link=type)
     textColorSplit = data.text_color.split(",")
     borderColorSplit = data.border_color.split(",")
@@ -86,7 +88,8 @@ def Result(request, type):
 
     return render(request, 'result/index.html', context)
 
-    
+def AddData(request):
+    pass
 def ConvertToThaiMonth(month):
     if month == '01':
         thaiMonth = 'มกราคม'

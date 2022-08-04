@@ -13,6 +13,9 @@ body {
 .table-striped>tbody>tr:nth-of-type(odd){
   background-color: #f9f9f940;
 }
+.ml-3{
+  margin-left: 20px;
+}
 /* SET of pastel button */
 .btn-purple{
   color:#000;
