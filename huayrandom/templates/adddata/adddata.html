@@ -1,0 +1,49 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">เพิ่มข้อมูล</h1>
+      </div>
+
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            </div>
+          </div>
+          <div class="slot-intro">
+            <h3 class="title shine-text underline">เพิ่มข้อมูลหวย</h3>
+            <table class="table table-striped">
+              <tr>
+                <th class="text-center shine-text">รายการ</th>
+                <th class="text-center shine-text">ช่องข้อมูล</th>
+              </tr>
+              <tr>
+                <td class="text-right">ชื่อ-สกุล : </td>
+                <td class="text-center">
+                  <div class="form-group">
+                    <input type="text" id="contactform-email" class="form-control" name="ContactForm[email]"
+                      aria-required="true" />
+                    <p class="help-block help-block-error" />
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div class="text-center">
+              <button class="btn btn-default">ส่งข้อมูล</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {% if resultCheckExpire %}
+    <script>
+      swal("หมดอายุแล้ว", "กรุณาติดต่อแอดมินเพื่อต่ออายุ", "error");
+    </script>
+    {% endif %}
+    {%endblock content%}

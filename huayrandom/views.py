@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from .models import *
+from huayrandom.models import *
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -89,7 +89,15 @@ def Result(request, type):
     return render(request, 'result/index.html', context)
 
 def AddData(request):
-    pass
+    context = {}
+    resultCheckExpire = CheckExpireDate(request.user.id)
+    if resultCheckExpire == "หมดเขตแล้ว":
+        pass
+    else:
+        resultCheckExpire = ""
+
+    return render(request, 'adddata/adddata.html', context)
+
 def ConvertToThaiMonth(month):
     if month == '01':
         thaiMonth = 'มกราคม'
