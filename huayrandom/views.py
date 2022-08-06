@@ -240,6 +240,7 @@ def Home(request, username):
         context['zipDataForLoopAfternoon'] = zipDataForLoopAfternoon
         context['zipDataForLoopEvening'] = zipDataForLoopEvening
         context['zipDataForLoopOther'] = zipDataForLoopOther
+        context['username'] = username
 
         return render(request, 'index.html', context)
     except:
@@ -247,7 +248,7 @@ def Home(request, username):
         pass
 
 
-def Result(request, type):
+def Result(request, username,link):
     context = {}
 
     resultCheckExpire = CheckExpireDate(request.user.id)
@@ -256,24 +257,35 @@ def Result(request, type):
         pass
     else:
         resultCheckExpire = ""
-    #  Get Huay Datac
-    data = HuayTypeModel.objects.get(link=type)
-    textColorSplit = data.text_color.split(",")
-    borderColorSplit = data.border_color.split(",")
+    context['username'] = username
+    context['link'] = link
+    try:
+        huayListObject = HuayListModel.objects.get(link=link)
+        data = HuayTypeModel.objects.get(huay_list=huayListObject)
+        textColorSplit = data.text_color.split(",")
+        borderColorSplit = data.border_color.split(",")
 
-    imgLocation = GenerateImageWIthText(data.page_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.data_pos_x, data.data_pos_y, data.data_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+        imgLocation = GenerateImageWIthText(data.page_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                            data.data_pos_x, data.data_pos_y, data.data_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
 
-    profileObject = ProfileModel.objects.get(user_id=request.user.id)
-    day = profileObject.expire_date.strftime("%d")
-    month = profileObject.expire_date.strftime("%m")
-    year = profileObject.expire_date.strftime("%Y")
-    thaiMonth = ConvertToThaiMonth(month)
-    expireDateThai = "{} {} {}".format(day, thaiMonth, year)
+        profileObject = ProfileModel.objects.get(user_id=request.user.id)
+        day = profileObject.expire_date.strftime("%d")
+        month = profileObject.expire_date.strftime("%m")
+        year = profileObject.expire_date.strftime("%Y")
+        thaiMonth = ConvertToThaiMonth(month)
+        expireDateThai = "{} {} {}".format(day, thaiMonth, year)
 
-    context['expireDateThai'] = expireDateThai
-    context['link'] = data.link
-    context['imgLocation'] = imgLocation
+        context['expireDateThai'] = expireDateThai
+        context['imgLocation'] = imgLocation
+    except:
+        request.session['error'] = 'error'
+        if 'error' in request.session:
+            context['error'] = request.session['error']
+            request.session['error'] = ''  # clear stuck error in session
+        return render(request, 'result/index.html', context)
+    if 'error' in request.session:
+        context['error'] = request.session['error']
+        request.session['error'] = ''  # clear stuck error in session
 
     return render(request, 'result/index.html', context)
 

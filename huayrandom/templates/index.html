@@ -20,7 +20,7 @@
               <h2 class="title shine-text underline">ช่วงเช้า</h2>
               {%for item1,item2,item3 in zipDataForLoopMorning%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
-                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+                <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
               </div>
               {%endfor%}
             </div>
@@ -28,7 +28,7 @@
               <h2 class="title shine-text underline">ช่วงบ่าย</h2>
               {%for item1,item2,item3 in zipDataForLoopAfternoon%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
-                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+                <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
               </div>
               {%endfor%}
             </div>
@@ -36,7 +36,7 @@
               <h2 class="title shine-text underline">ช่วงเย็น</h2>
               {%for item1,item2,item3 in zipDataForLoopEvening%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
-                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+                <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
               </div>
               {%endfor%}
             </div>
@@ -44,7 +44,7 @@
               <h2 class="title shine-text underline">อื่นๆ</h2>
               {%for item1,item2,item3 in zipDataForLoopOther%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
-                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+                <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
               </div>
               {%endfor%}
             </div>
