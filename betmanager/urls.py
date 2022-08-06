@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views
-from huayrandom.views import Login
+from huayrandom.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),

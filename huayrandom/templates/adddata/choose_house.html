@@ -1,0 +1,53 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">จัดการข้อมูลบ้าน</h1>
+      </div>
+
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            </div>
+          </div>
+          <div class="slot-intro">
+            <h3 class="title shine-text underline">เลือกบ้าน</h3>
+            <table class="table table-striped">
+              <tr>
+                <th class="text-center shine-text">ชื่อบ้าน</th>
+              </tr>
+              <tr>
+                <td class="text-center">
+                  <div class="form-group">
+                    <form method="POST">
+                      {%csrf_token%}
+                      <select name="house_name" class="form-control">
+                        <option value="none">เลือกบ้าน</option>
+                        {% for data in profileObject %}
+                        <option value="{{data.user.username}}">{{data.house_name}}</option>
+                        {% endfor %}
+                      </select>
+                      <div class="text-center mt-5">
+                        <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
+                      </div>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {%if error%}
+    <script>
+     swal("กรุณาเลือกชื่อบ้าน", "กรุณาเลือกชื่อบ้าน", "error");
+    </script>
+    {%endif%}
+    {%endblock content%}

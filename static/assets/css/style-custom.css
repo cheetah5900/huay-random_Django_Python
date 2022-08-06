@@ -7,7 +7,7 @@
 /* change font all web */
 body {
   font-family: "Prompt-Light" !important;
-  font-size: 10px !important;
+  font-size: 10px;
   background-image: url("/static/images/background/bdg.webp");
 }
 .table-striped>tbody>tr:nth-of-type(odd){
@@ -273,7 +273,7 @@ h1.big-font {
   font-size: 60px !important;
 }
 .font-size-18 {
-  font-size: 18px;
+  font-size: 18px!important;
 }
 @media (max-width: 767px) {
   /* reset footer nav style */

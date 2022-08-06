@@ -1,0 +1,87 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+
+<div class="wrap">
+ <section class="slot-home-body">
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <div class="navbar-header-feature d-flex justify-content-center mt-5">
+      <div class="navbar-header-login-logout">
+       <h1 class="text-center">เข้าสู่ระบบ โปรแกรมสุ่มหวย</h1>
+       <form class="form_login" method="post">
+        {%csrf_token%}
+        <div class="col-sm-12 mt-5">
+         <label for="username" style="font-size: 18px;">ID บ้าน</label>
+         <input type="text" class="form-control" id="username" placeholder="เช่น permsub695" name="username" />
+        </div>
+        <div class="col-sm-12 d-flex justify-content-center mt-5">
+         <div class="login-button-container">
+          <button type="submit">เข้าสู่ระบบ</button>
+         </div>
+        </div>
+       </form>
+      </div>
+     </div>
+    </div>
+
+   </div>
+  </div>
+  </section>  
+  
+  <section class="content">
+    <div class="container">
+      <div class="slot-intro">
+        <h3 class="title shine-text underline">โปรแกรมสุ่มหวยคืออะไร</h3>
+        <p>โปรแกรมสุ่มเลขแนวทาง ออโต้ ใบ้หวย สะดวก สำหรับนักพยากรณ์ ใส่เลข ใส่วันที่ อัตโนมัติ</p>
+        <h3 class="title shine-text underline">ทำงานอย่างไร</h3>
+        <p>สุ่มหวยตามเงื่อนไขต่อไปนี้</p>
+        <ul>
+          <li>ตัวเลข 2 ตัวหลักจะไม่ซ้ำกัน</li>
+          <li>ตัวเลข 2 ตัวหลักที่มีจำนวนน้อยกว่าจะอยู่ด้านหน้า เช่น 9 - 2 จะสลับเป็น 2 - 9 อัตโนมัติ</li>
+          <li>ตัวเลขรองแถวแรกจะเรียงจากน้อยไปมาก</li>
+          <li>ตัวเลขรองแถวที่สองจะเรียงจากน้อยไปมากเช่นกัน</li>
+          <li>ตัวเลขรองแถวที่สองจะไม่เป็นเลขสลับกับแถวแรก (เลขโต๊ด) เช่น ถ้าแถวแรกมี 32 แถวล่างจะไม่มี 23</li>
+        </ul>
+        <h3 class="title shine-text underline">วิธีบันทึกรูปภาพ</h3>
+        <h4 class="title shine-text underline">ในมือถือ</h4>
+        <p style="text-indent:36px;">กดค้างที่รูป แล้วกด "บันทึกรูป"</p>
+        <h4 class="title shine-text underline">ในคอมพิวเตอร์</h4>
+        <p style="text-indent:36px;">คลิกขวาที่รูป แล้วกด "บันทึกรูป"</p>
+        <h3 class="title shine-text underline">ค่าบริการ</h3>
+        <table class="table table-striped">
+          <tr>
+            <th class="text-center shine-text">รายละเอียด</th>
+            <th class="text-center shine-text">ลูกค้าใหม่</th>
+            <th class="text-center shine-text">ลูกค้าเก่า</th>
+          </tr>
+          <tr>
+            <td>ค่าบริการแรกเข้า กำหนดตำแหน่งตัวอักษร, สีตัวอักษร, ขอบสีตัวอักษร และ ขนาดตัวอักษร ลงบนรูป</td>
+            <td class="text-center">200 บาท</td>
+            <td class="text-center">-</td>
+          </tr>
+          <tr>
+            <td>ค่าบริการรายเดือน (ไม่จำกัดกลุ่ม)</td>
+            <td class="text-center">500 บาท</td>
+            <td class="text-center">500 บาท</td>
+          </tr>
+        </table>
+        <h3 class="title shine-text underline">วิธีสั่งซื้อ</h3>
+        <p style="text-indent:36px;">แอดไลน์ @789ojdsx (<a href="https://lin.ee/b1qJISw">https://lin.ee/b1qJISw</a>)
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
+
+{%if error%}
+<script>
+ swal("ไม่มีบ้านหวยนี้", "กรุณาตรวจสอบชื่อบ้าน หรือติดต่อ Admin", "error");
+</script>
+{%endif%}
+
+{%endblock content%}
+{%block javascripts%}
+{%endblock javascripts%}

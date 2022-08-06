@@ -10,10 +10,25 @@ import random
 from datetime import datetime
 import os
 
-expireDate = "20220928"
-expireDateThai = "27 กรกฎาคม 2565"
-houseName = "permsub695"
-houseNameThai = "เพิ่มทรัพย์ 695"
+
+def Index(request):
+    context = {}
+    if request.method == 'POST':
+        data = request.POST.copy()
+        getUsername = data.get('username')
+        # authen is function for User model for finding user
+        try:
+            userObject = User.objects.get(username=getUsername)
+            return redirect('home', userObject.username)
+        except:
+            request.session['error'] = 'ไม่มีบ้านดังกล่าว'
+            return redirect('index')
+
+    if 'error' in request.session:
+        context['error'] = request.session['error']
+        request.session['error'] = ''  # clear stuck error in session
+
+    return render(request, 'find_house.html', context)
 
 
 def Login(request):
@@ -22,42 +37,218 @@ def Login(request):
         data = request.POST.copy()
         getUsername = data.get('username')
         getPassword = data.get('password')
-        # authen is function for User model for finding user
-        user = authenticate(
-            username=getUsername, password=getPassword)
-
-        # if user is not empty
+        user = authenticate(username=getUsername, password=getPassword)
         if user is not None:
             login(request, user)
-            return redirect('Home')
+            return redirect('backend')
         else:
-            request.session['error'] = 'ชื่อหรือรหัสผ่านไม่ถูกต้อง'
-            return redirect('login')
+            request.session['error'] = "error"
+    if 'error' in request.session:
+        context['error'] = request.session['error']
+        request.session['error'] = ''  # clear stuck error in session
+    return render(request, 'login.html', context)
+
+
+@login_required
+def Backend(request):
+    context = {}
+
+    houseName = ""
+    if request.method == 'POST':
+        data = request.POST.copy()
+        houseName = data.get('house_name')
+        if(houseName != ""):
+            if(houseName == "none"):
+                request.session['error'] = "error"
+                return redirect('backend')
+            else:
+                return redirect('add_detail_picture', houseName)
+        else:
+            return redirect('backend')
+    profileObject = ProfileModel.objects.all()
+    context['profileObject'] = profileObject
 
     if 'error' in request.session:
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
 
-    return render(request, 'login.html', context)
+    return render(request, 'adddata/choose_house.html', context)
+
 
 @login_required
-def Home(request):
+def AddDetailPicture(request, username):
+    context = {}
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        huayListId = data.get('huay_list_id')
+        textFont = data.get('text_font')
+        textColor = data.get('text_color')
+        textPosX = data.get('text_pos_x')
+        textPosY = data.get('text_pos_y')
+        textSize = data.get('text_size')
+        borderWidth = data.get('border_width')
+        borderColor = data.get('border_color')
+        numberFont = data.get('number_font')
+        numberColor = data.get('number_color')
+        mainNumberPosX = data.get('main_number_pos_x')
+        mainNumberPosY = data.get('main_number_pos_y')
+        mainNumberSize = data.get('main_number_size')
+        dataPosX = data.get('data_pos_x')
+        dataPosY = data.get('data_pos_y')
+        dataFontsize = data.get('data_fontsize')
+        focusPosX = data.get('focus_pos_x')
+        focusPosY = data.get('focus_pos_y')
+        focusFontsize = data.get('focus_fontsize')
+        numberRow1PosX = data.get('number_row1_pos_x')
+        numberRow1PosY = data.get('number_row1_pos_y')
+        numberRow2PosX = data.get('number_row2_pos_x')
+        numberRow2PosY = data.get('number_row2_pos_y')
+        numberRowFontsize = data.get('number_row_fontsize')
+
+        try:
+            checkDuplicated = HuayTypeModel.objects.get(id=huayListId)
+            request.session['error'] = 'error'
+            return redirect('add_detail_picture', username)
+        except:
+            addData = HuayTypeModel()
+            addData.user = User.objects.get(id=request.user.id)
+            addData.huay_list = HuayListModel.objects.get(id=huayListId)
+            addData.font_text = textFont
+            addData.font_number = numberFont
+            addData.text_color = textColor
+            addData.border_size = borderWidth
+            addData.border_color = borderColor
+            addData.text_pos_x = textPosX
+            addData.text_pos_y = textPosY
+            addData.text_font_size = textSize
+            addData.data_pos_x = dataPosX
+            addData.data_pos_y = dataPosY
+            addData.data_font_size = dataFontsize
+            addData.main_num_pos_x = mainNumberPosX
+            addData.main_num_pos_y = mainNumberPosY
+            addData.main_num_font_size = mainNumberSize
+            addData.focus_num_pos_x = focusPosX
+            addData.focus_num_pos_y = focusPosY
+            addData.focus_num_font_size = focusFontsize
+            addData.row1_x = numberRow1PosX
+            addData.row1_y = numberRow1PosY
+            addData.row2_x = numberRow2PosX
+            addData.row2_y = numberRow2PosY
+            addData.row_font_size = numberRowFontsize
+            addData.save()
+
+            request.session['status'] = 'Done'
+
+            return redirect('add_detail_picture', username)
+
+    if 'error' in request.session:
+        context['error'] = request.session['error']
+        request.session['error'] = ''  # clear stuck error in session
+    if 'status' in request.session:
+        context['status'] = request.session['status']
+        request.session['status'] = ''  # clear stuck error in session
+
+    userObject = User.objects.get(username=username)
+    profileObject = ProfileModel.objects.get(user=userObject)
+
+    huayFilter = HuayTypeModel.objects.filter(user_id=request.user.id)
+    huayFilterList = []
+    for item in huayFilter:
+        huayFilterList.append(item.huay_list.short_name)
+
+    huayAll = HuayListModel.objects.all()
+    huayAllIdList = []
+    huayAllNameList = []
+    for itemAll in huayAll:
+        if str(itemAll) not in huayFilterList:
+            huayAllNameList.append(str(itemAll))
+            huayAllIdList.append(str(itemAll.id))
+    huayAllList = zip(huayAllNameList, huayAllIdList)
+
+    context['huayList'] = huayAllList
+    context['data'] = profileObject
+    return render(request, 'adddata/add_detail_picture.html', context)
+
+
+def Home(request, username):
     context = {}
     resultCheckExpire = CheckExpireDate(request.user.id)
     if resultCheckExpire == "หมดเขตแล้ว":
         pass
     else:
         resultCheckExpire = ""
-    context['houseName'] = houseName
-    context['houseNameThai'] = houseNameThai
-    context['expireDateThai'] = expireDateThai
-    context['resultCheckExpire'] = resultCheckExpire
+    try:
+        userObject = User.objects.get(username=username)
+        profileObject = ProfileModel.objects.get(user=userObject)
 
-    return render(request, 'index.html', context)
+        day = profileObject.expire_date.strftime("%d")
+        month = profileObject.expire_date.strftime("%m")
+        year = profileObject.expire_date.strftime("%Y")
+        thaiMonth = ConvertToThaiMonth(month)
+        expireDateThai = "{} {} {}".format(day, thaiMonth, year)
+        for x in range(0, 4):
+            print("X", x)
+            if x == 0:
+                huayObject = HuayListModel.objects.filter(time="07:00:00")
+            elif x == 1:
+                huayObject = HuayListModel.objects.filter(time="13:00:00")
+            elif x == 2:
+                huayObject = HuayListModel.objects.filter(time="19:00:00")
+            elif x == 3:
+                huayObject = HuayListModel.objects.filter(time="20:00:00")
 
-@login_required
+            huayShortNameList = []
+            huayLinkList = []
+            btnColorList = []
+
+            i = 1
+            listPurple = [1,5,9,13,17,21,25,29]
+            listOrange = [2,6,10,14,18,22,26,30]
+            listPink = [3,7,11,15,19,23,27,31]
+            listGreen = [4,8,12,16,20,24,28,32]
+
+            for item in huayObject:
+                huayShortNameList.append(item.short_name)
+                huayLinkList.append(item.link)
+                if i in listPurple:
+                    btnColorList.append('purple')
+                elif i in listOrange:
+                    btnColorList.append('orange')
+                elif i in listPink:
+                    btnColorList.append('pink')
+                elif i in listGreen:
+                    btnColorList.append('green')
+                i += 1
+            if x == 0:
+                zipDataForLoopMorning = zip(
+                    huayShortNameList, huayLinkList, btnColorList)
+            elif x == 1:
+                zipDataForLoopAfternoon = zip(
+                    huayShortNameList, huayLinkList, btnColorList)
+            elif x == 2:
+                zipDataForLoopEvening = zip(
+                    huayShortNameList, huayLinkList, btnColorList)
+            elif x == 3:
+                zipDataForLoopOther = zip(
+                    huayShortNameList, huayLinkList, btnColorList)
+
+        context['houseNameThai'] = profileObject.house_name
+        context['expireDateThai'] = expireDateThai
+        context['resultCheckExpire'] = resultCheckExpire
+        context['zipDataForLoopMorning'] = zipDataForLoopMorning
+        context['zipDataForLoopAfternoon'] = zipDataForLoopAfternoon
+        context['zipDataForLoopEvening'] = zipDataForLoopEvening
+        context['zipDataForLoopOther'] = zipDataForLoopOther
+
+        return render(request, 'index.html', context)
+    except:
+        # return redirect('index')
+        pass
+
+
 def Result(request, type):
-    context = {}    
+    context = {}
 
     resultCheckExpire = CheckExpireDate(request.user.id)
     if resultCheckExpire == "หมดเขตแล้ว":
@@ -73,20 +264,19 @@ def Result(request, type):
     imgLocation = GenerateImageWIthText(data.page_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
                                         data.data_pos_x, data.data_pos_y, data.data_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
 
-
     profileObject = ProfileModel.objects.get(user_id=request.user.id)
+    day = profileObject.expire_date.strftime("%d")
     month = profileObject.expire_date.strftime("%m")
     year = profileObject.expire_date.strftime("%Y")
     thaiMonth = ConvertToThaiMonth(month)
     expireDateThai = "{} {} {}".format(day, thaiMonth, year)
 
-    context['houseName'] = houseName
-    context['houseNameThai'] = houseNameThai
     context['expireDateThai'] = expireDateThai
     context['link'] = data.link
     context['imgLocation'] = imgLocation
 
     return render(request, 'result/index.html', context)
+
 
 def AddData(request):
     context = {}
@@ -97,6 +287,7 @@ def AddData(request):
         resultCheckExpire = ""
 
     return render(request, 'adddata/adddata.html', context)
+
 
 def ConvertToThaiMonth(month):
     if month == '01':
@@ -134,7 +325,7 @@ def CheckExpireDate(uid):
         expireDateNewFormat = expireDate.strftime("%Y%m%d%H%M")
         timeNow = datetime.now()
         currentTime = timeNow.strftime("%Y%m%d%H%M")
-        
+
         if currentTime >= expireDateNewFormat:
             profileObject.usertype = 'member'
             profileObject.expire_date = None

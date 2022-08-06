@@ -14,13 +14,20 @@ class ProfileModel(models.Model):
     def __str__(self):
         return self.user.username
 
+class HuayListModel(models.Model):
+    short_name = models.CharField(default='None', max_length=255)
+    full_name = models.CharField(default='None', max_length=255)
+    page_name = models.CharField(default='None', max_length=255)
+    time = models.TimeField()
+    link = models.CharField(default='None', max_length=255)
+
+    def __str__(self):
+        return self.short_name
+
 # HuayType
 class HuayTypeModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(default='None', max_length=255)
-    time = models.DateTimeField()
-    link = models.CharField(default='None', max_length=255)
-    page_name = models.CharField(default='None', max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    huay_list = models.OneToOneField(HuayListModel,default=1, on_delete=models.CASCADE)
     font_text = models.CharField(default='None', max_length=255)
     font_number = models.CharField(default='None', max_length=255)
     text_color = models.CharField(default='None', max_length=255)
@@ -45,4 +52,5 @@ class HuayTypeModel(models.Model):
     row_font_size = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return self.huay_list.short_name
+        

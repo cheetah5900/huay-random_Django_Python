@@ -1,215 +1,63 @@
 {% extends 'component/layout.html' %}
 
-    {%block content%}
+{%block content%}
 
-    <div class="wrap">
-      <section class="slot-home-body">
-        <div class="container">
-          <div>
-            <h1 class="shine-text big-font text-center">โปรแกรมสุ่มหวย</h1>
-            <p class="text-center">บ้าน {{houseNameThai}}</p>
-            <p class="text-center">ใช้ได้ถึงวันที่ {{expireDateThai}} เวลา 23.59 น.</p>
-            <h2 class="title shine-text underline">โปรแกรมใบ้หวยออโต้</h2>
-          </div>
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">โปรแกรมสุ่มหวย</h1>
+        <p class="text-center">บ้าน {{houseNameThai}}</p>
+        <p class="text-center">ใช้ได้ถึงวันที่ {{expireDateThai}} เวลา 23.59 น.</p>
+      </div>
 
-          <!-- GAMES -->
-          <div class="row">
-            <div class="col-md-12">
-              <!-- Top game list -->
-              <div class="top-slot-list">
-                <div class="row">
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/thai" class="btn btn-purple">รัฐบาลไทย</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/nimor" class="btn btn-pink">นิเคอิเช้า</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/chinamor" class="btn btn-orange">จีนเช้า</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hangmor" class="btn btn-yellow">ฮั่งเช้า</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/taiwan" class="btn btn-light-blue">หุ้นไต้หวัน</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/korean" class="btn btn-green">เกาหลี</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/niaf" class="btn btn-purple">นิเคอิบ่าย</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/chaniaf" class="btn btn-pink">จีนบ่าย</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hangaf" class="btn btn-orange">ฮั่งบ่าย</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/singa" class="btn btn-yellow">สิงคโปร์</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/thaieven" class="btn btn-light-blue">ไทยเย็น</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laojam" class="btn btn-green">ลาวจำปา</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laostar" class="btn btn-purple">ลาวสตาร์</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/noipi" class="btn btn-pink">นอยพิ</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/noida" class="btn btn-orange">นอยดา</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/noivi" class="btn btn-yellow">นอยวี</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laopat" class="btn btn-light-blue">ลาวพัฒนา</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laosa" class="btn btn-green">ลาวสามัคคี</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laovip" class="btn btn-purple">ลาว VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/russia" class="btn btn-pink">รัสเซีย</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/england" class="btn btn-orange">อังกฤษ</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/german" class="btn btn-yellow">เยอรมัน</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/daojoanvip" class="btn btn-light-blue">ดาวโจน VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/daojoan" class="btn btn-green">ดาวโจน</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoiaf" class="btn btn-purple">ฮานอยเที่ยง</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laotv" class="btn btn-pink">ลาว TV</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoihd" class="btn btn-orange">ฮานอย HD</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoistar" class="btn btn-yellow">ฮานอยสตาร์</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laohd" class="btn btn-light-blue">ลาว HD</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoitv" class="btn btn-green">ฮานอย TV</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoiga" class="btn btn-purple">ฮานอยกาชาด</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laopi" class="btn btn-pink">ลาวพิเศษ</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoiex" class="btn btn-orange">ฮานอย Extra</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laostarvip" class="btn btn-yellow">ลาวสตาร์ VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laowe" class="btn btn-light-blue">ลาวเวียงจัน</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/laoga" class="btn btn-green">ลาวกาชาด</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/nimorvip" class="btn btn-purple">นิเคอิเช้า VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/chinamorvip" class="btn btn-pink">จีนเช้า VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hangmorvip" class="btn btn-orange">ฮั่งเช้า VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/taiwanvip" class="btn btn-yellow">หุ้นไต้หวัน VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/koreanvip" class="btn btn-light-blue">เกาหลี VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/niafvip" class="btn btn-green">นิเคอิบ่าย VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/chinaafvip" class="btn btn-purple">จีนบ่าย VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hangafvip" class="btn btn-pink">ฮั่งบ่าย VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/singavip" class="btn btn-orange">สิงคโปร์ VIP</a>
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 mt-5">
-                    <a href="/result/hanoi" class="btn btn-yellow">ฮานอยพิเศษ</a>
-                  </div>
-                </div>
+      <!-- GAMES -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Top game list -->
+          <div class="top-slot-list">
+            <div class="row">
+              <h2 class="title shine-text underline">ช่วงเช้า</h2>
+              {%for item1,item2,item3 in zipDataForLoopMorning%}
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
+                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
               </div>
+              {%endfor%}
+            </div>
+            <div class="row">
+              <h2 class="title shine-text underline">ช่วงบ่าย</h2>
+              {%for item1,item2,item3 in zipDataForLoopAfternoon%}
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
+                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+              </div>
+              {%endfor%}
+            </div>
+            <div class="row">
+              <h2 class="title shine-text underline">ช่วงเย็น</h2>
+              {%for item1,item2,item3 in zipDataForLoopEvening%}
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
+                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+              </div>
+              {%endfor%}
+            </div>
+            <div class="row">
+              <h2 class="title shine-text underline">อื่นๆ</h2>
+              {%for item1,item2,item3 in zipDataForLoopOther%}
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
+                <a href="/result/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
+              </div>
+              {%endfor%}
             </div>
           </div>
         </div>
-      </section>
-      <section class="content">
-        <div class="container">
-          <div class="slot-intro">
-            <h3 class="title shine-text underline">โปรแกรมสุ่มหวยคืออะไร</h3>
-            <p>โปรแกรมสุ่มเลขแนวทาง ออโต้ ใบ้หวย สะดวก สำหรับนักพยากรณ์ ใส่เลข ใส่วันที่ อัตโนมัติ</p>
-            <h3 class="title shine-text underline">ทำงานอย่างไร</h3>
-            <p>สุ่มหวยตามเงื่อนไขต่อไปนี้</p>
-            <ul>
-              <li>ตัวเลข 2 ตัวหลักจะไม่ซ้ำกัน</li>
-              <li>ตัวเลข 2 ตัวหลักที่มีจำนวนน้อยกว่าจะอยู่ด้านหน้า เช่น 9 - 2 จะสลับเป็น 2 - 9 อัตโนมัติ</li>
-              <li>ตัวเลขรองแถวแรกจะเรียงจากน้อยไปมาก</li>
-              <li>ตัวเลขรองแถวที่สองจะเรียงจากน้อยไปมากเช่นกัน</li>
-              <li>ตัวเลขรองแถวที่สองจะไม่เป็นเลขสลับกับแถวแรก (เลขโต๊ด) เช่น ถ้าแถวแรกมี 32 แถวล่างจะไม่มี 23</li>
-            </ul>
-            <h3 class="title shine-text underline">วิธีบันทึกรูปภาพ</h3>
-            <h4 class="title shine-text underline">ในมือถือ</h4>
-            <p style="text-indent:36px;">กดค้างที่รูป แล้วกด "บันทึกรูป"</p>
-            <h4 class="title shine-text underline">ในคอมพิวเตอร์</h4>
-            <p style="text-indent:36px;">คลิกขวาที่รูป แล้วกด "บันทึกรูป"</p>
-            <h3 class="title shine-text underline">ค่าบริการ</h3>
-            <table class="table table-striped">
-              <tr>
-                <th class="text-center shine-text">รายละเอียด</th>
-                <th class="text-center shine-text">ลูกค้าใหม่</th>
-                <th class="text-center shine-text">ลูกค้าเก่า</th>
-              </tr>
-              <tr>
-                <td>ค่าบริการแรกเข้า กำหนดตำแหน่งตัวอักษร, สีตัวอักษร, ขอบสีตัวอักษร และ ขนาดตัวอักษร ลงบนรูป</td>
-                <td class="text-center">200 บาท</td>
-                <td class="text-center">-</td>
-              </tr>
-              <tr>
-                <td>ค่าบริการรายเดือน (ไม่จำกัดกลุ่ม)</td>
-                <td class="text-center">300 บาท</td>
-                <td class="text-center">300 บาท</td>
-              </tr>
-            </table>
-            <h3 class="title shine-text underline">วิธีสั่งซื้อ</h3>
-            <p style="text-indent:36px;">แอดไลน์ @789ojdsx (<a href="https://lin.ee/b1qJISw">https://lin.ee/b1qJISw</a>)
-            </p>
-          </div>
-        </div>
-      </section>
-
+      </div>
     </div>
+  </section>
+
+</div>
 {% if resultCheckExpire %}
 <script>
   swal("หมดอายุแล้ว", "กรุณาติดต่อแอดมินเพื่อต่ออายุ", "error");
 </script>
 {% endif %}
-    {%endblock content%}
+{%endblock content%}
