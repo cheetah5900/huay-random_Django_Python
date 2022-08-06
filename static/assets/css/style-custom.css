@@ -345,6 +345,15 @@ div[id^="gb-widget-"] {
 .justify-content-center {
   justify-content: center;
 }
+.justify-content-between {
+  justify-content: space-between;
+}
+.justify-content-around {
+  justify-content: space-around;
+}
+.flex-end {
+  align-items: flex-end;
+}
 /* line height mobile */
 .footer + .navigation-mobile {
   line-height: 2;

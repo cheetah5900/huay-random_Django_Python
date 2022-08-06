@@ -62,7 +62,7 @@ def Backend(request):
                 request.session['error'] = "error"
                 return redirect('backend')
             else:
-                return redirect('add_detail_picture', houseName)
+                return redirect('list_huay', houseName)
         else:
             return redirect('backend')
     profileObject = ProfileModel.objects.all()
@@ -72,7 +72,25 @@ def Backend(request):
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
 
-    return render(request, 'adddata/choose_house.html', context)
+    return render(request, 'choose_house.html', context)
+
+
+@login_required
+def ListHuay(request, username):
+    context = {}
+
+    userObject = User.objects.get(username=username)
+    huayObject = HuayTypeModel.objects.filter(user=userObject)
+    profileObject = ProfileModel.objects.get(user=userObject)
+
+    context['huayObject'] = huayObject
+    context['username'] = username
+    context['houseName'] = profileObject.house_name
+
+    if 'statusedit' in request.session:
+        context['statusedit'] = request.session['statusedit']
+        request.session['statusedit'] = ''  # clear stuck error in session
+    return render(request, 'list_huay.html', context)
 
 
 @login_required
@@ -90,13 +108,12 @@ def AddDetailPicture(request, username):
         borderWidth = data.get('border_width')
         borderColor = data.get('border_color')
         numberFont = data.get('number_font')
-        numberColor = data.get('number_color')
         mainNumberPosX = data.get('main_number_pos_x')
         mainNumberPosY = data.get('main_number_pos_y')
         mainNumberSize = data.get('main_number_size')
-        dataPosX = data.get('data_pos_x')
-        dataPosY = data.get('data_pos_y')
-        dataFontsize = data.get('data_fontsize')
+        dataPosX = data.get('date_pos_x')
+        dataPosY = data.get('date_pos_y')
+        dataFontsize = data.get('date_fontsize')
         focusPosX = data.get('focus_pos_x')
         focusPosY = data.get('focus_pos_y')
         focusFontsize = data.get('focus_fontsize')
@@ -122,9 +139,9 @@ def AddDetailPicture(request, username):
             addData.text_pos_x = textPosX
             addData.text_pos_y = textPosY
             addData.text_font_size = textSize
-            addData.data_pos_x = dataPosX
-            addData.data_pos_y = dataPosY
-            addData.data_font_size = dataFontsize
+            addData.date_pos_x = dataPosX
+            addData.date_pos_y = dataPosY
+            addData.date_font_size = dataFontsize
             addData.main_num_pos_x = mainNumberPosX
             addData.main_num_pos_y = mainNumberPosY
             addData.main_num_font_size = mainNumberSize
@@ -152,7 +169,7 @@ def AddDetailPicture(request, username):
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
 
-    huayFilter = HuayTypeModel.objects.filter(user_id=request.user.id)
+    huayFilter = HuayTypeModel.objects.filter(user=userObject)
     huayFilterList = []
     for item in huayFilter:
         huayFilterList.append(item.huay_list.short_name)
@@ -168,7 +185,79 @@ def AddDetailPicture(request, username):
 
     context['huayList'] = huayAllList
     context['data'] = profileObject
-    return render(request, 'adddata/add_detail_picture.html', context)
+    return render(request, 'manage_data_picture/add_detail_picture.html', context)
+
+
+@login_required
+def EditDetailPicture(request, username, huay_id):
+    context = {}
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        huayListId = data.get('huay_list_id')
+        textFont = data.get('text_font')
+        textColor = data.get('text_color')
+        textPosX = data.get('text_pos_x')
+        textPosY = data.get('text_pos_y')
+        textSize = data.get('text_size')
+        borderWidth = data.get('border_width')
+        borderColor = data.get('border_color')
+        numberFont = data.get('number_font')
+        mainNumberPosX = data.get('main_number_pos_x')
+        mainNumberPosY = data.get('main_number_pos_y')
+        mainNumberSize = data.get('main_number_size')
+        dataPosX = data.get('date_pos_x')
+        dataPosY = data.get('date_pos_y')
+        dataFontsize = data.get('date_fontsize')
+        focusPosX = data.get('focus_pos_x')
+        focusPosY = data.get('focus_pos_y')
+        focusFontsize = data.get('focus_fontsize')
+        numberRow1PosX = data.get('number_row1_pos_x')
+        numberRow1PosY = data.get('number_row1_pos_y')
+        numberRow2PosX = data.get('number_row2_pos_x')
+        numberRow2PosY = data.get('number_row2_pos_y')
+        numberRowFontsize = data.get('number_row_fontsize')
+
+        editData = HuayTypeModel.objects.get(id=huayListId)
+        editData.user = User.objects.get(username=username)
+        editData.font_text = textFont
+        editData.font_number = numberFont
+        editData.text_color = textColor
+        editData.border_size = borderWidth
+        editData.border_color = borderColor
+        editData.text_pos_x = textPosX
+        editData.text_pos_y = textPosY
+        editData.text_font_size = textSize
+        editData.date_pos_x = dataPosX
+        editData.date_pos_y = dataPosY
+        editData.date_font_size = dataFontsize
+        editData.main_num_pos_x = mainNumberPosX
+        editData.main_num_pos_y = mainNumberPosY
+        editData.main_num_font_size = mainNumberSize
+        editData.focus_num_pos_x = focusPosX
+        editData.focus_num_pos_y = focusPosY
+        editData.focus_num_font_size = focusFontsize
+        editData.row1_x = numberRow1PosX
+        editData.row1_y = numberRow1PosY
+        editData.row2_x = numberRow2PosX
+        editData.row2_y = numberRow2PosY
+        editData.row_font_size = numberRowFontsize
+        editData.save()
+
+        request.session['statusedit'] = 'Done'
+
+        return redirect('list_huay', username)
+
+
+    userObject = User.objects.get(username=username)
+    profileObject = ProfileModel.objects.get(user=userObject)
+
+    huayTypeObject = HuayTypeModel.objects.get(id=huay_id)
+
+    context['huayTypeObject'] = huayTypeObject
+    context['data'] = profileObject
+    context['huayId'] = huay_id
+    return render(request, 'manage_data_picture/edit_detail_picture.html', context)
 
 
 def Home(request, username):
@@ -203,10 +292,10 @@ def Home(request, username):
             btnColorList = []
 
             i = 1
-            listPurple = [1,5,9,13,17,21,25,29]
-            listOrange = [2,6,10,14,18,22,26,30]
-            listPink = [3,7,11,15,19,23,27,31]
-            listGreen = [4,8,12,16,20,24,28,32]
+            listPurple = [1, 5, 9, 13, 17, 21, 25, 29]
+            listOrange = [2, 6, 10, 14, 18, 22, 26, 30]
+            listPink = [3, 7, 11, 15, 19, 23, 27, 31]
+            listGreen = [4, 8, 12, 16, 20, 24, 28, 32]
 
             for item in huayObject:
                 huayShortNameList.append(item.short_name)
@@ -248,60 +337,48 @@ def Home(request, username):
         pass
 
 
-def Result(request, username,link):
+def Result(request, username, link):
     context = {}
-
-    resultCheckExpire = CheckExpireDate(request.user.id)
+    userObject = User.objects.get(username=username)
+    resultCheckExpire = CheckExpireDate(userObject.id)
     if resultCheckExpire == "หมดเขตแล้ว":
         # return redirect('Home')
         pass
     else:
         resultCheckExpire = ""
+
     context['username'] = username
     context['link'] = link
-    # try:
-    huayListObject = HuayListModel.objects.get(link=link)
-    data = HuayTypeModel.objects.get(huay_list=huayListObject)
-    textColorSplit = data.text_color.split(",")
-    borderColorSplit = data.border_color.split(",")
 
-    print("1")
-    imgLocation = GenerateImageWIthText(data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.data_pos_x, data.data_pos_y, data.data_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+    try:
+        huayListObject = HuayListModel.objects.get(link=link)
+        data = HuayTypeModel.objects.get(
+            huay_list=huayListObject, user=userObject)
+        textColorSplit = data.text_color.split(",")
+        borderColorSplit = data.border_color.split(",")
 
-    print("2")
-    profileObject = ProfileModel.objects.get(user_id=request.user.id)
-    print("3")
-    day = profileObject.expire_date.strftime("%d")
-    month = profileObject.expire_date.strftime("%m")
-    year = profileObject.expire_date.strftime("%Y")
-    thaiMonth = ConvertToThaiMonth(month)
-    expireDateThai = "{} {} {}".format(day, thaiMonth, year)
+        imgLocation = GenerateImageWIthText(data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                            data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+        profileObject = ProfileModel.objects.get(user_id=userObject)
+        day = profileObject.expire_date.strftime("%d")
+        month = profileObject.expire_date.strftime("%m")
+        year = profileObject.expire_date.strftime("%Y")
+        thaiMonth = ConvertToThaiMonth(month)
+        expireDateThai = "{} {} {}".format(day, thaiMonth, year)
 
-    context['expireDateThai'] = expireDateThai
-    context['imgLocation'] = imgLocation
-    # except:
-    #     request.session['error'] = 'error'
-    #     if 'error' in request.session:
-    #         context['error'] = request.session['error']
-    #         request.session['error'] = ''  # clear stuck error in session
-    #     return render(request, 'result/index.html', context)
+        context['expireDateThai'] = expireDateThai
+        context['imgLocation'] = imgLocation
+    except:
+        request.session['error'] = 'error'
+        if 'error' in request.session:
+            context['error'] = request.session['error']
+            request.session['error'] = ''  # clear stuck error in session
+        return render(request, 'result/index.html', context)
     if 'error' in request.session:
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
 
     return render(request, 'result/index.html', context)
-
-
-def AddData(request):
-    context = {}
-    resultCheckExpire = CheckExpireDate(request.user.id)
-    if resultCheckExpire == "หมดเขตแล้ว":
-        pass
-    else:
-        resultCheckExpire = ""
-
-    return render(request, 'adddata/adddata.html', context)
 
 
 def ConvertToThaiMonth(month):
