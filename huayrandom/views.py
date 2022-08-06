@@ -8,6 +8,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 import random
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import os
 
 
@@ -277,7 +278,6 @@ def Home(request, username):
         thaiMonth = ConvertToThaiMonth(month)
         expireDateThai = "{} {} {}".format(day, thaiMonth, year)
         for x in range(0, 4):
-            print("X", x)
             if x == 0:
                 huayObject = HuayListModel.objects.filter(time="07:00:00")
             elif x == 1:
@@ -333,8 +333,8 @@ def Home(request, username):
 
         return render(request, 'index.html', context)
     except:
-        # return redirect('index')
-        pass
+        return render(request, 'index.html', context)
+        # pass
 
 
 def Result(request, username, link):
@@ -461,8 +461,8 @@ def GenerateImageWIthText(type, fontText, fontNumber, textColor, borderSize, bor
         'static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
 
     # Set Date
-    # cueDateTime = datetime.now() + relativedelta(years=543)
-    cueDateTime = datetime.now()
+    cueDateTime = datetime.now() + relativedelta(years=543)
+    # cueDateTime = datetime.now()
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
@@ -502,10 +502,11 @@ def randomNumber():
 # ตัดตัวเลขที่ซ้ำตอนสร้างเลขหลักที่สอง
 
 
-def removeDuplicateNumber(list):
+def removeDuplicateNumber(list,avoidNumber):
     checkDuplicated = True
     while checkDuplicated == True:
-        subNumberSecondUnit = randomNumber()
+        print("AM I HERE2")
+        subNumberSecondUnit = RemoveDuplicatedToMainNumber(avoidNumber)
         if subNumberSecondUnit not in list:
             list.append(subNumberSecondUnit)
             checkDuplicated = False
@@ -528,6 +529,18 @@ def generateNumberForSecondLine(listSwapNumber, mainSecondNumber, subNumberSecon
             checkDuplicated = False
     return subNumberSecondUnit
 
+
+# ทำให้ค่าตัวหลังที่สุ่มมาได้ไม่เท่ากับค่าตัวแรก ไม่เช่นนั้นจะเป็นเลขเบิ้ล
+def RemoveDuplicatedToMainNumber(mainNumber):
+    check = True
+    while check == True:
+        random = randomNumber()
+        if random == mainNumber:
+            check = True
+        else:
+            check = False
+    return random
+
 # สร้างชุดสุ่มหวย 2 หลัก
 
 
@@ -536,30 +549,31 @@ def random2NumberResult():
     # Random integer
     mainNumberList = []
     mainFirstNumber = randomNumber()
-    mainNumberList.append(mainFirstNumber)
-    mainSecondNumber = removeDuplicateNumber(mainNumberList)
+    print("mainFirstNumber : ",mainFirstNumber)
+    mainSecondNumber = RemoveDuplicatedToMainNumber(mainFirstNumber)
+    print("mainSecondNumber : ",mainSecondNumber)
 
     # random one of two
     list = [mainFirstNumber, mainSecondNumber]
     focusNumber = random.choice(list)
 
     subNumberSecondUnitList = []
-    subNumberSecondUnit1 = randomNumber()
+    subNumberSecondUnit1 = RemoveDuplicatedToMainNumber(mainFirstNumber)
     subNumberSecondUnitList.append(subNumberSecondUnit1)
-    subNumberSecondUnit2 = removeDuplicateNumber(subNumberSecondUnitList)
-    subNumberSecondUnit3 = removeDuplicateNumber(subNumberSecondUnitList)
-    subNumberSecondUnit4 = removeDuplicateNumber(subNumberSecondUnitList)
+    subNumberSecondUnit2 = removeDuplicateNumber(subNumberSecondUnitList,mainFirstNumber)
+    subNumberSecondUnit3 = removeDuplicateNumber(subNumberSecondUnitList,mainFirstNumber)
+    subNumberSecondUnit4 = removeDuplicateNumber(subNumberSecondUnitList,mainFirstNumber)
     swapNumber = [str(subNumberSecondUnit1)+str(mainFirstNumber), str(subNumberSecondUnit2)+str(mainFirstNumber),
                   str(subNumberSecondUnit3)+str(mainFirstNumber), str(subNumberSecondUnit4)+str(mainFirstNumber)]
 
     subNumber2SecondUnitList = []
     # ตัดตัวเลขที่ซ้ำกันออกทั้งหมดก่อนที่จะไปเช็คกับคำในแถวแรก
     subNumber2SecondUnitList = []
-    subNumber2SecondUnit1 = randomNumber()
+    subNumber2SecondUnit1 = RemoveDuplicatedToMainNumber(mainSecondNumber)
     subNumber2SecondUnitList.append(subNumber2SecondUnit1)
-    subNumber2SecondUnit2 = removeDuplicateNumber(subNumber2SecondUnitList)
-    subNumber2SecondUnit3 = removeDuplicateNumber(subNumber2SecondUnitList)
-    subNumber2SecondUnit4 = removeDuplicateNumber(subNumber2SecondUnitList)
+    subNumber2SecondUnit2 = removeDuplicateNumber(subNumber2SecondUnitList,mainSecondNumber)
+    subNumber2SecondUnit3 = removeDuplicateNumber(subNumber2SecondUnitList,mainSecondNumber)
+    subNumber2SecondUnit4 = removeDuplicateNumber(subNumber2SecondUnitList,mainSecondNumber)
     # เช็คซ้ำกับแถวที่ 1
     subNumber2SecondUnit1 = generateNumberForSecondLine(
         swapNumber, mainSecondNumber, subNumber2SecondUnit1)
