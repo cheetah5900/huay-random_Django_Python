@@ -17,7 +17,6 @@ def Index(request):
     if request.method == 'POST':
         data = request.POST.copy()
         getUsername = data.get('username')
-        # authen is function for User model for finding user
         try:
             userObject = User.objects.get(username=getUsername)
             return redirect('home', userObject.username)
@@ -28,6 +27,9 @@ def Index(request):
     if 'error' in request.session:
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
+    if 'expire' in request.session:
+        context['expire'] = request.session['expire']
+        request.session['expire'] = '' 
 
     return render(request, 'find_house.html', context)
 
@@ -262,12 +264,14 @@ def EditDetailPicture(request, username, huay_id):
 
 
 def Home(request, username):
-    context = {}
-    resultCheckExpire = CheckExpireDate(request.user.id)
-    if resultCheckExpire == "หมดเขตแล้ว":
-        pass
+    context = {}    
+    resultCheckExpire = CheckExpireDate(username)
+    if resultCheckExpire == "ตัดสิทธิ์แล้ว":
+        request.session['expire'] = 'ตัดสิทธิ์แล้ว'
+        return redirect('index')
     else:
         resultCheckExpire = ""
+
     try:
         userObject = User.objects.get(username=username)
         profileObject = ProfileModel.objects.get(user=userObject)
@@ -330,20 +334,21 @@ def Home(request, username):
         context['zipDataForLoopEvening'] = zipDataForLoopEvening
         context['zipDataForLoopOther'] = zipDataForLoopOther
         context['username'] = username
-
         return render(request, 'index.html', context)
     except:
-        return render(request, 'index.html', context)
-        # pass
+        request.session['error'] = 'ไม่มีบ้านดังกล่าว'
+        return redirect('index')
+        
 
 
 def Result(request, username, link):
     context = {}
     userObject = User.objects.get(username=username)
-    resultCheckExpire = CheckExpireDate(userObject.id)
-    if resultCheckExpire == "หมดเขตแล้ว":
-        # return redirect('Home')
-        pass
+    resultCheckExpire = CheckExpireDate(username)
+    print("resultCheckExpire",resultCheckExpire)
+    if resultCheckExpire == "ตัดสิทธิ์แล้ว":
+        request.session['expire'] = 'ตัดสิทธิ์แล้ว'
+        return redirect('index')
     else:
         resultCheckExpire = ""
 
@@ -376,7 +381,7 @@ def Result(request, username, link):
         return render(request, 'result/index.html', context)
     if 'error' in request.session:
         context['error'] = request.session['error']
-        request.session['error'] = ''  # clear stuck error in session
+        request.session['error'] = '' 
 
     return render(request, 'result/index.html', context)
 
@@ -409,9 +414,9 @@ def ConvertToThaiMonth(month):
     return thaiMonth
 
 
-def CheckExpireDate(uid):
+def CheckExpireDate(username):
     try:
-        userObject = User.objects.get(id=uid)
+        userObject = User.objects.get(username=username)
         profileObject = ProfileModel.objects.get(user=userObject)
         expireDate = profileObject.expire_date
         expireDateNewFormat = expireDate.strftime("%Y%m%d%H%M")
@@ -419,12 +424,7 @@ def CheckExpireDate(uid):
         currentTime = timeNow.strftime("%Y%m%d%H%M")
 
         if currentTime >= expireDateNewFormat:
-            profileObject.usertype = 'member'
-            profileObject.expire_date = None
-            profileObject.save()
             return "ตัดสิทธิ์แล้ว"
-        if currentTime < expireDateNewFormat:
-            pass
     except:
         pass
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
@@ -444,21 +444,22 @@ def GenerateImageWIthText(type, fontText, fontNumber, textColor, borderSize, bor
     row2Set3 = randomResult[9]
     row2Set4 = randomResult[10]
     path = os.getcwd()
-    locationTemplate = path+r'\static\images\template-hua\template.jpg'
+    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/template.jpg'
+    
     img = Image.open(locationTemplate)
     imgObj = ImageDraw.Draw(img)
 
     # Set font
     font0 = ImageFont.truetype(
-        'static/assets/fonts/{}'.format(fontText), txtFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
     font1 = ImageFont.truetype(
-        'static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
     font2 = ImageFont.truetype(
-        'static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
     font3 = ImageFont.truetype(
-        'static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
     font4 = ImageFont.truetype(
-        'static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
 
     # Set Date
     cueDateTime = datetime.now() + relativedelta(years=543)
@@ -487,9 +488,9 @@ def GenerateImageWIthText(type, fontText, fontNumber, textColor, borderSize, bor
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
                 font=font4, fill=textColor)
 
-    location = path+r'\static\images\result-hua\result.jpg'
+    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/result.jpg'
     img.save(location)
-    imgLocation = r'/static/images/result-hua/result.jpg'
+    imgLocation = '/static/images/result-hua/result.jpg'
     return imgLocation
 
 #  สุ่มตัวเลข 0-9
@@ -505,7 +506,6 @@ def randomNumber():
 def removeDuplicateNumber(list,avoidNumber):
     checkDuplicated = True
     while checkDuplicated == True:
-        print("AM I HERE2")
         subNumberSecondUnit = RemoveDuplicatedToMainNumber(avoidNumber)
         if subNumberSecondUnit not in list:
             list.append(subNumberSecondUnit)
@@ -547,7 +547,6 @@ def RemoveDuplicatedToMainNumber(mainNumber):
 def random2NumberResult():
 
     # Random integer
-    mainNumberList = []
     mainFirstNumber = randomNumber()
     print("mainFirstNumber : ",mainFirstNumber)
     mainSecondNumber = RemoveDuplicatedToMainNumber(mainFirstNumber)
@@ -574,6 +573,7 @@ def random2NumberResult():
     subNumber2SecondUnit2 = removeDuplicateNumber(subNumber2SecondUnitList,mainSecondNumber)
     subNumber2SecondUnit3 = removeDuplicateNumber(subNumber2SecondUnitList,mainSecondNumber)
     subNumber2SecondUnit4 = removeDuplicateNumber(subNumber2SecondUnitList,mainSecondNumber)
+    
     # เช็คซ้ำกับแถวที่ 1
     subNumber2SecondUnit1 = generateNumberForSecondLine(
         swapNumber, mainSecondNumber, subNumber2SecondUnit1)

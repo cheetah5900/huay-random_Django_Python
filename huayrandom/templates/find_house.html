@@ -3,43 +3,45 @@
 {%block content%}
 
 <div class="wrap">
- <section class="slot-home-body">
-  <div class="container">
-   <div class="row">
-    <div class="col-md-12">
-     <div class="navbar-header-feature d-flex justify-content-center mt-5">
-      <div class="navbar-header-login-logout">
-       <h1 class="text-center">เข้าสู่ระบบ โปรแกรมสุ่มหวย</h1>
-       <form class="form_login" method="post">
-        {%csrf_token%}
-        <div class="col-sm-12 mt-5">
-         <label for="username" style="font-size: 18px;">ID บ้าน</label>
-         <input type="text" class="form-control" id="username" placeholder="เช่น permsub695" name="username" />
+  <section class="slot-home-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="navbar-header-feature d-flex justify-content-center mt-5">
+            <div class="navbar-header-login-logout">
+              <h1 class="text-center">เข้าสู่ระบบ โปรแกรมสุ่มหวย</h1>
+              <form class="form_login" method="post">
+                {%csrf_token%}
+                <div class="col-sm-12 mt-5">
+                  <label for="username" style="font-size: 18px;">ID บ้าน</label>
+                  <input type="text" class="form-control" id="username" placeholder="เช่น permsub695" name="username" />
+                </div>
+                <div class="col-sm-12 d-flex justify-content-center mt-5">
+                  <div class="login-button-container">
+                    <button type="submit">เข้าสู่ระบบ</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-12 d-flex justify-content-center mt-5">
-         <div class="login-button-container">
-          <button type="submit">เข้าสู่ระบบ</button>
-         </div>
-        </div>
-       </form>
-      </div>
-     </div>
-    </div>
 
-   </div>
-  </div>
-  </section>  
-  
+      </div>
+    </div>
+  </section>
+
   <section class="content">
     <div class="container">
       <div class="slot-intro">
         <h3 class="title shine-text underline">โปรแกรมสุ่มหวยคืออะไร</h3>
-        <p>โปรแกรมสุ่มเลขแนวทาง ออโต้ ใบ้หวย สะดวก สำหรับนักพยากรณ์ ใส่เลข ใส่วันที่ อัตโนมัติ</p>
+        <p style="text-indent:34px;">โปรแกรมสุ่มเลขแนวทาง อันโนมัติ สำหรับการใบ้หวย สะดวก ประหยัดเวลา ไม่ต้องมานั่งทำเองทีละรูป</p>
         <h3 class="title shine-text underline">ทำงานอย่างไร</h3>
         <p>สุ่มหวยตามเงื่อนไขต่อไปนี้</p>
         <ul>
           <li>ตัวเลข 2 ตัวหลักจะไม่ซ้ำกัน</li>
           <li>ตัวเลข 2 ตัวหลักที่มีจำนวนน้อยกว่าจะอยู่ด้านหน้า เช่น 9 - 2 จะสลับเป็น 2 - 9 อัตโนมัติ</li>
+          <li>จะไม่มีเลขเบิ้ล เช่น 11 , 22 , 33 เป็นต้น</li>
+          <li>เมื่อหมดอายุ ระบบจะตัดการใช้งานอัตโนมัติ</li>
           <li>ตัวเลขรองแถวแรกจะเรียงจากน้อยไปมาก</li>
           <li>ตัวเลขรองแถวที่สองจะเรียงจากน้อยไปมากเช่นกัน</li>
           <li>ตัวเลขรองแถวที่สองจะไม่เป็นเลขสลับกับแถวแรก (เลขโต๊ด) เช่น ถ้าแถวแรกมี 32 แถวล่างจะไม่มี 23</li>
@@ -57,14 +59,32 @@
             <th class="text-center shine-text">ลูกค้าเก่า</th>
           </tr>
           <tr>
-            <td>ค่าบริการแรกเข้า กำหนดตำแหน่งตัวอักษร, สีตัวอักษร, ขอบสีตัวอักษร และ ขนาดตัวอักษร ลงบนรูป</td>
-            <td class="text-center">200 บาท</td>
+            <td>ค่าบริการแรกเข้า กำหนดตำแหน่งตัวอักษร, สีตัวอักษร, ขอบสีตัวอักษร และ ขนาดตัวอักษร ลงบนรูป ใบใบ้หวย</td>
+            <td class="text-center">100 บาท</td>
             <td class="text-center">-</td>
           </tr>
           <tr>
             <td>ค่าบริการรายเดือน (ไม่จำกัดกลุ่ม)</td>
-            <td class="text-center">500 บาท</td>
-            <td class="text-center">500 บาท</td>
+            <td class="text-center">700 บาท</td>
+            <td class="text-center">700 บาท</td>
+          </tr>
+        </table>
+        <h3 class="title shine-text underline">ส่วนลดพิเศษ (เลือกได้)</h3>
+        <table class="table table-striped">
+          <tr>
+            <th style="width:500px;" class="text-center shine-text">รายละเอียด</th>
+            <th class="text-center shine-text">ลูกค้าใหม่</th>
+            <th class="text-center shine-text">ลูกค้าเก่า</th>
+          </tr>
+          <tr>
+            <td>ติดลายน้ำของทางร้าน</td>
+            <td class="text-right">ลดราคา 100 บาท / เดือน</td>
+            <td class="text-right">ลดราคา 100 บาท / เดือน</td>
+          </tr>
+          <tr>
+            <td>แนะนำเพื่อน</td>
+            <td class="text-right">ลดราคา 100 บาท / เดือน (จำกัด 2 คน/เดือน)</td>
+            <td class="text-right">ลดราคา 100 บาท / เดือน (จำกัด 2 คน/เดือน)</td>
           </tr>
         </table>
         <h3 class="title shine-text underline">วิธีสั่งซื้อ</h3>
@@ -78,9 +98,14 @@
 
 {%if error%}
 <script>
- swal("ไม่มีบ้านหวยนี้", "กรุณาตรวจสอบชื่อบ้าน หรือติดต่อ Admin", "error");
+  swal("ไม่มีบ้านหวยนี้", "กรุณาตรวจสอบชื่อบ้าน หรือติดต่อ Admin", "error");
 </script>
 {%endif%}
+{% if expire %}
+<script>
+  swal("โปรแกรมหมดอายุ", "กรุณาติดต่อแอดมินเพื่อต่ออายุ", "error");
+</script>
+{% endif %}
 
 {%endblock content%}
 {%block javascripts%}
