@@ -437,7 +437,6 @@ def Result(request, username, link):
     context = {}
     userObject = User.objects.get(username=username)
     resultCheckExpire = CheckExpireDate(username)
-    print("resultCheckExpire",resultCheckExpire)
     if resultCheckExpire == "ตัดสิทธิ์แล้ว":
         request.session['expire'] = 'ตัดสิทธิ์แล้ว'
         return redirect('index')
@@ -512,7 +511,7 @@ def CheckExpireDate(username):
         profileObject = ProfileModel.objects.get(user=userObject)
         expireDate = profileObject.expire_date
         expireDateNewFormat = expireDate.strftime("%Y%m%d%H%M")
-        timeNow = datetime.now()
+        timeNow = datetime.now() + relativedelta(hours=7)
         currentTime = timeNow.strftime("%Y%m%d%H%M")
 
         if currentTime >= expireDateNewFormat:
@@ -567,7 +566,6 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
 
     # Set Date
     cueDateTime = datetime.now() + relativedelta(years=543)
-    # cueDateTime = datetime.now()
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
@@ -646,7 +644,6 @@ def generateNumberForSecondLine(listSwapNumber, mainSecondNumber, subNumberSecon
 
 
 def random2NumberResult():
-
     allNumberList = []
 
     # Random integer
