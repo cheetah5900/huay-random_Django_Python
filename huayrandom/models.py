@@ -8,7 +8,7 @@ class ProfileModel(models.Model):
     usertype = models.CharField(default='random', max_length=255)
     status = models.BooleanField(default=True)
     expire_date = models.DateTimeField(null=True, blank=True)
-    credit_shop = models.BooleanField(default=True)
+    # credit_shop = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
@@ -26,14 +26,13 @@ class HuayListModel(models.Model):
 class FontListModel(models.Model):
     font_name = models.CharField(default='Prompt.ttf', max_length=255)
     
-
     def __str__(self):
         return self.font_name
 
 # HuayType
 class HuayTypeModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    huay_list = models.OneToOneField(HuayListModel,default=1, on_delete=models.CASCADE)
+    huay_list = models.ForeignKey(HuayListModel, on_delete=models.CASCADE)
     font_text = models.CharField(default='None', max_length=255)
     font_number = models.CharField(default='None', max_length=255)
     text_color = models.CharField(default='None', max_length=255)
@@ -56,6 +55,9 @@ class HuayTypeModel(models.Model):
     row2_x = models.IntegerField(default=0)
     row2_y = models.IntegerField(default=0)
     row_font_size = models.IntegerField(default=0)
+    # credit_shop_pos_x = models.IntegerField(default=0)
+    # credit_shop_pos_y = models.IntegerField(default=0)
+    # credit_shop_font_size = models.IntegerField(default=0)
 
     def __str__(self):
         return self.huay_list.short_name

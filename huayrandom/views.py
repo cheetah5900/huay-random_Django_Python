@@ -492,24 +492,25 @@ def Result(request, username, link):
     context['link'] = link
     context['expireDateThai'] = expireDateThai
 
-    try:
-        huayListObject = HuayListModel.objects.get(link=link)
-        data = HuayTypeModel.objects.get(
-            huay_list=huayListObject, user=userObject)
-        textColorSplit = data.text_color.split(",")
-        borderColorSplit = data.border_color.split(",")
+    # try:
+    huayListObject = HuayListModel.objects.get(link=link)
+    data = HuayTypeModel.objects.get(
+        huay_list=huayListObject, user=userObject)
+    profileObject = ProfileModel.objects.get(user=userObject)
+    textColorSplit = data.text_color.split(",")
+    borderColorSplit = data.border_color.split(",")
 
-        imgLocation = GenerateImageWIthText(username,data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                            data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
-        
+    imgLocation = GenerateImageWIthText(username,data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+    
 
-        context['imgLocation'] = imgLocation
-    except:
-        request.session['error'] = 'error'
-        if 'error' in request.session:
-            context['error'] = request.session['error']
-            request.session['error'] = ''  # clear stuck error in session
-        return render(request, 'result/index.html', context)
+    context['imgLocation'] = imgLocation
+    # except:
+    #     request.session['error'] = 'error'
+    #     if 'error' in request.session:
+    #         context['error'] = request.session['error']
+    #         request.session['error'] = ''  # clear stuck error in session
+    #     return render(request, 'result/index.html', context)
     return render(request, 'result/index.html', context)
 
 
@@ -571,34 +572,34 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
     row2Set3 = randomResult[9]
     row2Set4 = randomResult[10]
     path = os.getcwd()
-    # locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
-    locationTemplate = path+'/static/images/template-hua/{}-template.jpg'.format(username)
+    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
+    # locationTemplate = path+'/static/images/template-hua/{}-template.jpg'.format(username)
     
     img = Image.open(locationTemplate)
     imgObj = ImageDraw.Draw(img)
 
     # Set font
-    # font0 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    # font1 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    # font2 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    # font3 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    # font4 = ImageFont.truetype(
-        # '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    
     font0 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
     font1 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
     font2 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
     font3 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
     font4 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    
+    # font0 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    # font1 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    # font2 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    # font3 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    # font4 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
 
     # Set Date
     cueDateTime = datetime.now() + relativedelta(years=543)
@@ -626,8 +627,8 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
                 font=font4, fill=textColor)
 
-    # location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
-    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
+    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
     img.save(location)
     imgLocation = '/static/images/result-hua/{}-result.jpg'.format(username)
     return imgLocation
