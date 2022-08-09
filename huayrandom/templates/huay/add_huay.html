@@ -46,10 +46,9 @@
                   <td class="text-center">
                     <div class="form-group">
                       <select name="text_font" class="form-control">
-                        <option value="Kanit.ttf">Kanit.ttf</option>
-                        <option value="PromptBold.ttf">PromptBold.ttf</option>
-                        <option value="PromptLight.ttf">PromptLight.ttf</option>
-                        <option value="HelveticaNeue.ttf">HelveticaNeue.ttf</option>
+                        {%for font in fontList%}
+                        <option value="{{font.id}}">{{font.font_name}}</option>
+                        {%endfor%}
                       </select>
                       <p class="help-block help-block-error" />
                     </div>
@@ -123,10 +122,9 @@
                   <td class="text-center">
                     <div class="form-group">
                       <select name="number_font" class="form-control">
-                        <option value="Kanit.ttf">Kanit.ttf</option>
-                        <option value="PromptBold.ttf">PromptBold.ttf</option>
-                        <option value="PromptLight.ttf">PromptLight.ttf</option>
-                        <option value="HelveticaNeue.ttf">HelveticaNeue.ttf</option>
+                        {%for font in fontList%}
+                        <option value="{{font.id}}">{{font.font_name}}</option>
+                        {%endfor%}
                       </select>
                       <p class="help-block help-block-error" />
                     </div>

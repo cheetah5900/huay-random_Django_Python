@@ -24,20 +24,51 @@
           <div class="slot-intro">
             <form method="post">
               {%csrf_token%}
+              <h3>วันที่</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">ตำแหน่งวันที่ X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.date_pos_x}}" name="date_pos_x" type="number" class="form-control"
+                        placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งวันที่ Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.date_pos_y}}" name="date_pos_y" type="number" class="form-control"
+                        placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดวันที่ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.date_font_size}}" name="date_fontsize" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
               <h3>ชื่อหวย</h3>
               <table class="table table-striped">
                 <tr>
                   <td class="text-right">Font ข้อความ : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <select name="text_font" class="form-control">
-                        <option {%if huayTypeObject.font_text == 'Kanit.ttf' %} selected {%endif%}>Kanit.ttf</option>
-                        <option {%if huayTypeObject.font_text == 'PromptBold.ttf' %} selected{%endif%}>PromptBold.ttf
-                        </option>
-                        <option {%if huayTypeObject.font_text == 'PromptLight.ttf' %} selected{%endif%}>PromptLight.ttf
-                        </option>
-                        <option {%if huayTypeObject.font_text == 'HelveticaNeue.ttf' %} selected{%endif%}>
-                          HelveticaNeue.ttf</option>
+                      <select name="font_text_id" class="form-control">
+                        {%for font in fontList%}
+                        <option {%if font.font_name == huayTypeObject.font_text %} selected {%endif%} value="{{font.id}}">{{font.font_name}}</option>
+                        {%endfor%}
                       </select>
                       <p class="help-block help-block-error" />
                     </div>
@@ -117,15 +148,10 @@
                   <td class="text-right">Font ตัวเลข : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <select name="number_font" class="form-control">
-                        <option {%if huayTypeObject.font_number == 'Kanit.ttf' %} selected {%endif%}>Kanit.ttf
-                        </option>
-                        <option {%if huayTypeObject.font_number == 'PromptBold.ttf' %} selected{%endif%}>PromptBold.ttf
-                        </option>
-                        <option {%if huayTypeObject.font_number == 'PromptLight.ttf' %} selected{%endif%}>PromptLight.ttf
-                        </option>
-                        <option {%if huayTypeObject.font_number == 'HelveticaNeue.ttf' %} selected{%endif%}>
-                          HelveticaNeue.ttf</option>
+                      <select name="number_font_id" class="form-control">
+                        {%for font in fontList%}
+                        <option {%if font.font_name == huayTypeObject.font_number %} selected {%endif%} value="{{font.id}}">{{font.font_name}}</option>
+                        {%endfor%}
                       </select>
                       <p class="help-block help-block-error" />
                     </div>
@@ -164,77 +190,7 @@
                   </td>
                 </tr>
               </table>
-              <h3>วันที่</h3>
-              <table class="table table-striped">
-                <tr>
-                  <td class="text-right">ตำแหน่งวันที่ X : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input value="{{huayTypeObject.date_pos_x}}" name="date_pos_x" type="number" class="form-control"
-                        placeholder="1">
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">ตำแหน่งวันที่ Y : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input value="{{huayTypeObject.date_pos_y}}" name="date_pos_y" type="number" class="form-control"
-                        placeholder="1">
-
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">ขนาดวันที่ : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input value="{{huayTypeObject.date_font_size}}" name="date_fontsize" type="number"
-                        class="form-control" placeholder="1">
-
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-              </table>
-              <h3>ตัวเน้น</h3>
-              <table class="table table-striped">
-                <tr>
-                  <td class="text-right">ตำแหน่งตัวเน้น X : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input value="{{huayTypeObject.focus_num_pos_x}}" name="focus_pos_x" type="number"
-                        class="form-control" placeholder="1">
-
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">ตำแหน่งตัวเน้น Y : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input value="{{huayTypeObject.focus_num_pos_y}}" name="focus_pos_y" type="number"
-                        class="form-control" placeholder="1">
-
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">ขนาดตัวเน้น : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input value="{{huayTypeObject.focus_num_font_size}}" name="focus_fontsize" type="number"
-                        class="form-control" placeholder="1">
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-              </table>
-              <h3>เลขใบ้หวย 2 หลัก</h3>
+              <h3>เลขใบ้หวยย่อย 2 ชุด</h3>
               <table class="table table-striped">
                 <tr>
                   <td class="text-right">แถวที่ 1 X : </td>
@@ -284,6 +240,41 @@
                       <input value="{{huayTypeObject.row_font_size}}" name="number_row_fontsize" type="number"
                         class="form-control" placeholder="1">
 
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <h3>ตัวเน้น</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">ตำแหน่งตัวเน้น X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.focus_num_pos_x}}" name="focus_pos_x" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งตัวเน้น Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.focus_num_pos_y}}" name="focus_pos_y" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดตัวเน้น : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.focus_num_font_size}}" name="focus_fontsize" type="number"
+                        class="form-control" placeholder="1">
                       <p class="help-block help-block-error" />
                     </div>
                   </td>

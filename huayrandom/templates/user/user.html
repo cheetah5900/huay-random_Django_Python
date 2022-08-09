@@ -1,0 +1,64 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">จัดการรายการ User</h1>
+      </div>
+
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            </div>
+          </div>
+          <div class="slot-intro">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h3 class="title shine-text underline">เลือกรายการ User</h3>
+              </div>
+              <div class="d-flex flex-end"style="padding-bottom:10px">
+                <a href="/backend/{{username}}/add/user" class="btn btn-light-blue" style="color:black;">เพิ่ม User</a>
+              </div>
+            </div>
+            <table class="table table-striped">
+              <tr>
+                <th class="text-center shine-text">User</th>
+                <th class="text-center shine-text">แก้ไข</th>
+                <th class="text-center shine-text">ลบ</th>
+              </tr>
+              {%for item in userObject%}
+              <tr>
+                <td class="text-center">
+                  <div class="form-group">
+                    {{item}}
+                  </div>
+                </td>
+                <td class="text-center">
+                  <a href="/backend/{{username}}/edit/user/{{item.id}}" class="btn btn-yellow" style="color:black;">แก้ไข</a>
+                </td>
+                <td class="text-center">
+                  <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
+                </td>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {%if error%}
+    <script>
+      swal("มี username  นี้แล้ว", "มี username  นี้แล้ว", "error");
+    </script>
+    {%endif%}
+    {%if status%}
+    <script>
+      swal("เพิ่ม  User เสร็จสิ้น", "เพิ่ม  User เสร็จสิ้น", "error");
+    </script>
+    {%endif%}
+    {%endblock content%}

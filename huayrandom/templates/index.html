@@ -6,8 +6,8 @@
   <section class="slot-home-body">
     <div class="container">
       <div>
-        <h1 class="shine-text big-font text-center">โปรแกรมสุ่มหวย</h1>
-        <h1 class="shine-text big-font text-center">บ้าน {{houseNameThai}}</h1>
+        <h1 class="black-font">โปรแกรมสุ่มหวย</h1>
+        <div class="shine-text font-size-30 text-center">บ้าน {{houseNameThai}}</div>
         <p class="text-center">ใช้ได้ถึงวันที่ {{expireDateThai}} เวลา 23.59 น.</p>
       </div>
 
@@ -17,7 +17,9 @@
           <!-- Top game list -->
           <div class="top-slot-list">
             <div class="row">
+              <div class="col-xs-12">
               <h2 class="title shine-text underline">ช่วงเช้า</h2>
+              </div>
               {%for item1,item2,item3 in zipDataForLoopMorning%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
                 <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
@@ -25,7 +27,9 @@
               {%endfor%}
             </div>
             <div class="row">
+              <div class="col-xs-12">
               <h2 class="title shine-text underline">ช่วงบ่าย</h2>
+              </div>
               {%for item1,item2,item3 in zipDataForLoopAfternoon%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
                 <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
@@ -33,7 +37,9 @@
               {%endfor%}
             </div>
             <div class="row">
+              <div class="col-xs-12">
               <h2 class="title shine-text underline">ช่วงเย็น</h2>
+              </div>
               {%for item1,item2,item3 in zipDataForLoopEvening%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
                 <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>
@@ -41,7 +47,9 @@
               {%endfor%}
             </div>
             <div class="row">
+              <div class="col-xs-12">
               <h2 class="title shine-text underline">อื่นๆ</h2>
+              </div>
               {%for item1,item2,item3 in zipDataForLoopOther%}
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 mt-5">
                 <a href="/result/{{username}}/{{item2}}" class="btn btn-{{item3}}">{{item1}}</a>

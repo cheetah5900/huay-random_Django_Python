@@ -16,6 +16,10 @@ body {
 .ml-3{
   margin-left: 20px;
 }
+.black-font{
+  color:black;
+  font-size: 1px;
+}
 /* SET of pastel button */
 .btn-purple{
   color:#000;
@@ -268,9 +272,12 @@ span.title {
   font-size: 24px;
   border-bottom: 1px solid #e6c41a !important;
 }
+.btn {
+  font-size: 16px;
+}
 /* set span has underline */
-h1.big-font {
-  font-size: 60px !important;
+.font-size-30 {
+  font-size: 30px !important;
 }
 .font-size-18 {
   font-size: 18px!important;

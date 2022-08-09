@@ -9,19 +9,21 @@
         <div class="col-md-12">
           <div class="navbar-header-feature d-flex justify-content-center mt-5">
             <div class="navbar-header-login-logout">
-              <h1 class="text-center">เข้าสู่ระบบ โปรแกรมสุ่มหวย</h1>
-              <form class="form_login" method="post">
-                {%csrf_token%}
-                <div class="col-sm-12 mt-5">
-                  <label for="username" style="font-size: 18px;">ID บ้าน</label>
-                  <input type="text" class="form-control" id="username" placeholder="เช่น permsub695" name="username" />
-                </div>
-                <div class="col-sm-12 d-flex justify-content-center mt-5">
-                  <div class="login-button-container">
-                    <button type="submit">เข้าสู่ระบบ</button>
-                  </div>
-                </div>
-              </form>
+              <h1 class="text-center">โปรแกรมสุ่มหวย</h1>
+              <div class="d-flex justify-content-center">
+                <form class="form_login" method="post">
+                  {%csrf_token%}
+                    <div class="col-sm-12 mt-5">
+                      <label for="username" style="font-size: 18px;">ใส่ ID บ้าน เพื่อเข้าสู่ระบบ</label>
+                      <input type="text" class="form-control" id="username" placeholder="เช่น permsub695" name="username" />
+                    </div>
+                    <div class="col-sm-12 d-flex justify-content-center mt-5">
+                      <div class="login-button-container">
+                        <button type="submit">เข้าสู่ระบบ</button>
+                      </div>
+                    </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -33,9 +35,9 @@
   <section class="content">
     <div class="container">
       <div class="slot-intro">
-        <h3 class="title shine-text underline">โปรแกรมสุ่มหวยคืออะไร</h3>
+        <h2 class="title shine-text underline">โปรแกรมสุ่มหวยคืออะไร</h2>
         <p style="text-indent:34px;">โปรแกรมสุ่มเลขแนวทาง อันโนมัติ สำหรับการใบ้หวย สะดวก ประหยัดเวลา ไม่ต้องมานั่งทำเองทีละรูป</p>
-        <h3 class="title shine-text underline">ทำงานอย่างไร</h3>
+        <h2 class="title shine-text underline">ทำงานอย่างไร</h2>
         <p>สุ่มหวยตามเงื่อนไขต่อไปนี้</p>
         <ul>
           <li>ตัวเลข 2 ตัวหลักจะไม่ซ้ำกัน</li>
@@ -46,12 +48,12 @@
           <li>ตัวเลขรองแถวที่สองจะเรียงจากน้อยไปมากเช่นกัน</li>
           <li>ตัวเลขรองแถวที่สองจะไม่เป็นเลขสลับกับแถวแรก (เลขโต๊ด) เช่น ถ้าแถวแรกมี 32 แถวล่างจะไม่มี 23</li>
         </ul>
-        <h3 class="title shine-text underline">วิธีบันทึกรูปภาพ</h3>
+        <h2 class="title shine-text underline">วิธีบันทึกรูปภาพ</h2>
         <h4 class="title shine-text underline">ในมือถือ</h4>
         <p style="text-indent:36px;">กดค้างที่รูป แล้วกด "บันทึกรูป"</p>
         <h4 class="title shine-text underline">ในคอมพิวเตอร์</h4>
         <p style="text-indent:36px;">คลิกขวาที่รูป แล้วกด "บันทึกรูป"</p>
-        <h3 class="title shine-text underline">ค่าบริการ</h3>
+        <h2 class="title shine-text underline">ค่าบริการ</h2>
         <table class="table table-striped">
           <tr>
             <th class="text-center shine-text">รายละเอียด</th>
@@ -72,7 +74,7 @@
         <h3 class="title shine-text underline">ส่วนลดพิเศษ (เลือกได้)</h3>
         <table class="table table-striped">
           <tr>
-            <th style="width:500px;" class="text-center shine-text">รายละเอียด</th>
+            <th class="text-center shine-text">รายละเอียด</th>
             <th class="text-center shine-text">ลูกค้าใหม่</th>
             <th class="text-center shine-text">ลูกค้าเก่า</th>
           </tr>
@@ -90,6 +92,10 @@
         <h3 class="title shine-text underline">วิธีสั่งซื้อ</h3>
         <p style="text-indent:36px;">แอดไลน์ @789ojdsx (<a href="https://lin.ee/b1qJISw">https://lin.ee/b1qJISw</a>)
         </p>
+        <h3 class="title shine-text underline">ตัวอย่าง</h3>
+        <div class="text-center">
+        <img src="/static/images/result-hua/permsub695-result.jpg" style="max-width:50%" alt="">
+        </div>
       </div>
     </div>
   </section>

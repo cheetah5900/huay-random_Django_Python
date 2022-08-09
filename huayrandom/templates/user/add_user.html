@@ -1,0 +1,58 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+<style>
+  table>tbody>tr>td:first-child {
+    width: 250px;
+  }
+</style>
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">เพิ่ม User</h1>
+      </div>
+
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            </div>
+          </div>
+          <div class="slot-intro">
+            <form method="post">
+              {%csrf_token%}
+             
+              <h3>Username</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">username : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="username">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <div class="text-center">
+                <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
+                <a class="btn btn-danger" href="/backend/">ยกเลิก</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {% if status %}
+    <script>
+      swal("เพิ่มข้อมูลสำเร็จ", "เพิ่มข้อมูลสำเร็จ", "success");
+    </script>
+    {% endif %}
+    {% if error %}
+    <script>
+      swal("บ้านนี้มีรายละเอียดหวยนี้แล้ว", "บ้านนี้มีรายละเอียดหวยนี้แล้ว", "error");
+    </script>
+    {% endif %}
+    {%endblock content%}

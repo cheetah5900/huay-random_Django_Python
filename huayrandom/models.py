@@ -10,6 +10,7 @@ class ProfileModel(models.Model):
     usertype = models.CharField(default='random', max_length=255)
     status = models.BooleanField(default=True)
     expire_date = models.DateTimeField(null=True, blank=True)
+    credit_shop = models.CharField(default='None', max_length=255)
 
     def __str__(self):
         return self.user.username
@@ -23,6 +24,13 @@ class HuayListModel(models.Model):
 
     def __str__(self):
         return self.short_name
+
+class FontListModel(models.Model):
+    font_name = models.CharField(default='Prompt.ttf', max_length=255)
+    
+
+    def __str__(self):
+        return self.font_name
 
 # HuayType
 class HuayTypeModel(models.Model):
