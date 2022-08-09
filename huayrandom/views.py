@@ -358,13 +358,12 @@ def EditDetailPicture(request, username, huay_id):
 
 def Home(request, username):
     context = {}    
+    context['username'] = username
     resultCheckExpire = CheckExpireDate(username)
     if resultCheckExpire == "ตัดสิทธิ์แล้ว":
         request.session['expire'] = 'ตัดสิทธิ์แล้ว'
-        return redirect('index')
     else:
         resultCheckExpire = ""
-
     try:
         userObject = User.objects.get(username=username)
         profileObject = ProfileModel.objects.get(user=userObject)
@@ -421,12 +420,16 @@ def Home(request, username):
 
         context['houseNameThai'] = profileObject.house_name
         context['expireDateThai'] = expireDateThai
-        context['resultCheckExpire'] = resultCheckExpire
         context['zipDataForLoopMorning'] = zipDataForLoopMorning
         context['zipDataForLoopAfternoon'] = zipDataForLoopAfternoon
         context['zipDataForLoopEvening'] = zipDataForLoopEvening
         context['zipDataForLoopOther'] = zipDataForLoopOther
-        context['username'] = username
+
+        if 'expire' in request.session:
+            context['expire'] = request.session['expire']
+            context['username'] = username
+            request.session['expire'] = ''  # clear stuck error in session
+            
         return render(request, 'index.html', context)
     except:
         request.session['error'] = 'ไม่มีบ้านดังกล่าว'
@@ -435,16 +438,27 @@ def Home(request, username):
 
 def Result(request, username, link):
     context = {}
-    userObject = User.objects.get(username=username)
     resultCheckExpire = CheckExpireDate(username)
     if resultCheckExpire == "ตัดสิทธิ์แล้ว":
         request.session['expire'] = 'ตัดสิทธิ์แล้ว'
-        return redirect('index')
+        if 'expire' in request.session:
+            context['expire'] = request.session['expire']
+            request.session['expire'] = ''  # clear stuck error in session
+        return render(request,'result/index.html',context)
     else:
         resultCheckExpire = ""
 
+    userObject = User.objects.get(username=username)
+    profileObject = ProfileModel.objects.get(user_id=userObject)
+    day = profileObject.expire_date.strftime("%d")
+    month = profileObject.expire_date.strftime("%m")
+    year = profileObject.expire_date.strftime("%Y")
+    thaiMonth = ConvertToThaiMonth(month)
+    expireDateThai = "{} {} {}".format(day, thaiMonth, year)
+
     context['username'] = username
     context['link'] = link
+    context['expireDateThai'] = expireDateThai
 
     try:
         huayListObject = HuayListModel.objects.get(link=link)
@@ -455,14 +469,8 @@ def Result(request, username, link):
 
         imgLocation = GenerateImageWIthText(username,data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
                                             data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
-        profileObject = ProfileModel.objects.get(user_id=userObject)
-        day = profileObject.expire_date.strftime("%d")
-        month = profileObject.expire_date.strftime("%m")
-        year = profileObject.expire_date.strftime("%Y")
-        thaiMonth = ConvertToThaiMonth(month)
-        expireDateThai = "{} {} {}".format(day, thaiMonth, year)
+        
 
-        context['expireDateThai'] = expireDateThai
         context['imgLocation'] = imgLocation
     except:
         request.session['error'] = 'error'
@@ -470,10 +478,6 @@ def Result(request, username, link):
             context['error'] = request.session['error']
             request.session['error'] = ''  # clear stuck error in session
         return render(request, 'result/index.html', context)
-    if 'error' in request.session:
-        context['error'] = request.session['error']
-        request.session['error'] = '' 
-
     return render(request, 'result/index.html', context)
 
 

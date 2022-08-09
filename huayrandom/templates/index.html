@@ -63,4 +63,9 @@
   </section>
 
 </div>
+{%if expire%}
+<script>
+ swal("โปรแกรมหมดอายุ", "กรุณาติดต่อ Admin เพื่อต่ออายุ", "error");
+</script>
+{%endif%}
 {%endblock content%}

@@ -83,6 +83,11 @@
      swal("ยังไม่ได้เพิ่มข้อมูลให้กับหวยตัวนี้", "กรุณาติดต่อ Admin", "error");
     </script>
     {%endif%}
+    {%if expire%}
+    <script>
+     swal("โปรแกรมหมดอายุ", "กรุณาติดต่อ Admin เพื่อต่ออายุ", "error");
+    </script>
+    {%endif%}
     {%endblock content%}
     {%block javascripts%}
     <!-- slider and sidebar-->
