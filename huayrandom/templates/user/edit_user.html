@@ -10,7 +10,7 @@
   <section class="slot-home-body">
     <div class="container">
       <div>
-        <h1 class="shine-text big-font text-center">เพิ่ม User</h1>
+        <h1 class="shine-text big-font text-center">แก้ไขข User</h1>
       </div>
 
       <section class="content">
@@ -23,24 +23,15 @@
             <form method="post">
               {%csrf_token%}
              
-              <h3>เพิ่ม Username</h3>
+              <h3>แก้ไข Username : {{data.house_name_}}</h3>
               <table class="table table-striped">
                 <tr>
-                  <td class="text-right">username : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="username">
-                      <p class="help-block help-block-error" />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">เครดิตร้าน : </td>
+                  <td class="text-right">เครดิตร้าน : {{data.credit_shop}}</td>
                   <td class="text-center">
                     <div class="form-group">
                       <select name="credit_shop" class="form-control">
-                        <option value="True">ติด</option>
-                        <option value="False">ไม่ติด</option>
+                        <option {%if data.credit_shop == True %} selected {% endif %} value="True">ติด</option>
+                        <option  {%if data.credit_shop == False %} selected {% endif %} value="False">ไม่ติด</option>
                       </select>
                     </div>
                   </td>
@@ -49,7 +40,7 @@
                   <td class="text-right">วันหมดอายุ : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="date" class="form-control" name="expire_date">
+                      <input type="date" class="form-control" name="expire_date" value="{{expireDate}}">
                     </div>
                   </td>
                 </tr>
@@ -57,7 +48,7 @@
                   <td class="text-right">เวลาหมดอายุ : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="time" class="form-control" name="expire_time">
+                      <input type="time" class="form-control" name="expire_time" value="{{expireTime}}">
                     </div>
                   </td>
                 </tr>

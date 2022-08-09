@@ -18,40 +18,45 @@
           <div class="slot-intro">
             <h3 class="title shine-text underline">เลือกบ้าน</h3>
             <table class="table table-striped">
-              <tr>
-                <th class="text-center shine-text">ชื่อบ้าน</th>
-              </tr>
-              <tr>
-                <td class="text-center">
-                  <div class="form-group">
-                    <form method="POST">
-                      {%csrf_token%}
+              <form method="POST">
+                {%csrf_token%}
+                <tr>
+                  <th class="text-center shine-text">ชื่อบ้าน</th>
+                  <th class="text-center shine-text">แก้ไข</th>
+                </tr>
+                <tr>
+                  <td class="text-center">
+                    <div class="form-group">
                       <select name="house_name" class="form-control">
                         <option value="none">เลือกบ้าน</option>
                         {% for data in profileObject %}
                         <option value="{{data.user.username}}">{{data.house_name}}</option>
                         {% endfor %}
                       </select>
-                      <label for="huayRadio">หวย</label>
-                      <input type="radio" name="next_page" value="huay">
-                      <label for="huayRadio">ผู้ใช้</label>
-                      <input type="radio" name="next_page" value="user">
-                      <div class="text-center mt-5">
-                        <button type="submit" class="btn btn-default">ยืนยัน</button>
-                      </div>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            </table>
+                    </div>
           </div>
+          </td>
+          <td>
+              <label for="huayRadio">หวย</label>
+              <input type="radio" name="next_page" value="huay" checked>
+              <br>
+              <label for="huayRadio">ผู้ใช้</label>
+              <input type="radio" name="next_page" value="user">
+              <div class="text-center mt-5">
+                <button type="submit" class="btn btn-default">ยืนยัน</button>
+              </div>
+          </td>
+          </tr>
+          </form>
+          </table>
         </div>
-      </section>
-
     </div>
-    {%if error%}
-    <script>
-     swal("กรุณาเลือกชื่อบ้าน", "กรุณาเลือกชื่อบ้าน", "error");
-    </script>
-    {%endif%}
-    {%endblock content%}
+  </section>
+
+</div>
+{%if error%}
+<script>
+  swal("กรุณาเลือกชื่อบ้าน", "กรุณาเลือกชื่อบ้าน", "error");
+</script>
+{%endif%}
+{%endblock content%}

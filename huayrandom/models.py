@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
-
 # Profile
 class ProfileModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -10,7 +8,7 @@ class ProfileModel(models.Model):
     usertype = models.CharField(default='random', max_length=255)
     status = models.BooleanField(default=True)
     expire_date = models.DateTimeField(null=True, blank=True)
-    credit_shop = models.CharField(default='None', max_length=255)
+    credit_shop = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username

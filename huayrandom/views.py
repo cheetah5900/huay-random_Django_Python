@@ -68,7 +68,7 @@ def Backend(request):
             elif(nextPage == "huay"):
                 return redirect('list_huay', houseName)
             else:
-                return redirect('list_user', houseName)
+                return redirect('list_user')
 
         else:
             return redirect('backend')
@@ -82,12 +82,11 @@ def Backend(request):
     return render(request, 'list_house.html', context)
 
 @login_required
-def ListUser(request,username):
+def ListUser(request):
     context = {}
 
     userObject = User.objects.all()
     context['userObject'] = userObject
-    context['username'] = username
 
     return render(request, 'user/user.html', context)
 
@@ -98,6 +97,9 @@ def AddUser(request, username):
     if request.method == 'POST':
         data = request.POST.copy()
         username = data.get('username')
+        creditShop = data.get('credit_shop')
+        expireDate = data.get('expire_date')
+        expireTime = data.get('expire_time')
 
         try:
             checkDuplicated = User.objects.get(username=username)
@@ -113,6 +115,8 @@ def AddUser(request, username):
             addProfileData = ProfileModel()
             addProfileData.user = User.objects.get(username=username)
             addProfileData.house_name = username
+            addProfileData.credit_shop = creditShop
+            addProfileData.expire_date = "{} {}:00".format(expireDate,expireTime)
             addProfileData.save()
 
             huayListObject = HuayListModel.objects.all()
@@ -157,6 +161,34 @@ def AddUser(request, username):
 
 
     return render(request, 'user/add_user.html', context)
+
+@login_required
+def EditUser(request, username):
+    context = {}
+    userObject = User.objects.get(username=username)
+    
+    if request.method == 'POST':
+        data = request.POST.copy()
+        creditShop = data.get('credit_shop')
+        expireDate = data.get('expire_date')
+        expireTime = data.get('expire_time')
+
+        editData = ProfileModel.objects.get(user=userObject)
+        editData.user = userObject
+        editData.credit_shop = creditShop
+        editData.expire_date =  "{} {}:00".format(expireDate,expireTime)
+        editData.save()
+
+        request.session['statusedit'] = 'Done'
+
+        return redirect('list_user')
+
+    profileObject = ProfileModel.objects.get(user=userObject)
+
+    context['data'] = profileObject
+    context['expireDate'] = profileObject.expire_date.strftime("%Y-%m-%d")
+    context['expireTime'] = profileObject.expire_date.strftime("%H:%M")
+    return render(request, 'user/edit_user.html', context)
 
 
 @login_required
