@@ -30,15 +30,15 @@ STATIC_URL = '/static/'
 
 
 # ? Dev
-# DEBUG = True
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static"
-# ]
+DEBUG = True
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
 
 
 # ? Prod
-DEBUG = False
-STATIC_ROOT = BASE_DIR / "static"
+# DEBUG = False
+# STATIC_ROOT = BASE_DIR / "static"
 
 ALLOWED_HOSTS = ['*']
 

@@ -29,7 +29,7 @@ def Index(request):
         request.session['error'] = ''  # clear stuck error in session
     if 'expire' in request.session:
         context['expire'] = request.session['expire']
-        request.session['expire'] = '' 
+        request.session['expire'] = ''
 
     return render(request, 'find_house.html', context)
 
@@ -61,11 +61,11 @@ def Backend(request):
         data = request.POST.copy()
         houseName = data.get('house_name')
         nextPage = data.get('next_page')
-        if(houseName != ""):
-            if(houseName == "none"):
+        if (houseName != ""):
+            if (houseName == "none"):
                 request.session['error'] = "error"
                 return redirect('backend')
-            elif(nextPage == "huay"):
+            elif (nextPage == "huay"):
                 return redirect('list_huay', houseName)
             else:
                 return redirect('list_user')
@@ -81,6 +81,7 @@ def Backend(request):
 
     return render(request, 'list_house.html', context)
 
+
 @login_required
 def ListUser(request):
     context = {}
@@ -89,6 +90,7 @@ def ListUser(request):
     context['userObject'] = userObject
 
     return render(request, 'user/user.html', context)
+
 
 @login_required
 def AddUser(request, username):
@@ -116,7 +118,8 @@ def AddUser(request, username):
             addProfileData.user = User.objects.get(username=username)
             addProfileData.house_name = username
             addProfileData.credit_shop = creditShop
-            addProfileData.expire_date = "{} {}:00".format(expireDate,expireTime)
+            addProfileData.expire_date = "{} {}:00".format(
+                expireDate, expireTime)
             addProfileData.save()
 
             huayListObject = HuayListModel.objects.all()
@@ -140,7 +143,7 @@ def AddUser(request, username):
                 addHuayData.main_num_font_size = 90
                 addHuayData.focus_num_pos_x = 1025
                 addHuayData.focus_num_pos_y = 780
-                addHuayData.focus_num_font_size = 230 
+                addHuayData.focus_num_font_size = 230
                 addHuayData.row1_x = 170
                 addHuayData.row1_y = 900
                 addHuayData.row2_x = 170
@@ -159,14 +162,14 @@ def AddUser(request, username):
         context['status'] = request.session['status']
         request.session['status'] = ''  # clear stuck error in session
 
-
     return render(request, 'user/add_user.html', context)
+
 
 @login_required
 def EditUser(request, username):
     context = {}
     userObject = User.objects.get(username=username)
-    
+
     if request.method == 'POST':
         data = request.POST.copy()
         creditShop = data.get('credit_shop')
@@ -176,7 +179,7 @@ def EditUser(request, username):
         editData = ProfileModel.objects.get(user=userObject)
         editData.user = userObject
         editData.credit_shop = creditShop
-        editData.expire_date =  "{} {}:00".format(expireDate,expireTime)
+        editData.expire_date = "{} {}:00".format(expireDate, expireTime)
         editData.save()
 
         request.session['statusedit'] = 'Done'
@@ -239,14 +242,13 @@ def AddDetailPicture(request, username):
         numberRow2PosY = data.get('number_row2_pos_y')
         numberRowFontsize = data.get('number_row_fontsize')
 
-
         try:
             checkDuplicated = HuayTypeModel.objects.get(id=huayListId)
             request.session['error'] = 'error'
             return redirect('add_huay', username)
         except:
-            getFontName = FontListModel.objects.get(id=fontTextId) 
-            getFontName2 = FontListModel.objects.get(id=fontNumberId) 
+            getFontName = FontListModel.objects.get(id=fontTextId)
+            getFontName2 = FontListModel.objects.get(id=fontNumberId)
             addData = HuayTypeModel()
             addData.user = User.objects.get(id=username)
             addData.huay_list = HuayListModel.objects.get(id=huayListId)
@@ -315,7 +317,7 @@ def AddDetailPicture(request, username):
 def EditDetailPicture(request, username, huay_id):
     context = {}
     userObject = User.objects.get(username=username)
-    
+
     if request.method == 'POST':
         data = request.POST.copy()
         huayListId = data.get('huay_list_id')
@@ -342,10 +344,10 @@ def EditDetailPicture(request, username, huay_id):
         numberRow2PosY = data.get('number_row2_pos_y')
         numberRowFontsize = data.get('number_row_fontsize')
 
-        getFontName = FontListModel.objects.get(id=fontTextId) 
-        getFontName2 = FontListModel.objects.get(id=fontNumberId) 
-        
-        editData = HuayTypeModel.objects.get(id=huayListId,user=userObject)
+        getFontName = FontListModel.objects.get(id=fontTextId)
+        getFontName2 = FontListModel.objects.get(id=fontNumberId)
+
+        editData = HuayTypeModel.objects.get(id=huayListId, user=userObject)
 
         editData.user = User.objects.get(username=username)
         editData.font_text = getFontName.font_name
@@ -374,11 +376,11 @@ def EditDetailPicture(request, username, huay_id):
 
         request.session['statusedit'] = 'Done'
 
-        return redirect('edit_huay', username,huay_id)
+        return redirect('edit_huay', username, huay_id)
 
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
-    huayTypeObject = HuayTypeModel.objects.get(id=huay_id,user=userObject)
+    huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
     fontListObject = FontListModel.objects.all()
 
     context['huayTypeObject'] = huayTypeObject
@@ -389,7 +391,7 @@ def EditDetailPicture(request, username, huay_id):
 
 
 def Home(request, username):
-    context = {}    
+    context = {}
     context['username'] = username
     resultCheckExpire = CheckExpireDate(username)
     if resultCheckExpire == "ตัดสิทธิ์แล้ว":
@@ -461,12 +463,12 @@ def Home(request, username):
             context['expire'] = request.session['expire']
             context['username'] = username
             request.session['expire'] = ''  # clear stuck error in session
-            
+
         return render(request, 'index.html', context)
     except:
         request.session['error'] = 'ไม่มีบ้านดังกล่าว'
         return redirect('index')
-        
+
 
 def Result(request, username, link):
     context = {}
@@ -476,7 +478,7 @@ def Result(request, username, link):
         if 'expire' in request.session:
             context['expire'] = request.session['expire']
             request.session['expire'] = ''  # clear stuck error in session
-        return render(request,'result/index.html',context)
+        return render(request, 'result/index.html', context)
     else:
         resultCheckExpire = ""
 
@@ -500,9 +502,8 @@ def Result(request, username, link):
         textColorSplit = data.text_color.split(",")
         borderColorSplit = data.border_color.split(",")
 
-        imgLocation = GenerateImageWIthText(username,data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+        imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
                                             data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
-        
 
         context['imgLocation'] = imgLocation
     except:
@@ -558,7 +559,7 @@ def CheckExpireDate(username):
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
 
 
-def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize):
+def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize):
     randomResult = random2NumberResult()
     mainFirstNumber = randomResult[0]
     mainSecondNumber = randomResult[1]
@@ -572,13 +573,7 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
     row2Set3 = randomResult[9]
     row2Set4 = randomResult[10]
     path = os.getcwd()
-    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
-    # locationTemplate = path+'/static/images/template-hua/{}-template.jpg'.format(username)
-    
-    img = Image.open(locationTemplate)
-    imgObj = ImageDraw.Draw(img)
-
-    # Set font
+    # ? SERVER
     font0 = ImageFont.truetype(
         '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
     font1 = ImageFont.truetype(
@@ -589,7 +584,10 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
         '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
     font4 = ImageFont.truetype(
         '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    
+    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
+    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
+
+    # ? LOCAL
     # font0 = ImageFont.truetype(
     #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
     # font1 = ImageFont.truetype(
@@ -600,9 +598,15 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
     #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
     # font4 = ImageFont.truetype(
     #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    # locationTemplate = path + \
+    #     '/static/images/template-hua/{}-template.jpg'.format(username)
+
+    img = Image.open(locationTemplate)
+    imgObj = ImageDraw.Draw(img)
 
     # Set Date
-    cueDateTime = datetime.now() + relativedelta(hours=7,years=543)
+    cueDateTime = datetime.now() + relativedelta(hours=7, years=543)
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
@@ -627,8 +631,6 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
                 font=font4, fill=textColor)
 
-    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
-    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
     img.save(location)
     imgLocation = '/static/images/result-hua/{}-result.jpg'.format(username)
     return imgLocation
@@ -641,6 +643,8 @@ def randomNumber():
     return result
 
 # สุ่มตัวเลขขึ้นมา โดยต้องไปซ้ำกับใน list
+
+
 def RandomNumberUniqueToList(list):
     checkDuplicated = True
     while checkDuplicated == True:
@@ -657,6 +661,8 @@ def RandomNumberUniqueToList(list):
 # คัดกรองตัวเลขแถวที่สอง โดยมีเงื่อนไขคือ ถ้าเลข 2 หลัก ของตัวเลขแถวที่สอง ซ้ำ กับ ตัวเลขของตัวแรก ให้สร้างใหม่ และแต่ละตัวภายในแถวที่สองห้ามซ้ำกัน
 
 # จะสุ่มเป็นตัวอะไรก็ได้ ยกเว้นตัวที่ส่งเช้ามา เช่น ส่ง 3 เข้ามา มันจะสุ่มจนได้เลขอื่นที่ไม่ใช่ 3
+
+
 def AvoidNumber(avoidNumber):
     check = True
     while check == True:
@@ -679,17 +685,10 @@ def generateNumberForSecondLine(listSwapNumber, mainSecondNumber, subNumberSecon
     return newSubNumberSecondUnit
 
 
-
 def random2NumberResult():
-    allNumberList = []
-
     # Random integer
     mainFirstNumber = randomNumber()
     mainSecondNumber = AvoidNumber(mainFirstNumber)
-
-    #append first 2 number to list
-    allNumberList.append(mainFirstNumber)
-    allNumberList.append(mainSecondNumber)
 
     # random one of two
     listForFocusNumber = [mainFirstNumber, mainSecondNumber]
@@ -699,15 +698,18 @@ def random2NumberResult():
     # เอา ตัวหลักเข้า list เพื่อไม่ให้ตัวอื่นๆในแถวแรกที่สร้างขึ้นมาเบิ้ลกับตัวแรก
     subNumberRow1SecondUnitList.append(mainFirstNumber)
 
-    subNumberRow1SecondUnit1 = RandomNumberUniqueToList(subNumberRow1SecondUnitList)
+    subNumberRow1SecondUnit1 = RandomNumberUniqueToList(
+        subNumberRow1SecondUnitList)
     subNumberRow1SecondUnitList.append(subNumberRow1SecondUnit1)
-    subNumberRow1SecondUnit2 = RandomNumberUniqueToList(subNumberRow1SecondUnitList)
+    subNumberRow1SecondUnit2 = RandomNumberUniqueToList(
+        subNumberRow1SecondUnitList)
     subNumberRow1SecondUnitList.append(subNumberRow1SecondUnit2)
-    subNumberRow1SecondUnit3 = RandomNumberUniqueToList(subNumberRow1SecondUnitList)
+    subNumberRow1SecondUnit3 = RandomNumberUniqueToList(
+        subNumberRow1SecondUnitList)
     subNumberRow1SecondUnitList.append(subNumberRow1SecondUnit3)
-    subNumberRow1SecondUnit4 = RandomNumberUniqueToList(subNumberRow1SecondUnitList)
+    subNumberRow1SecondUnit4 = RandomNumberUniqueToList(
+        subNumberRow1SecondUnitList)
     subNumberRow1SecondUnitList.append(subNumberRow1SecondUnit4)
-
 
     swapNumber = [str(subNumberRow1SecondUnit1)+str(mainFirstNumber), str(subNumberRow1SecondUnit2)+str(mainFirstNumber),
                   str(subNumberRow1SecondUnit3)+str(mainFirstNumber), str(subNumberRow1SecondUnit4)+str(mainFirstNumber)]
@@ -715,19 +717,23 @@ def random2NumberResult():
     # ตัดตัวเลขที่ซ้ำกันออกทั้งหมดก่อนที่จะไปเช็คกับคำในแถวแรก
     subNumberRow2SecondUnitList = []
     # เอา ตัวหลักทั้งสองตัวเข้า list เพื่อไม่ให้เลขหลักหน่วยที่สร้างขึ้นมาในแถวที่สอง ซ้ำกับเลขหลักสิบของตัวหลัก
-    subNumberRow2SecondUnitList.append(mainFirstNumber)
+    # subNumberRow2SecondUnitList.append(mainFirstNumber)
     # เอาเลขหลักสิบของตัวหลักมาใส่ list เพื่อไม่ให้เลขหลักหน่วยที่สร้างขึ้นมาในแถวที่สอง ซ้ำกับเลขหลักหน่วยของตัวหลัก
     subNumberRow2SecondUnitList.append(mainSecondNumber)
 
-    subNumberRow2SecondUnit1 = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
+    subNumberRow2SecondUnit1 = RandomNumberUniqueToList(
+        subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit1)
-    subNumberRow2SecondUnit2 = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
+    subNumberRow2SecondUnit2 = RandomNumberUniqueToList(
+        subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit2)
-    subNumberRow2SecondUnit3 = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
+    subNumberRow2SecondUnit3 = RandomNumberUniqueToList(
+        subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit3)
-    subNumberRow2SecondUnit4 = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
+    subNumberRow2SecondUnit4 = RandomNumberUniqueToList(
+        subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit4)
-    
+
     # เช็คซ้ำกับแถวที่ 1
     subNumberRow2SecondUnit1 = generateNumberForSecondLine(
         swapNumber, mainSecondNumber, subNumberRow2SecondUnit1)
@@ -738,6 +744,10 @@ def random2NumberResult():
     subNumberRow2SecondUnit4 = generateNumberForSecondLine(
         swapNumber, mainSecondNumber, subNumberRow2SecondUnit4)
 
+    # ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
+    if mainSecondNumber not in subNumberRow1SecondUnitList:
+        if mainFirstNumber not in subNumberRow2SecondUnitList:
+            subNumberRow1SecondUnit4 = mainSecondNumber
 
     # Sort Number
     sortNumberSecondUnitList = [
