@@ -63,8 +63,11 @@ def Backend(request):
         nextPage = data.get('next_page')
         if (houseName != ""):
             if (houseName == "none"):
-                request.session['error'] = "error"
-                return redirect('backend')
+                if (nextPage == "huay"):
+                    request.session['error'] = "error"
+                    return redirect('backend')
+                else:
+                    return redirect('list_user')
             elif (nextPage == "huay"):
                 return redirect('list_huay', houseName)
             else:
@@ -93,7 +96,7 @@ def ListUser(request):
 
 
 @login_required
-def AddUser(request, username):
+def AddUser(request):
     context = {}
 
     if request.method == 'POST':
@@ -106,7 +109,7 @@ def AddUser(request, username):
         try:
             checkDuplicated = User.objects.get(username=username)
             request.session['error'] = 'error'
-            return redirect('list_user', username)
+            return redirect('list_user')
         except:
 
             addData = User()
@@ -127,8 +130,8 @@ def AddUser(request, username):
                 addHuayData = HuayTypeModel()
                 addHuayData.user = User.objects.get(username=username)
                 addHuayData.huay_list = HuayListModel.objects.get(id=item.id)
-                addHuayData.font_text = "PromptBold.tff"
-                addHuayData.font_number = "Kanit.tff"
+                addHuayData.font_text = "PromptBold.ttf"
+                addHuayData.font_number = "Kanit.ttf"
                 addHuayData.text_color = "255,255,255"
                 addHuayData.border_size = 4
                 addHuayData.border_color = "0,0,0"
@@ -153,7 +156,7 @@ def AddUser(request, username):
 
             request.session['status'] = 'Done'
 
-            return redirect('list_user', username)
+            return redirect('list_user')
 
     if 'error' in request.session:
         context['error'] = request.session['error']
@@ -241,16 +244,16 @@ def AddDetailPicture(request, username):
         numberRow2PosX = data.get('number_row2_pos_x')
         numberRow2PosY = data.get('number_row2_pos_y')
         numberRowFontsize = data.get('number_row_fontsize')
-
         try:
-            checkDuplicated = HuayTypeModel.objects.get(id=huayListId)
+            checkDuplicated = HuayTypeModel.objects.get(id=huayListId,user=userObject)
             request.session['error'] = 'error'
             return redirect('add_huay', username)
         except:
+            print("fontTextId : ",fontTextId)
             getFontName = FontListModel.objects.get(id=fontTextId)
             getFontName2 = FontListModel.objects.get(id=fontNumberId)
             addData = HuayTypeModel()
-            addData.user = User.objects.get(id=username)
+            addData.user = User.objects.get(username=username)
             addData.huay_list = HuayListModel.objects.get(id=huayListId)
             addData.font_text = getFontName.font_name
             addData.font_number = getFontName2.font_name
@@ -494,24 +497,24 @@ def Result(request, username, link):
     context['link'] = link
     context['expireDateThai'] = expireDateThai
 
-    try:
-        huayListObject = HuayListModel.objects.get(link=link)
-        data = HuayTypeModel.objects.get(
-            huay_list=huayListObject, user=userObject)
-        profileObject = ProfileModel.objects.get(user=userObject)
-        textColorSplit = data.text_color.split(",")
-        borderColorSplit = data.border_color.split(",")
+    # try:
+    huayListObject = HuayListModel.objects.get(link=link)
+    data = HuayTypeModel.objects.get(
+        huay_list=huayListObject, user=userObject)
+    profileObject = ProfileModel.objects.get(user=userObject)
+    textColorSplit = data.text_color.split(",")
+    borderColorSplit = data.border_color.split(",")
 
-        imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                            data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
 
-        context['imgLocation'] = imgLocation
-    except:
-        request.session['error'] = 'error'
-        if 'error' in request.session:
-            context['error'] = request.session['error']
-            request.session['error'] = ''  # clear stuck error in session
-        return render(request, 'result/index.html', context)
+    context['imgLocation'] = imgLocation
+    # except:
+    #     request.session['error'] = 'error'
+    #     if 'error' in request.session:
+    #         context['error'] = request.session['error']
+    #         request.session['error'] = ''  # clear stuck error in session
+    #     return render(request, 'result/index.html', context)
     return render(request, 'result/index.html', context)
 
 
@@ -573,36 +576,37 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     row2Set3 = randomResult[9]
     row2Set4 = randomResult[10]
     path = os.getcwd()
+
     # ? SERVER
-    font0 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    font1 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    font2 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    font3 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    font4 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
-    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
+    # font0 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    # font1 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    # font2 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    # font3 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    # font4 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    # location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
+    # locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
 
     # ? LOCAL
-    # font0 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    # font1 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    # font2 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    # font3 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    # font4 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
-    # locationTemplate = path + \
-    #     '/static/images/template-hua/{}-template.jpg'.format(username)
+    font0 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    font1 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    font2 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    font3 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    font4 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    locationTemplate = path + \
+        '/static/images/template-hua/{}-template.jpg'.format(username)
 
-    img = Image.open(locationTemplate)
+    img = Image.open(locationTemplate)    
     imgObj = ImageDraw.Draw(img)
 
     # Set Date

@@ -1,0 +1,304 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+<style>
+  table>tbody>tr>td:first-child {
+    width: 250px;
+  }
+</style>
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">แก้ไขรายละเอียดรูปภาพ</h1>
+        <h2 class="shine-text big-font text-center">บ้าน : {{data.house_name}}</h2>
+        <h2 class="shine-text big-font text-center">รายการหวย : {{huayTypeObject.huay_list.full_name}}</h2>
+      </div>
+
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            </div>
+          </div>
+          <div class="slot-intro">
+            <form method="post">
+              {%csrf_token%}
+              <h3>วันที่</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">ตำแหน่งวันที่ X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.date_pos_x}}" name="date_pos_x" type="number" class="form-control"
+                        placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งวันที่ Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.date_pos_y}}" name="date_pos_y" type="number" class="form-control"
+                        placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดวันที่ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.date_font_size}}" name="date_fontsize" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <h3>ชื่อหวย</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">Font ข้อความ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <select name="font_text_id" class="form-control">
+                        {%for font in fontList%}
+                        <option {%if font.font_name == huayTypeObject.font_text %} selected {%endif%} value="{{font.id}}">{{font.font_name}}</option>
+                        {%endfor%}
+                      </select>
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">สีข้อความ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <select name="text_color" class="form-control">
+                        <option {%if huayTypeObject.text_color == '255,255,255' %} selected {%endif%} value="255,255,255">
+                          ขาว</option>
+                        <option {%if huayTypeObject.text_color == '0,0,0' %} selected {%endif%} value="0,0,0">ดำ</option>
+                      </select>
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งข้อความ X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.text_pos_x}}" type="number" class="form-control" placeholder="1"
+                        name="text_pos_x">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งข้อความ Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.text_pos_y}}" type="number" class="form-control" placeholder="1"
+                        name="text_pos_y">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดข้อความ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.text_font_size}}" type="number" class="form-control" placeholder="1"
+                        name="text_size">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ความหนาเส้นขอบ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.border_size}}" type="number" class="form-control" placeholder="1"
+                        name="border_width">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">สีเส้นขอบ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <select name="border_color" class="form-control">
+                        <option {%if huayTypeObject.border_color == '255,255,255' %} selected {%endif%}
+                          value="255,255,255">ขาว</option>
+                        <option {%if huayTypeObject.border_color == '0,0,0' %} selected {%endif%} value="0,0,0">ดำ
+                        </option>
+                      </select>
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <h3>ตัวเลข 2 หลัก</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">Font ตัวเลข : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <select name="number_font_id" class="form-control">
+                        {%for font in fontList%}
+                        <option {%if font.font_name == huayTypeObject.font_number %} selected {%endif%} value="{{font.id}}">{{font.font_name}}</option>
+                        {%endfor%}
+                      </select>
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งเลขหลัก 2 ตัว X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.main_num_pos_x}}" name="main_number_pos_x" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งเลขหลัก 2 ตัว Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.main_num_pos_y}}" name="main_number_pos_y" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดเลขหลัก 2 ตัว : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.main_num_font_size}}" name="main_number_size" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <h3>เลขใบ้หวยย่อย 2 ชุด</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">แถวที่ 1 X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.row1_x}}" name="number_row1_pos_x" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">แถวที่ 1 Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.row1_y}}" name="number_row1_pos_y" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">แถวที่ 2 X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.row2_x}}" name="number_row2_pos_x" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">แถวที่ 2 Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.row2_y}}" name="number_row2_pos_y" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดเลขทั้งสองแถว : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.row_font_size}}" name="number_row_fontsize" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <h3>ตัวเน้น</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">ตำแหน่งตัวเน้น X : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.focus_num_pos_x}}" name="focus_pos_x" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ตำแหน่งตัวเน้น Y : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.focus_num_pos_y}}" name="focus_pos_y" type="number"
+                        class="form-control" placeholder="1">
+
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ขนาดตัวเน้น : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input value="{{huayTypeObject.focus_num_font_size}}" name="focus_fontsize" type="number"
+                        class="form-control" placeholder="1">
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <div class="text-center">
+                <input type="hidden" name="huay_list_id" value="{{huayId}}">
+                <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
+                <a class="btn btn-danger" href="/backend/">ยกเลิก</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {% if status %}
+    <script>
+      swal("เพิ่มข้อมูลสำเร็จ", "เพิ่มข้อมูลสำเร็จ", "success");
+    </script>
+    {% endif %}
+    {% if error %}
+    <script>
+      swal("บ้านนี้มีรายละเอียดหวยนี้แล้ว", "บ้านนี้มีรายละเอียดหวยนี้แล้ว", "error");
+    </script>
+    {% endif %}
+    {%endblock content%}

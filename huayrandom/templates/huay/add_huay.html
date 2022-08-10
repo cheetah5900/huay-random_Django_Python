@@ -45,7 +45,7 @@
                   <td class="text-right">Font ข้อความ : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <select name="text_font" class="form-control">
+                      <select name="font_text_id" class="form-control">
                         {%for font in fontList%}
                         <option value="{{font.id}}">{{font.font_name}}</option>
                         {%endfor%}
@@ -121,7 +121,7 @@
                   <td class="text-right">Font ตัวเลข : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <select name="number_font" class="form-control">
+                      <select name="number_font_id" class="form-control">
                         {%for font in fontList%}
                         <option value="{{font.id}}">{{font.font_name}}</option>
                         {%endfor%}

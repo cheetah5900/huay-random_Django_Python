@@ -5,4 +5,5 @@ from .models import *
 admin.site.register(HuayTypeModel)
 admin.site.register(HuayListModel)
 admin.site.register(ProfileModel)
+admin.site.register(ColorListModel)
 admin.site.register(FontListModel)
