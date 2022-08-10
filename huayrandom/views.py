@@ -492,25 +492,25 @@ def Result(request, username, link):
     context['link'] = link
     context['expireDateThai'] = expireDateThai
 
-    # try:
-    huayListObject = HuayListModel.objects.get(link=link)
-    data = HuayTypeModel.objects.get(
-        huay_list=huayListObject, user=userObject)
-    profileObject = ProfileModel.objects.get(user=userObject)
-    textColorSplit = data.text_color.split(",")
-    borderColorSplit = data.border_color.split(",")
+    try:
+        huayListObject = HuayListModel.objects.get(link=link)
+        data = HuayTypeModel.objects.get(
+            huay_list=huayListObject, user=userObject)
+        profileObject = ProfileModel.objects.get(user=userObject)
+        textColorSplit = data.text_color.split(",")
+        borderColorSplit = data.border_color.split(",")
 
-    imgLocation = GenerateImageWIthText(username,data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
-    
+        imgLocation = GenerateImageWIthText(username,data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                            data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+        
 
-    context['imgLocation'] = imgLocation
-    # except:
-    #     request.session['error'] = 'error'
-    #     if 'error' in request.session:
-    #         context['error'] = request.session['error']
-    #         request.session['error'] = ''  # clear stuck error in session
-    #     return render(request, 'result/index.html', context)
+        context['imgLocation'] = imgLocation
+    except:
+        request.session['error'] = 'error'
+        if 'error' in request.session:
+            context['error'] = request.session['error']
+            request.session['error'] = ''  # clear stuck error in session
+        return render(request, 'result/index.html', context)
     return render(request, 'result/index.html', context)
 
 
@@ -602,7 +602,7 @@ def GenerateImageWIthText(username,type, fontText, fontNumber, textColor, border
     #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
 
     # Set Date
-    cueDateTime = datetime.now() + relativedelta(years=543)
+    cueDateTime = datetime.now() + relativedelta(hours=7,years=543)
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
@@ -715,9 +715,9 @@ def random2NumberResult():
     # ตัดตัวเลขที่ซ้ำกันออกทั้งหมดก่อนที่จะไปเช็คกับคำในแถวแรก
     subNumberRow2SecondUnitList = []
     # เอา ตัวหลักทั้งสองตัวเข้า list เพื่อไม่ให้เลขหลักหน่วยที่สร้างขึ้นมาในแถวที่สอง ซ้ำกับเลขหลักสิบของตัวหลัก
-    subNumberRow1SecondUnitList.append(mainFirstNumber)
+    subNumberRow2SecondUnitList.append(mainFirstNumber)
     # เอาเลขหลักสิบของตัวหลักมาใส่ list เพื่อไม่ให้เลขหลักหน่วยที่สร้างขึ้นมาในแถวที่สอง ซ้ำกับเลขหลักหน่วยของตัวหลัก
-    subNumberRow1SecondUnitList.append(mainSecondNumber)
+    subNumberRow2SecondUnitList.append(mainSecondNumber)
 
     subNumberRow2SecondUnit1 = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit1)
