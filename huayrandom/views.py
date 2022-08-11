@@ -686,10 +686,12 @@ def AvoidNumber(avoidNumber):
 # สร้างชุดสุ่มหวย 2 หลัก
 
 
-def generateNumberForSecondLine(listSwapNumber, mainSecondNumber, subNumberSecondUnit):
+def generateNumberForSecondLine(subNumberRow2SecondUnitList,listSwapNumber, mainSecondNumber, subNumberSecondUnit):
     setOfNumber = str(mainSecondNumber)+str(subNumberSecondUnit)
     if setOfNumber in listSwapNumber:
-        newSubNumberSecondUnit = AvoidNumber(subNumberSecondUnit)
+        newSubNumberSecondUnit = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
+        # เพิ่มเข้าไปในลิสต์เพื่อไม่ให้การสุ่มตัวเลขครั้งใหม่ ซ้ำกับเลขเก่า และเลขที่เพิ่งสร้างได้เมื่อกี้
+        subNumberRow2SecondUnitList.append(newSubNumberSecondUnit)
     else:
         newSubNumberSecondUnit = subNumberSecondUnit
     return newSubNumberSecondUnit
@@ -721,13 +723,15 @@ def random2NumberResult(profileObject):
         subNumberRow1SecondUnitList)
     subNumberRow1SecondUnitList.append(subNumberRow1SecondUnit4)
 
-    swapNumber = [str(subNumberRow1SecondUnit1)+str(mainFirstNumber), str(subNumberRow1SecondUnit2)+str(mainFirstNumber),
-                  str(subNumberRow1SecondUnit3)+str(mainFirstNumber), str(subNumberRow1SecondUnit4)+str(mainFirstNumber)]
-
-    # ตัดตัวเลขที่ซ้ำกันออกทั้งหมดก่อนที่จะไปเช็คกับคำในแถวแรก
+    #* สร้าง List ขึ้นมาสำหรับการเช็คซ้ำ
     subNumberRow2SecondUnitList = []
-    # เอา ตัวหลักทั้งสองตัวเข้า list เพื่อไม่ให้เลขหลักหน่วยที่สร้างขึ้นมาในแถวที่สอง ซ้ำกับเลขหลักสิบของตัวหลัก
-    # subNumberRow2SecondUnitList.append(mainFirstNumber)
+
+    #* ถ้าแถวที่ 1 มีเลข รูด แล้ว แถวที่ 2 จะต้องยกเว้นการสุ่มโดนเลข วิ่ง เช่น เลข วิ่ง-รูด เป็น 4-6 ถ้าแถวที่ 1 มี 46 แล้ว แถวข้างล่างต้องสุ่มให้ไม่มีเลข 6
+    #* แต่ถ้าแถวที่ 1 ไม่มีเลขรูด สามารถสุ่มยังไงก็ได้ แสดงว่าถ้าแถวแรกมีเลขรูดแล้ว เราก็จะใส่เลข วิ่ง เข้าไปใน List เพื่อจะได้ไม่สุ่มโดนเลข วิ่ง
+    if subNumberRow1SecondUnit1 == mainSecondNumber or subNumberRow1SecondUnit2 == mainSecondNumber or subNumberRow1SecondUnit3 == mainSecondNumber or subNumberRow1SecondUnit4 == mainSecondNumber:
+        # เพิ่มเลข "รูด" เข้าไป
+        subNumberRow2SecondUnitList.append(mainFirstNumber)
+
     # เอาเลขหลักสิบของตัวหลักมาใส่ list เพื่อไม่ให้เลขหลักหน่วยที่สร้างขึ้นมาในแถวที่สอง ซ้ำกับเลขหลักหน่วยของตัวหลัก
     subNumberRow2SecondUnitList.append(mainSecondNumber)
 
@@ -744,19 +748,9 @@ def random2NumberResult(profileObject):
         subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit4)
 
-    # เช็คซ้ำกับแถวที่ 1
-    subNumberRow2SecondUnit1 = generateNumberForSecondLine(
-        swapNumber, mainSecondNumber, subNumberRow2SecondUnit1)
-    subNumberRow2SecondUnit2 = generateNumberForSecondLine(
-        swapNumber, mainSecondNumber, subNumberRow2SecondUnit2)
-    subNumberRow2SecondUnit3 = generateNumberForSecondLine(
-        swapNumber, mainSecondNumber, subNumberRow2SecondUnit3)
-    subNumberRow2SecondUnit4 = generateNumberForSecondLine(
-        swapNumber, mainSecondNumber, subNumberRow2SecondUnit4)
 
     #* ถ้า random_mode เป็นแบบต้องมีเลข วิ่ง-รูด ในเลขเจาะ จะเข้าเงื่อนไขนี้
-    #? แนวคิด : ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
-    # print("profileObject.random_mode : ",profileObject.random_mode)
+    #* ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
     if profileObject.random_mode == 'force_have_main_number':
         if mainSecondNumber not in subNumberRow1SecondUnitList:
             if mainFirstNumber not in subNumberRow2SecondUnitList:
