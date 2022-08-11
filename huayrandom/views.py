@@ -618,14 +618,23 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
+
+    borderColorObject = ColorListModel.objects.get(id=borderColor)
+    borderColorSeparate = borderColorObject.color_code.split(",")
+    borderColorConverted0 = int(borderColorSeparate[0])
+    borderColorConverted1 = int(borderColorSeparate[1])
+    borderColorConverted2 = int(borderColorSeparate[2])
+
+    borderColorConverted =borderColorConverted0,borderColorConverted1,borderColorConverted2
+
     imgObj.text((txtPosX-borderSize, txtPosY), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
     imgObj.text((txtPosX+borderSize, txtPosY), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
     imgObj.text((txtPosX, txtPosY-borderSize), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
     imgObj.text((txtPosX, txtPosY+borderSize), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
 
     textColorObject = ColorListModel.objects.get(id=textColor)
     textColorSeparate = textColorObject.color_code.split(",")
