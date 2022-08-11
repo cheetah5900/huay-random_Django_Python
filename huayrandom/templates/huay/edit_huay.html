@@ -79,9 +79,9 @@
                   <td class="text-center">
                     <div class="form-group">
                       <select name="text_color" class="form-control">
-                        <option {%if huayTypeObject.text_color == '255,255,255' %} selected {%endif%} value="255,255,255">
-                          ขาว</option>
-                        <option {%if huayTypeObject.text_color == '0,0,0' %} selected {%endif%} value="0,0,0">ดำ</option>
+                          {% for item in colorList %}
+                          <option {%if huayTypeObject.text_color == item.id %} selected {%endif%} value="{{item.id}}">{{item.color_name}}</option>
+                          {% endfor %}
                       </select>
                       <p class="help-block help-block-error" />
                     </div>
@@ -132,10 +132,9 @@
                   <td class="text-center">
                     <div class="form-group">
                       <select name="border_color" class="form-control">
-                        <option {%if huayTypeObject.border_color == '255,255,255' %} selected {%endif%}
-                          value="255,255,255">ขาว</option>
-                        <option {%if huayTypeObject.border_color == '0,0,0' %} selected {%endif%} value="0,0,0">ดำ
-                        </option>
+                        {% for item in colorList %}
+                        <option {%if huayTypeObject.border_color == item.id %} selected {%endif%} value="{{item.id}}">{{item.color_name}}</option>
+                        {% endfor %}
                       </select>
                       <p class="help-block help-block-error" />
                     </div>

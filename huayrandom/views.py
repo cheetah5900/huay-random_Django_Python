@@ -220,7 +220,7 @@ def ListHuay(request, username):
 
 
 @login_required
-def AddDetailPicture(request, username):
+def AddHuay(request, username):
     context = {}
 
     if request.method == 'POST':
@@ -253,7 +253,6 @@ def AddDetailPicture(request, username):
             request.session['error'] = 'error'
             return redirect('add_huay', username)
         except:
-            print("fontTextId : ",fontTextId)
             getFontName = FontListModel.objects.get(id=fontTextId)
             getFontName2 = FontListModel.objects.get(id=fontNumberId)
             addData = HuayTypeModel()
@@ -312,16 +311,18 @@ def AddDetailPicture(request, username):
     huayAllList = zip(huayAllNameList, huayAllIdList)
 
     fontListObject = FontListModel.objects.all()
+    colorListObject = ColorListModel.objects.all()
 
     context['huayList'] = huayAllList
     context['data'] = profileObject
     context['fontList'] = fontListObject
+    context['colorList'] = colorListObject
 
     return render(request, 'huay/add_huay.html', context)
 
 
 @login_required
-def EditDetailPicture(request, username, huay_id):
+def EditHuay(request, username, huay_id):
     context = {}
     userObject = User.objects.get(username=username)
 
@@ -389,11 +390,14 @@ def EditDetailPicture(request, username, huay_id):
     profileObject = ProfileModel.objects.get(user=userObject)
     huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
     fontListObject = FontListModel.objects.all()
+    colorListObject = ColorListModel.objects.all()
 
     context['huayTypeObject'] = huayTypeObject
     context['data'] = profileObject
     context['huayId'] = huay_id
     context['fontList'] = fontListObject
+    context['colorList'] = colorListObject
+
     return render(request, 'huay/edit_huay.html', context)
 
 
