@@ -9,6 +9,8 @@ class ProfileModel(models.Model):
     status = models.BooleanField(default=True)
     expire_date = models.DateTimeField(null=True, blank=True)
     credit_shop = models.BooleanField(default=True)
+    # สุ่มว่าจะให้มีเลข วิ่ง-รูด ในเลขเจาะหรือไม่
+    random_mode = models.CharField(default='random_any', max_length=255)
 
     def __str__(self):
         return self.user.username

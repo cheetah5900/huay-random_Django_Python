@@ -105,6 +105,7 @@ def AddUser(request):
         creditShop = data.get('credit_shop')
         expireDate = data.get('expire_date')
         expireTime = data.get('expire_time')
+        randomMode = data.get('random_mode')
 
         try:
             checkDuplicated = User.objects.get(username=username)
@@ -121,6 +122,7 @@ def AddUser(request):
             addProfileData.user = User.objects.get(username=username)
             addProfileData.house_name = username
             addProfileData.credit_shop = creditShop
+            addProfileData.random_mode = randomMode
             addProfileData.expire_date = "{} {}:00".format(
                 expireDate, expireTime)
             addProfileData.save()
@@ -178,10 +180,12 @@ def EditUser(request, username):
         creditShop = data.get('credit_shop')
         expireDate = data.get('expire_date')
         expireTime = data.get('expire_time')
+        randomMode = data.get('random_mode')
 
         editData = ProfileModel.objects.get(user=userObject)
         editData.user = userObject
         editData.credit_shop = creditShop
+        editData.random_mode = randomMode
         editData.expire_date = "{} {}:00".format(expireDate, expireTime)
         editData.save()
 
@@ -563,7 +567,9 @@ def CheckExpireDate(username):
 
 
 def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize):
-    randomResult = random2NumberResult()
+    userObject = User.objects.get(username=username)
+    profileObject = ProfileModel.objects.get(user=userObject)
+    randomResult = random2NumberResult(profileObject)
     mainFirstNumber = randomResult[0]
     mainSecondNumber = randomResult[1]
     focusNumber = randomResult[2]
@@ -578,33 +584,33 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     path = os.getcwd()
 
     # ? SERVER
-    # font0 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    # font1 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    # font2 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    # font3 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    # font4 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    # location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
-    # locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
+    font0 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    font1 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    font2 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    font3 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    font4 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
+    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
 
     # ? LOCAL
-    font0 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    font1 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    font2 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    font3 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    font4 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
-    locationTemplate = path + \
-        '/static/images/template-hua/{}-template.jpg'.format(username)
+    # font0 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    # font1 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    # font2 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    # font3 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    # font4 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    # locationTemplate = path + \
+    #     '/static/images/template-hua/{}-template.jpg'.format(username)
 
     img = Image.open(locationTemplate)    
     imgObj = ImageDraw.Draw(img)
@@ -689,7 +695,7 @@ def generateNumberForSecondLine(listSwapNumber, mainSecondNumber, subNumberSecon
     return newSubNumberSecondUnit
 
 
-def random2NumberResult():
+def random2NumberResult(profileObject):
     # Random integer
     mainFirstNumber = randomNumber()
     mainSecondNumber = AvoidNumber(mainFirstNumber)
@@ -748,10 +754,13 @@ def random2NumberResult():
     subNumberRow2SecondUnit4 = generateNumberForSecondLine(
         swapNumber, mainSecondNumber, subNumberRow2SecondUnit4)
 
-    # ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
-    if mainSecondNumber not in subNumberRow1SecondUnitList:
-        if mainFirstNumber not in subNumberRow2SecondUnitList:
-            subNumberRow1SecondUnit4 = mainSecondNumber
+    #* ถ้า random_mode เป็นแบบต้องมีเลข วิ่ง-รูด ในเลขเจาะ จะเข้าเงื่อนไขนี้
+    #? แนวคิด : ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
+    # print("profileObject.random_mode : ",profileObject.random_mode)
+    if profileObject.random_mode == 'force_have_main_number':
+        if mainSecondNumber not in subNumberRow1SecondUnitList:
+            if mainFirstNumber not in subNumberRow2SecondUnitList:
+                subNumberRow1SecondUnit4 = mainSecondNumber
 
     # Sort Number
     sortNumberSecondUnitList = [
