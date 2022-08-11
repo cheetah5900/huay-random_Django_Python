@@ -75,22 +75,11 @@
               </table>
               <div class="text-center">
                 <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
-                <a class="btn btn-danger" href="/backend/">ยกเลิก</a>
+                <a class="btn btn-danger" href="/backend/listuser">ยกเลิก</a>
               </div>
             </form>
           </div>
         </div>
       </section>
-
     </div>
-    {% if status %}
-    <script>
-      swal("เพิ่มข้อมูลสำเร็จ", "เพิ่มข้อมูลสำเร็จ", "success");
-    </script>
-    {% endif %}
-    {% if error %}
-    <script>
-      swal("บ้านนี้มีรายละเอียดหวยนี้แล้ว", "บ้านนี้มีรายละเอียดหวยนี้แล้ว", "error");
-    </script>
-    {% endif %}
     {%endblock content%}

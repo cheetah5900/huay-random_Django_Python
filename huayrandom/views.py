@@ -132,11 +132,11 @@ def AddUser(request):
                 addHuayData = HuayTypeModel()
                 addHuayData.user = User.objects.get(username=username)
                 addHuayData.huay_list = HuayListModel.objects.get(id=item.id)
-                addHuayData.font_text = "PromptBold.ttf"
-                addHuayData.font_number = "Kanit.ttf"
-                addHuayData.text_color = "255,255,255"
+                addHuayData.font_text = "supermarket.ttf"
+                addHuayData.font_number = "HelveticaNeue.ttf"
+                addHuayData.text_color = 1
                 addHuayData.border_size = 4
-                addHuayData.border_color = "0,0,0"
+                addHuayData.border_color = 2
                 addHuayData.text_pos_x = 500
                 addHuayData.text_pos_y = 560
                 addHuayData.text_font_size = 90
@@ -507,8 +507,8 @@ def Result(request, username, link):
     data = HuayTypeModel.objects.get(
         huay_list=huayListObject, user=userObject)
     profileObject = ProfileModel.objects.get(user=userObject)
-    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, data.text_color, 4, data.border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
+    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, data.text_color, data.border_status,4, data.border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size,data.main_num_separator,data.row_1_separator,data.row_2_separator)
 
     context['imgLocation'] = imgLocation
     # except:
@@ -564,7 +564,7 @@ def CheckExpireDate(username):
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
 
 
-def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize):
+def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderStatus,borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize,mainNumSeparator,row1Separator,row2Separator):
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
     randomResult = random2NumberResult(profileObject)
@@ -582,33 +582,33 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     path = os.getcwd()
 
     # ? SERVER
-    font0 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    font1 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    font2 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    font3 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    font4 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
-    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
+    # font0 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    # font1 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    # font2 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    # font3 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    # font4 = ImageFont.truetype(
+    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    # location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
+    # locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
 
     # ? LOCAL
-    # font0 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    # font1 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    # font2 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    # font3 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    # font4 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
-    # locationTemplate = path + \
-    #     '/static/images/template-hua/{}-template.jpg'.format(username)
+    font0 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    font1 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    font2 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    font3 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    font4 = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    locationTemplate = path + \
+        '/static/images/template-hua/{}-template.jpg'.format(username)
 
     img = Image.open(locationTemplate)    
     imgObj = ImageDraw.Draw(img)
@@ -618,23 +618,23 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
+    if borderStatus == "on":
+        borderColorObject = ColorListModel.objects.get(id=borderColor)
+        borderColorSeparate = borderColorObject.color_code.split(",")
+        borderColorConverted0 = int(borderColorSeparate[0])
+        borderColorConverted1 = int(borderColorSeparate[1])
+        borderColorConverted2 = int(borderColorSeparate[2])
 
-    borderColorObject = ColorListModel.objects.get(id=borderColor)
-    borderColorSeparate = borderColorObject.color_code.split(",")
-    borderColorConverted0 = int(borderColorSeparate[0])
-    borderColorConverted1 = int(borderColorSeparate[1])
-    borderColorConverted2 = int(borderColorSeparate[2])
+        borderColorConverted =borderColorConverted0,borderColorConverted1,borderColorConverted2
 
-    borderColorConverted =borderColorConverted0,borderColorConverted1,borderColorConverted2
-
-    imgObj.text((txtPosX-borderSize, txtPosY), type,
-                font=font0, fill=borderColorConverted)
-    imgObj.text((txtPosX+borderSize, txtPosY), type,
-                font=font0, fill=borderColorConverted)
-    imgObj.text((txtPosX, txtPosY-borderSize), type,
-                font=font0, fill=borderColorConverted)
-    imgObj.text((txtPosX, txtPosY+borderSize), type,
-                font=font0, fill=borderColorConverted)
+        imgObj.text((txtPosX-borderSize, txtPosY), type,
+                    font=font0, fill=borderColorConverted)
+        imgObj.text((txtPosX+borderSize, txtPosY), type,
+                    font=font0, fill=borderColorConverted)
+        imgObj.text((txtPosX, txtPosY-borderSize), type,
+                    font=font0, fill=borderColorConverted)
+        imgObj.text((txtPosX, txtPosY+borderSize), type,
+                    font=font0, fill=borderColorConverted)
 
     textColorObject = ColorListModel.objects.get(id=textColor)
     textColorSeparate = textColorObject.color_code.split(",")
@@ -647,12 +647,12 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     # TEXT
     imgObj.text((txtPosX, txtPosY), type, font=font0, fill=textColorConverted)
     imgObj.text((datePosX, datePosY), curDate, font=font1, fill=textColorConverted)
-    imgObj.text((mainNumberPosX, mainNumberPosY), "{} - {}".format(mainFirstNumber,
+    imgObj.text((mainNumberPosX, mainNumberPosY), "{}{}{}".format(mainFirstNumber,mainNumSeparator,
                                                                    mainSecondNumber), font=font2, fill=textColorConverted)
-    imgObj.text((row1X, row1Y), "{} - {} - {} - {}".format(row1Set1,
-                row1Set2, row1Set3, row1Set4), font=font3, fill=textColorConverted)
-    imgObj.text((row2X, row2Y), "{} - {} - {} - {}".format(row2Set1,
-                row2Set2, row2Set3, row2Set4), font=font3, fill=textColorConverted)
+    imgObj.text((row1X, row1Y), "{}{}{}{}{}{}{}".format(row1Set1,row1Separator,
+                row1Set2,row1Separator, row1Set3,row1Separator, row1Set4,row1Separator), font=font3, fill=textColorConverted)
+    imgObj.text((row2X, row2Y), "{}{}{}{}{}{}{}".format(row2Set1,row2Separator,
+                row2Set2,row2Separator, row2Set3,row2Separator, row2Set4,row2Separator), font=font3, fill=textColorConverted)
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
                 font=font4, fill=textColorConverted)
 
