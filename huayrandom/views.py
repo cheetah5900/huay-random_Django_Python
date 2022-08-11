@@ -213,14 +213,11 @@ def ListHuay(request, username):
     context['username'] = username
     context['houseName'] = profileObject.house_name
 
-    if 'statusedit' in request.session:
-        context['statusedit'] = request.session['statusedit']
-        request.session['statusedit'] = ''  # clear stuck error in session
     return render(request, 'huay/list_huay.html', context)
 
 
 @login_required
-def AddDetailPicture(request, username):
+def AddHuay(request, username):
     context = {}
 
     if request.method == 'POST':
@@ -253,7 +250,6 @@ def AddDetailPicture(request, username):
             request.session['error'] = 'error'
             return redirect('add_huay', username)
         except:
-            print("fontTextId : ",fontTextId)
             getFontName = FontListModel.objects.get(id=fontTextId)
             getFontName2 = FontListModel.objects.get(id=fontNumberId)
             addData = HuayTypeModel()
@@ -312,16 +308,18 @@ def AddDetailPicture(request, username):
     huayAllList = zip(huayAllNameList, huayAllIdList)
 
     fontListObject = FontListModel.objects.all()
+    colorListObject = ColorListModel.objects.all()
 
     context['huayList'] = huayAllList
     context['data'] = profileObject
     context['fontList'] = fontListObject
+    context['colorList'] = colorListObject
 
     return render(request, 'huay/add_huay.html', context)
 
 
 @login_required
-def EditDetailPicture(request, username, huay_id):
+def EditHuay(request, username, huay_id):
     context = {}
     userObject = User.objects.get(username=username)
 
@@ -389,11 +387,14 @@ def EditDetailPicture(request, username, huay_id):
     profileObject = ProfileModel.objects.get(user=userObject)
     huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
     fontListObject = FontListModel.objects.all()
+    colorListObject = ColorListModel.objects.all()
 
     context['huayTypeObject'] = huayTypeObject
     context['data'] = profileObject
     context['huayId'] = huay_id
     context['fontList'] = fontListObject
+    context['colorList'] = colorListObject
+
     return render(request, 'huay/edit_huay.html', context)
 
 
@@ -506,10 +507,7 @@ def Result(request, username, link):
     data = HuayTypeModel.objects.get(
         huay_list=huayListObject, user=userObject)
     profileObject = ProfileModel.objects.get(user=userObject)
-    textColorSplit = data.text_color.split(",")
-    borderColorSplit = data.border_color.split(",")
-
-    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, (int(textColorSplit[0]), int(textColorSplit[1]), int(textColorSplit[2])), 4, (int(borderColorSplit[0]), int(borderColorSplit[1]), int(borderColorSplit[2])), data.text_pos_x, data.text_pos_y, data.text_font_size,
+    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, data.text_color, 4, data.border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
                                         data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size)
 
     context['imgLocation'] = imgLocation
@@ -620,26 +618,43 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # BORDER NAME TEXT
+
+    borderColorObject = ColorListModel.objects.get(id=borderColor)
+    borderColorSeparate = borderColorObject.color_code.split(",")
+    borderColorConverted0 = int(borderColorSeparate[0])
+    borderColorConverted1 = int(borderColorSeparate[1])
+    borderColorConverted2 = int(borderColorSeparate[2])
+
+    borderColorConverted =borderColorConverted0,borderColorConverted1,borderColorConverted2
+
     imgObj.text((txtPosX-borderSize, txtPosY), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
     imgObj.text((txtPosX+borderSize, txtPosY), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
     imgObj.text((txtPosX, txtPosY-borderSize), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
     imgObj.text((txtPosX, txtPosY+borderSize), type,
-                font=font0, fill=borderColor)
+                font=font0, fill=borderColorConverted)
+
+    textColorObject = ColorListModel.objects.get(id=textColor)
+    textColorSeparate = textColorObject.color_code.split(",")
+    textColorConverted0 = int(textColorSeparate[0])
+    textColorConverted1 = int(textColorSeparate[1])
+    textColorConverted2 = int(textColorSeparate[2])
+
+    textColorConverted =textColorConverted0,textColorConverted1,textColorConverted2
 
     # TEXT
-    imgObj.text((txtPosX, txtPosY), type, font=font0, fill=textColor)
-    imgObj.text((datePosX, datePosY), curDate, font=font1, fill=textColor)
+    imgObj.text((txtPosX, txtPosY), type, font=font0, fill=textColorConverted)
+    imgObj.text((datePosX, datePosY), curDate, font=font1, fill=textColorConverted)
     imgObj.text((mainNumberPosX, mainNumberPosY), "{} - {}".format(mainFirstNumber,
-                                                                   mainSecondNumber), font=font2, fill=textColor)
+                                                                   mainSecondNumber), font=font2, fill=textColorConverted)
     imgObj.text((row1X, row1Y), "{} - {} - {} - {}".format(row1Set1,
-                row1Set2, row1Set3, row1Set4), font=font3, fill=textColor)
+                row1Set2, row1Set3, row1Set4), font=font3, fill=textColorConverted)
     imgObj.text((row2X, row2Y), "{} - {} - {} - {}".format(row2Set1,
-                row2Set2, row2Set3, row2Set4), font=font3, fill=textColor)
+                row2Set2, row2Set3, row2Set4), font=font3, fill=textColorConverted)
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
-                font=font4, fill=textColor)
+                font=font4, fill=textColorConverted)
 
     img.save(location)
     imgLocation = '/static/images/result-hua/{}-result.jpg'.format(username)
