@@ -508,7 +508,7 @@ def Result(request, username, link):
         huay_list=huayListObject, user=userObject)
     profileObject = ProfileModel.objects.get(user=userObject)
     imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, data.text_color, data.border_status,4, data.border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size,data.main_num_separator,data.row_1_separator,data.row_2_separator)
+                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size,data.main_num_separator,data.row1_separator,data.row2_separator,data.date_color,data.main_num_color,data.focus_num_color,data.row1_color,data.row2_color)
 
     context['imgLocation'] = imgLocation
     # except:
@@ -564,7 +564,7 @@ def CheckExpireDate(username):
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
 
 
-def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderStatus,borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize,mainNumSeparator,row1Separator,row2Separator):
+def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderStatus,borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize,mainNumSeparator,row1Separator,row2Separator,dateColor,mainNumColor,focusNumColor,row1Color,row2Color):
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
     randomResult = random2NumberResult(profileObject)
@@ -635,26 +635,61 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
                     font=font0, fill=borderColorConverted)
         imgObj.text((txtPosX, txtPosY+borderSize), type,
                     font=font0, fill=borderColorConverted)
+    #* ================= START :  GET FONT NAME =================
+    dateColorObject = ColorListModel.objects.get(id=dateColor)
+    dateColorSeparate = dateColorObject.color_code.split(",")
+    dateColorConverted0 = int(dateColorSeparate[0])
+    dateColorConverted1 = int(dateColorSeparate[1])
+    dateColorConverted2 = int(dateColorSeparate[2])
+    dateColorConverted =dateColorConverted0,dateColorConverted1,dateColorConverted2
 
     textColorObject = ColorListModel.objects.get(id=textColor)
     textColorSeparate = textColorObject.color_code.split(",")
     textColorConverted0 = int(textColorSeparate[0])
     textColorConverted1 = int(textColorSeparate[1])
     textColorConverted2 = int(textColorSeparate[2])
-
     textColorConverted =textColorConverted0,textColorConverted1,textColorConverted2
 
+    mainNumColorObject = ColorListModel.objects.get(id=mainNumColor)
+    mainNumColorSeparate = mainNumColorObject.color_code.split(",")
+    mainNumColorConverted0 = int(mainNumColorSeparate[0])
+    mainNumColorConverted1 = int(mainNumColorSeparate[1])
+    mainNumColorConverted2 = int(mainNumColorSeparate[2])
+    mainNumColorConverted =mainNumColorConverted0,mainNumColorConverted1,mainNumColorConverted2
+
+    focusNumColorObject = ColorListModel.objects.get(id=focusNumColor)
+    focusNumColorSeparate = focusNumColorObject.color_code.split(",")
+    focusNumColorConverted0 = int(focusNumColorSeparate[0])
+    focusNumColorConverted1 = int(focusNumColorSeparate[1])
+    focusNumColorConverted2 = int(focusNumColorSeparate[2])
+    focusNumColorConverted =focusNumColorConverted0,focusNumColorConverted1,focusNumColorConverted2
+
+    row1ColorObject = ColorListModel.objects.get(id=row1Color)
+    row1ColorSeparate = row1ColorObject.color_code.split(",")
+    row1ColorConverted0 = int(row1ColorSeparate[0])
+    row1ColorConverted1 = int(row1ColorSeparate[1])
+    row1ColorConverted2 = int(row1ColorSeparate[2])
+    row1ColorConverted =row1ColorConverted0,row1ColorConverted1,row1ColorConverted2
+
+    row2ColorObject = ColorListModel.objects.get(id=row2Color)
+    row2ColorSeparate = row2ColorObject.color_code.split(",")
+    row2ColorConverted0 = int(row2ColorSeparate[0])
+    row2ColorConverted1 = int(row2ColorSeparate[1])
+    row2ColorConverted2 = int(row2ColorSeparate[2])
+    row2ColorConverted =row2ColorConverted0,row2ColorConverted1,row2ColorConverted2
+
+    #* ================= END :  GET FONT NAME =================
     # TEXT
     imgObj.text((txtPosX, txtPosY), type, font=font0, fill=textColorConverted)
-    imgObj.text((datePosX, datePosY), curDate, font=font1, fill=textColorConverted)
+    imgObj.text((datePosX, datePosY), curDate, font=font1, fill=dateColorConverted)
     imgObj.text((mainNumberPosX, mainNumberPosY), "{}{}{}".format(mainFirstNumber,mainNumSeparator,
-                                                                   mainSecondNumber), font=font2, fill=textColorConverted)
+                                                                   mainSecondNumber), font=font2, fill=mainNumColorConverted)
     imgObj.text((row1X, row1Y), "{}{}{}{}{}{}{}".format(row1Set1,row1Separator,
-                row1Set2,row1Separator, row1Set3,row1Separator, row1Set4,row1Separator), font=font3, fill=textColorConverted)
+                row1Set2,row1Separator, row1Set3,row1Separator, row1Set4,row1Separator), font=font3, fill=row1ColorConverted)
     imgObj.text((row2X, row2Y), "{}{}{}{}{}{}{}".format(row2Set1,row2Separator,
-                row2Set2,row2Separator, row2Set3,row2Separator, row2Set4,row2Separator), font=font3, fill=textColorConverted)
+                row2Set2,row2Separator, row2Set3,row2Separator, row2Set4,row2Separator), font=font3, fill=row2ColorConverted)
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
-                font=font4, fill=textColorConverted)
+                font=font4, fill=focusNumColorConverted)
 
     img.save(location)
     imgLocation = '/static/images/result-hua/{}-result.jpg'.format(username)
