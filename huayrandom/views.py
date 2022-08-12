@@ -132,28 +132,6 @@ def AddUser(request):
                 addHuayData = HuayTypeModel()
                 addHuayData.user = User.objects.get(username=username)
                 addHuayData.huay_list = HuayListModel.objects.get(id=item.id)
-                addHuayData.font_text = "supermarket.ttf"
-                addHuayData.font_number = "HelveticaNeue.ttf"
-                addHuayData.text_color = 1
-                addHuayData.border_size = 4
-                addHuayData.border_color = 2
-                addHuayData.text_pos_x = 500
-                addHuayData.text_pos_y = 560
-                addHuayData.text_font_size = 90
-                addHuayData.date_pos_x = 1220
-                addHuayData.date_pos_y = 45
-                addHuayData.date_font_size = 30
-                addHuayData.main_num_pos_x = 550
-                addHuayData.main_num_pos_y = 720
-                addHuayData.main_num_font_size = 90
-                addHuayData.focus_num_pos_x = 1025
-                addHuayData.focus_num_pos_y = 780
-                addHuayData.focus_num_font_size = 230
-                addHuayData.row1_x = 170
-                addHuayData.row1_y = 900
-                addHuayData.row2_x = 170
-                addHuayData.row2_y = 1000
-                addHuayData.row_font_size = 90
                 addHuayData.save()
 
             request.session['status'] = 'Done'
@@ -229,7 +207,7 @@ def AddHuay(request, username):
         textPosY = data.get('text_pos_y')
         textSize = data.get('text_size')
         borderWidth = data.get('border_width')
-        borderColor = data.get('border_color')
+        borderColor = data.get('text_border_color')
         fontNumberId = data.get('number_font_id')
         mainNumberPosX = data.get('main_number_pos_x')
         mainNumberPosY = data.get('main_number_pos_y')
@@ -246,7 +224,8 @@ def AddHuay(request, username):
         numberRow2PosY = data.get('number_row2_pos_y')
         numberRowFontsize = data.get('number_row_fontsize')
         try:
-            checkDuplicated = HuayTypeModel.objects.get(id=huayListId,user=userObject)
+            checkDuplicated = HuayTypeModel.objects.get(
+                id=huayListId, user=userObject)
             request.session['error'] = 'error'
             return redirect('add_huay', username)
         except:
@@ -258,8 +237,8 @@ def AddHuay(request, username):
             addData.font_text = getFontName.font_name
             addData.font_number = getFontName2.font_name
             addData.text_color = textColor
-            addData.border_size = borderWidth
-            addData.border_color = borderColor
+            addData.text_border_size = borderWidth
+            addData.text_border_color = borderColor
             addData.text_pos_x = textPosX
             addData.text_pos_y = textPosY
             addData.text_font_size = textSize
@@ -332,7 +311,7 @@ def EditHuay(request, username, huay_id):
         textPosY = data.get('text_pos_y')
         textSize = data.get('text_size')
         borderWidth = data.get('border_width')
-        borderColor = data.get('border_color')
+        borderColor = data.get('text_border_color')
         fontNumberId = data.get('number_font_id')
         mainNumberPosX = data.get('main_number_pos_x')
         mainNumberPosY = data.get('main_number_pos_y')
@@ -358,8 +337,8 @@ def EditHuay(request, username, huay_id):
         editData.font_text = getFontName.font_name
         editData.font_number = getFontName2.font_name
         editData.text_color = textColor
-        editData.border_size = borderWidth
-        editData.border_color = borderColor
+        editData.text_border_size = borderWidth
+        editData.text_border_color = borderColor
         editData.text_pos_x = textPosX
         editData.text_pos_y = textPosY
         editData.text_font_size = textSize
@@ -388,6 +367,16 @@ def EditHuay(request, username, huay_id):
     huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
     fontListObject = FontListModel.objects.all()
     colorListObject = ColorListModel.objects.all()
+
+
+    imgLocation = GenerateImageWIthText(username, huayTypeObject.huay_list.full_name, huayTypeObject.font_text, huayTypeObject.font_number, huayTypeObject.text_color, huayTypeObject.text_border_status, huayTypeObject.text_border_size, huayTypeObject.text_border_color, huayTypeObject.text_pos_x, huayTypeObject.text_pos_y, huayTypeObject.text_font_size,
+                                        huayTypeObject.date_pos_x, huayTypeObject.date_pos_y, huayTypeObject.date_font_size, huayTypeObject.main_num_pos_x, huayTypeObject.main_num_pos_y, huayTypeObject.main_num_font_size, huayTypeObject.main_num_border_status, huayTypeObject.main_num_border_color, huayTypeObject.main_num_border_size, huayTypeObject.focus_num_pos_x,
+                                        huayTypeObject.focus_num_pos_y, huayTypeObject.focus_num_font_size, huayTypeObject.focus_num_border_status, huayTypeObject.focus_num_border_color, huayTypeObject.focus_num_border_size, huayTypeObject.row1_x, huayTypeObject.row1_y, huayTypeObject.row1_border_status, huayTypeObject.row1_border_color, huayTypeObject.row1_border_size,
+                                        huayTypeObject.row2_x, huayTypeObject.row2_y,  huayTypeObject.row2_border_status, huayTypeObject.row2_border_color, huayTypeObject.row2_border_size, huayTypeObject.row_font_size, huayTypeObject.main_num_separator, huayTypeObject.row1_separator, huayTypeObject.row2_separator, huayTypeObject.date_color, huayTypeObject.main_num_color, huayTypeObject.focus_num_color,
+                                        huayTypeObject.row1_color, huayTypeObject.row2_color,huayTypeObject.credit_shop_pos_x,huayTypeObject.credit_shop_pos_y,huayTypeObject.credit_shop_border_status, huayTypeObject.credit_shop_border_color, huayTypeObject.credit_shop_border_size)
+
+    context['imgLocation'] = imgLocation
+
 
     context['huayTypeObject'] = huayTypeObject
     context['data'] = profileObject
@@ -502,21 +491,26 @@ def Result(request, username, link):
     context['link'] = link
     context['expireDateThai'] = expireDateThai
 
-    # try:
-    huayListObject = HuayListModel.objects.get(link=link)
-    data = HuayTypeModel.objects.get(
-        huay_list=huayListObject, user=userObject)
-    profileObject = ProfileModel.objects.get(user=userObject)
-    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, data.text_color, data.border_status,4, data.border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.focus_num_pos_x, data.focus_num_pos_y, data.focus_num_font_size, data.row1_x, data.row1_y, data.row2_x, data.row2_y, data.row_font_size,data.main_num_separator,data.row1_separator,data.row2_separator,data.date_color,data.main_num_color,data.focus_num_color,data.row1_color,data.row2_color)
+    try:
 
-    context['imgLocation'] = imgLocation
-    # except:
-    #     request.session['error'] = 'error'
-    #     if 'error' in request.session:
-    #         context['error'] = request.session['error']
-    #         request.session['error'] = ''  # clear stuck error in session
-    #     return render(request, 'result/index.html', context)
+        huayListObject = HuayListModel.objects.get(link=link)
+        data = HuayTypeModel.objects.get(
+            huay_list=huayListObject, user=userObject)
+        profileObject = ProfileModel.objects.get(user=userObject)
+
+        imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.font_text, data.font_number, data.text_color, data.text_border_status, data.text_border_size, data.text_border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                            data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
+                                            data.focus_num_pos_y, data.focus_num_font_size, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
+                                            data.row2_x, data.row2_y,  data.row2_border_status, data.row2_border_color, data.row2_border_size, data.row_font_size, data.main_num_separator, data.row1_separator, data.row2_separator, data.date_color, data.main_num_color, data.focus_num_color,
+                                            data.row1_color, data.row2_color,data.credit_shop_pos_x,data.credit_shop_pos_y,data.credit_shop_border_status, data.credit_shop_border_color, data.credit_shop_border_size)
+
+        context['imgLocation'] = imgLocation
+    except:
+        request.session['error'] = 'error'
+        if 'error' in request.session:
+            context['error'] = request.session['error']
+            request.session['error'] = ''  # clear stuck error in session
+        return render(request, 'result/index.html', context)
     return render(request, 'result/index.html', context)
 
 
@@ -564,7 +558,7 @@ def CheckExpireDate(username):
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
 
 
-def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borderStatus,borderSize, borderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, focusNumberX, focusNumberY, focusNumberFontSize, row1X, row1Y, row2X, row2Y, rowFontSize,mainNumSeparator,row1Separator,row2Separator,dateColor,mainNumColor,focusNumColor,row1Color,row2Color):
+def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textBorderStatus, textBorderSize, textBorderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, mainNumberBorderStatus, mainNumberBorderColor, mainNumberBorderSize, focusNumberX, focusNumberY, focusNumberFontSize, forcusNumberBorderStatus, forcusNumberBorderColor, forcusNumberBorderSize, row1X, row1Y, row1BorderStatus, row1BorderColor, row1BorderSize, row2X, row2Y, row2BorderStatus, row2BorderColor, row2BorderSize, rowFontSize, mainNumSeparator, row1Separator, row2Separator, dateColor, mainNumColor, focusNumColor, row1Color, row2Color,creditShopPosX,creditShopPosY,creditShopBorderStatus, creditShopBorderColor, creditShopBorderSize):
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
     randomResult = random2NumberResult(profileObject)
@@ -582,114 +576,212 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, borde
     path = os.getcwd()
 
     # ? SERVER
-    # font0 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    # font1 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    # font2 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    # font3 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    # font4 = ImageFont.truetype(
-    #     '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    # location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
-    # locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
+    font0 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    font1 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    font2 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    font3 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    font4 = ImageFont.truetype(
+        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(username)
+    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(username)
 
     # ? LOCAL
-    font0 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    font1 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    font2 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    font3 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    font4 = ImageFont.truetype(
-        path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
-    locationTemplate = path + \
-        '/static/images/template-hua/{}-template.jpg'.format(username)
+    # font0 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
+    # font1 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+    # font2 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+    # font3 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+    # font4 = ImageFont.truetype(
+    #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    # location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    # locationTemplate = path + \
+    #     '/static/images/template-hua/{}-template.jpg'.format(username)
 
-    img = Image.open(locationTemplate)    
+    img = Image.open(locationTemplate)
     imgObj = ImageDraw.Draw(img)
 
     # Set Date
     cueDateTime = datetime.now() + relativedelta(hours=7, years=543)
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
-    # BORDER NAME TEXT
-    if borderStatus == "on":
-        borderColorObject = ColorListModel.objects.get(id=borderColor)
-        borderColorSeparate = borderColorObject.color_code.split(",")
-        borderColorConverted0 = int(borderColorSeparate[0])
-        borderColorConverted1 = int(borderColorSeparate[1])
-        borderColorConverted2 = int(borderColorSeparate[2])
-
-        borderColorConverted =borderColorConverted0,borderColorConverted1,borderColorConverted2
-
-        imgObj.text((txtPosX-borderSize, txtPosY), type,
-                    font=font0, fill=borderColorConverted)
-        imgObj.text((txtPosX+borderSize, txtPosY), type,
-                    font=font0, fill=borderColorConverted)
-        imgObj.text((txtPosX, txtPosY-borderSize), type,
-                    font=font0, fill=borderColorConverted)
-        imgObj.text((txtPosX, txtPosY+borderSize), type,
-                    font=font0, fill=borderColorConverted)
-    #* ================= START :  GET FONT NAME =================
+    # * ================= START :  GET FONT COLOR =================
     dateColorObject = ColorListModel.objects.get(id=dateColor)
     dateColorSeparate = dateColorObject.color_code.split(",")
     dateColorConverted0 = int(dateColorSeparate[0])
     dateColorConverted1 = int(dateColorSeparate[1])
     dateColorConverted2 = int(dateColorSeparate[2])
-    dateColorConverted =dateColorConverted0,dateColorConverted1,dateColorConverted2
+    dateColorConverted = dateColorConverted0, dateColorConverted1, dateColorConverted2
 
     textColorObject = ColorListModel.objects.get(id=textColor)
     textColorSeparate = textColorObject.color_code.split(",")
     textColorConverted0 = int(textColorSeparate[0])
     textColorConverted1 = int(textColorSeparate[1])
     textColorConverted2 = int(textColorSeparate[2])
-    textColorConverted =textColorConverted0,textColorConverted1,textColorConverted2
+    textColorConverted = textColorConverted0, textColorConverted1, textColorConverted2
 
     mainNumColorObject = ColorListModel.objects.get(id=mainNumColor)
     mainNumColorSeparate = mainNumColorObject.color_code.split(",")
     mainNumColorConverted0 = int(mainNumColorSeparate[0])
     mainNumColorConverted1 = int(mainNumColorSeparate[1])
     mainNumColorConverted2 = int(mainNumColorSeparate[2])
-    mainNumColorConverted =mainNumColorConverted0,mainNumColorConverted1,mainNumColorConverted2
+    mainNumColorConverted = mainNumColorConverted0, mainNumColorConverted1, mainNumColorConverted2
 
     focusNumColorObject = ColorListModel.objects.get(id=focusNumColor)
     focusNumColorSeparate = focusNumColorObject.color_code.split(",")
     focusNumColorConverted0 = int(focusNumColorSeparate[0])
     focusNumColorConverted1 = int(focusNumColorSeparate[1])
     focusNumColorConverted2 = int(focusNumColorSeparate[2])
-    focusNumColorConverted =focusNumColorConverted0,focusNumColorConverted1,focusNumColorConverted2
+    focusNumColorConverted = focusNumColorConverted0, focusNumColorConverted1, focusNumColorConverted2
 
     row1ColorObject = ColorListModel.objects.get(id=row1Color)
     row1ColorSeparate = row1ColorObject.color_code.split(",")
     row1ColorConverted0 = int(row1ColorSeparate[0])
     row1ColorConverted1 = int(row1ColorSeparate[1])
     row1ColorConverted2 = int(row1ColorSeparate[2])
-    row1ColorConverted =row1ColorConverted0,row1ColorConverted1,row1ColorConverted2
+    row1ColorConverted = row1ColorConverted0, row1ColorConverted1, row1ColorConverted2
 
     row2ColorObject = ColorListModel.objects.get(id=row2Color)
     row2ColorSeparate = row2ColorObject.color_code.split(",")
     row2ColorConverted0 = int(row2ColorSeparate[0])
     row2ColorConverted1 = int(row2ColorSeparate[1])
     row2ColorConverted2 = int(row2ColorSeparate[2])
-    row2ColorConverted =row2ColorConverted0,row2ColorConverted1,row2ColorConverted2
+    row2ColorConverted = row2ColorConverted0, row2ColorConverted1, row2ColorConverted2
 
-    #* ================= END :  GET FONT NAME =================
-    # TEXT
+    # * ================= END :  GET FONT COLOR =================
+    # * ================= START : BORDER =================
+    # ? text
+    if textBorderStatus == "on":
+        textBorderColorObject = ColorListModel.objects.get(id=textBorderColor)
+        textBorderColorSeparate = textBorderColorObject.color_code.split(",")
+        textBorderColorConverted0 = int(textBorderColorSeparate[0])
+        textBorderColorConverted1 = int(textBorderColorSeparate[1])
+        textBorderColorConverted2 = int(textBorderColorSeparate[2])
+        textBorderColorConverted = textBorderColorConverted0, textBorderColorConverted1, textBorderColorConverted2
+
+        imgObj.text((txtPosX-textBorderSize, txtPosY), type,
+                    font=font0, fill=textBorderColorConverted)
+        imgObj.text((txtPosX+textBorderSize, txtPosY), type,
+                    font=font0, fill=textBorderColorConverted)
+        imgObj.text((txtPosX, txtPosY-textBorderSize), type,
+                    font=font0, fill=textBorderColorConverted)
+        imgObj.text((txtPosX, txtPosY+textBorderSize), type,
+                    font=font0, fill=textBorderColorConverted)
+    # ? main number
+    if mainNumberBorderStatus == "on":
+        mainNumberBorderColorObject = ColorListModel.objects.get(
+            id=mainNumberBorderColor)
+        mainNumberBorderColorSeparate = mainNumberBorderColorObject.color_code.split(
+            ",")
+        mainNumberBorderColorConverted0 = int(mainNumberBorderColorSeparate[0])
+        mainNumberBorderColorConverted1 = int(mainNumberBorderColorSeparate[1])
+        mainNumberBorderColorConverted2 = int(mainNumberBorderColorSeparate[2])
+        mainNumberBorderColorConverted = mainNumberBorderColorConverted0, mainNumberBorderColorConverted1, mainNumberBorderColorConverted2
+
+        imgObj.text((mainNumberPosX-mainNumberBorderSize, mainNumberPosY),  "{}{}{}".format(mainFirstNumber, mainNumSeparator, mainSecondNumber),
+                    font=font2, fill=mainNumberBorderColorConverted)
+        imgObj.text((mainNumberPosX+mainNumberBorderSize, mainNumberPosY),  "{}{}{}".format(mainFirstNumber, mainNumSeparator, mainSecondNumber),
+                    font=font2, fill=mainNumberBorderColorConverted)
+        imgObj.text((mainNumberPosX, mainNumberPosY-mainNumberBorderSize),  "{}{}{}".format(mainFirstNumber, mainNumSeparator, mainSecondNumber),
+                    font=font2, fill=mainNumberBorderColorConverted)
+        imgObj.text((mainNumberPosX, mainNumberPosY+mainNumberBorderSize),  "{}{}{}".format(mainFirstNumber, mainNumSeparator, mainSecondNumber),
+                    font=font2, fill=mainNumberBorderColorConverted)
+    # ? focus number
+    if forcusNumberBorderStatus == "on":
+        forcusNumberBorderColorObject = ColorListModel.objects.get(
+            id=forcusNumberBorderColor)
+        forcusNumberBorderColorSeparate = forcusNumberBorderColorObject.color_code.split(
+            ",")
+        forcusNumberBorderColorConverted0 = int(
+            forcusNumberBorderColorSeparate[0])
+        forcusNumberBorderColorConverted1 = int(
+            forcusNumberBorderColorSeparate[1])
+        forcusNumberBorderColorConverted2 = int(
+            forcusNumberBorderColorSeparate[2])
+        forcusNumberBorderColorConverted = forcusNumberBorderColorConverted0, forcusNumberBorderColorConverted1, forcusNumberBorderColorConverted2
+
+        imgObj.text((focusNumberX-forcusNumberBorderSize, focusNumberY), "{}".format(focusNumber),
+                    font=font4, fill=forcusNumberBorderColorConverted)
+        imgObj.text((focusNumberX+forcusNumberBorderSize, focusNumberY), "{}".format(focusNumber),
+                    font=font4, fill=forcusNumberBorderColorConverted)
+        imgObj.text((focusNumberX, focusNumberY-forcusNumberBorderSize), "{}".format(focusNumber),
+                    font=font4, fill=forcusNumberBorderColorConverted)
+        imgObj.text((focusNumberX, focusNumberY+forcusNumberBorderSize), "{}".format(focusNumber),
+                    font=font4, fill=forcusNumberBorderColorConverted)
+    # ? row 1
+    if row1BorderStatus == "on":
+        row1BorderColorObject = ColorListModel.objects.get(id=row1BorderColor)
+        row1BorderColorSeparate = row1BorderColorObject.color_code.split(",")
+        row1BorderColorConverted0 = int(row1BorderColorSeparate[0])
+        row1BorderColorConverted1 = int(row1BorderColorSeparate[1])
+        row1BorderColorConverted2 = int(row1BorderColorSeparate[2])
+        row1BorderColorConverted = row1BorderColorConverted0, row1BorderColorConverted1, row1BorderColorConverted2
+
+        imgObj.text((row1X-row1BorderSize, row1Y), "{}{}{}{}{}{}{}".format(row1Set1, row1Separator, row1Set2, row1Separator, row1Set3, row1Separator, row1Set4, row1Separator),
+                    font=font3, fill=row1BorderColorConverted)
+        imgObj.text((row1X+row1BorderSize, row1Y), "{}{}{}{}{}{}{}".format(row1Set1, row1Separator, row1Set2, row1Separator, row1Set3, row1Separator, row1Set4, row1Separator),
+                    font=font3, fill=row1BorderColorConverted)
+        imgObj.text((row1X, row1Y-row1BorderSize), "{}{}{}{}{}{}{}".format(row1Set1, row1Separator, row1Set2, row1Separator, row1Set3, row1Separator, row1Set4, row1Separator),
+                    font=font3, fill=row1BorderColorConverted)
+        imgObj.text((row1X, row1Y+row1BorderSize), "{}{}{}{}{}{}{}".format(row1Set1, row1Separator, row1Set2, row1Separator, row1Set3, row1Separator, row1Set4, row1Separator),
+                    font=font3, fill=row1BorderColorConverted)
+    # ? row 2
+    if row2BorderStatus == "on":
+        row2BorderColorObject = ColorListModel.objects.get(id=row2BorderColor)
+        row2BorderColorSeparate = row2BorderColorObject.color_code.split(",")
+        row2BorderColorConverted0 = int(row2BorderColorSeparate[0])
+        row2BorderColorConverted1 = int(row2BorderColorSeparate[1])
+        row2BorderColorConverted2 = int(row2BorderColorSeparate[2])
+        row2BorderColorConverted = row2BorderColorConverted0, row2BorderColorConverted1, row2BorderColorConverted2
+
+
+        imgObj.text((row2X-row2BorderSize, row2Y), "{}{}{}{}{}{}{}".format(row2Set1, row2Separator, row2Set2, row2Separator, row2Set3, row2Separator, row2Set4, row2Separator),
+                    font=font3, fill=row2BorderColorConverted)
+        imgObj.text((row2X+row2BorderSize, row2Y), "{}{}{}{}{}{}{}".format(row2Set1, row2Separator, row2Set2, row2Separator, row2Set3, row2Separator, row2Set4, row2Separator),
+                    font=font3, fill=row2BorderColorConverted)
+        imgObj.text((row2X, row2Y-row2BorderSize), "{}{}{}{}{}{}{}".format(row2Set1, row2Separator, row2Set2, row2Separator, row2Set3, row2Separator, row2Set4, row2Separator),
+                    font=font3, fill=row2BorderColorConverted)
+        imgObj.text((row2X, row2Y+row2BorderSize), "{}{}{}{}{}{}{}".format(row2Set1, row2Separator, row2Set2, row2Separator, row2Set3, row2Separator, row2Set4, row2Separator),
+                    font=font3, fill=row2BorderColorConverted)
+    # ? credit shop
+    if creditShopBorderStatus == "on":
+        creditShopBorderColorObject = ColorListModel.objects.get(
+            id=creditShopBorderColor)
+        creditShopBorderColorSeparate = creditShopBorderColorObject.color_code.split(
+            ",")
+        creditShopBorderColorConverted0 = int(creditShopBorderColorSeparate[0])
+        creditShopBorderColorConverted1 = int(creditShopBorderColorSeparate[1])
+        creditShopBorderColorConverted2 = int(creditShopBorderColorSeparate[2])
+        creditShopBorderColorConverted = creditShopBorderColorConverted0, creditShopBorderColorConverted1, creditShopBorderColorConverted2
+
+        imgObj.text((creditShopPosX-creditShopBorderSize, creditShopPosY), type,
+                    font=font0, fill=creditShopBorderColorConverted)
+        imgObj.text((creditShopPosX+creditShopBorderSize, creditShopPosY), type,
+                    font=font0, fill=creditShopBorderColorConverted)
+        imgObj.text((creditShopPosX, creditShopPosY-creditShopBorderSize), type,
+                    font=font0, fill=creditShopBorderColorConverted)
+        imgObj.text((creditShopPosX, creditShopPosY+creditShopBorderSize), type,
+                    font=font0, fill=creditShopBorderColorConverted)
+    # * ================= END : BORDER =================
+    # * ================= START : TEXT =================
     imgObj.text((txtPosX, txtPosY), type, font=font0, fill=textColorConverted)
-    imgObj.text((datePosX, datePosY), curDate, font=font1, fill=dateColorConverted)
-    imgObj.text((mainNumberPosX, mainNumberPosY), "{}{}{}".format(mainFirstNumber,mainNumSeparator,
-                                                                   mainSecondNumber), font=font2, fill=mainNumColorConverted)
-    imgObj.text((row1X, row1Y), "{}{}{}{}{}{}{}".format(row1Set1,row1Separator,
-                row1Set2,row1Separator, row1Set3,row1Separator, row1Set4,row1Separator), font=font3, fill=row1ColorConverted)
-    imgObj.text((row2X, row2Y), "{}{}{}{}{}{}{}".format(row2Set1,row2Separator,
-                row2Set2,row2Separator, row2Set3,row2Separator, row2Set4,row2Separator), font=font3, fill=row2ColorConverted)
+    imgObj.text((datePosX, datePosY), curDate,
+                font=font1, fill=dateColorConverted)
+    imgObj.text((mainNumberPosX, mainNumberPosY), "{}{}{}".format(mainFirstNumber, mainNumSeparator,
+                                                                  mainSecondNumber), font=font2, fill=mainNumColorConverted)
+    imgObj.text((row1X, row1Y), "{}{}{}{}{}{}{}".format(row1Set1, row1Separator,
+                row1Set2, row1Separator, row1Set3, row1Separator, row1Set4, row1Separator), font=font3, fill=row1ColorConverted)
+    imgObj.text((row2X, row2Y), "{}{}{}{}{}{}{}".format(row2Set1, row2Separator,
+                row2Set2, row2Separator, row2Set3, row2Separator, row2Set4, row2Separator), font=font3, fill=row2ColorConverted)
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
                 font=font4, fill=focusNumColorConverted)
+    # * ================= END : TEXT =================
 
     img.save(location)
     imgLocation = '/static/images/result-hua/{}-result.jpg'.format(username)
@@ -736,10 +828,11 @@ def AvoidNumber(avoidNumber):
 # สร้างชุดสุ่มหวย 2 หลัก
 
 
-def generateNumberForSecondLine(subNumberRow2SecondUnitList,listSwapNumber, mainSecondNumber, subNumberSecondUnit):
+def generateNumberForSecondLine(subNumberRow2SecondUnitList, listSwapNumber, mainSecondNumber, subNumberSecondUnit):
     setOfNumber = str(mainSecondNumber)+str(subNumberSecondUnit)
     if setOfNumber in listSwapNumber:
-        newSubNumberSecondUnit = RandomNumberUniqueToList(subNumberRow2SecondUnitList)
+        newSubNumberSecondUnit = RandomNumberUniqueToList(
+            subNumberRow2SecondUnitList)
         # เพิ่มเข้าไปในลิสต์เพื่อไม่ให้การสุ่มตัวเลขครั้งใหม่ ซ้ำกับเลขเก่า และเลขที่เพิ่งสร้างได้เมื่อกี้
         subNumberRow2SecondUnitList.append(newSubNumberSecondUnit)
     else:
@@ -773,11 +866,11 @@ def random2NumberResult(profileObject):
         subNumberRow1SecondUnitList)
     subNumberRow1SecondUnitList.append(subNumberRow1SecondUnit4)
 
-    #* สร้าง List ขึ้นมาสำหรับการเช็คซ้ำ
+    # * สร้าง List ขึ้นมาสำหรับการเช็คซ้ำ
     subNumberRow2SecondUnitList = []
 
-    #* ถ้าแถวที่ 1 มีเลข รูด แล้ว แถวที่ 2 จะต้องยกเว้นการสุ่มโดนเลข วิ่ง เช่น เลข วิ่ง-รูด เป็น 4-6 ถ้าแถวที่ 1 มี 46 แล้ว แถวข้างล่างต้องสุ่มให้ไม่มีเลข 6
-    #* แต่ถ้าแถวที่ 1 ไม่มีเลขรูด สามารถสุ่มยังไงก็ได้ แสดงว่าถ้าแถวแรกมีเลขรูดแล้ว เราก็จะใส่เลข วิ่ง เข้าไปใน List เพื่อจะได้ไม่สุ่มโดนเลข วิ่ง
+    # * ถ้าแถวที่ 1 มีเลข รูด แล้ว แถวที่ 2 จะต้องยกเว้นการสุ่มโดนเลข วิ่ง เช่น เลข วิ่ง-รูด เป็น 4-6 ถ้าแถวที่ 1 มี 46 แล้ว แถวข้างล่างต้องสุ่มให้ไม่มีเลข 6
+    # * แต่ถ้าแถวที่ 1 ไม่มีเลขรูด สามารถสุ่มยังไงก็ได้ แสดงว่าถ้าแถวแรกมีเลขรูดแล้ว เราก็จะใส่เลข วิ่ง เข้าไปใน List เพื่อจะได้ไม่สุ่มโดนเลข วิ่ง
     if subNumberRow1SecondUnit1 == mainSecondNumber or subNumberRow1SecondUnit2 == mainSecondNumber or subNumberRow1SecondUnit3 == mainSecondNumber or subNumberRow1SecondUnit4 == mainSecondNumber:
         # เพิ่มเลข "รูด" เข้าไป
         subNumberRow2SecondUnitList.append(mainFirstNumber)
@@ -798,9 +891,8 @@ def random2NumberResult(profileObject):
         subNumberRow2SecondUnitList)
     subNumberRow2SecondUnitList.append(subNumberRow2SecondUnit4)
 
-
-    #* ถ้า random_mode เป็นแบบต้องมีเลข วิ่ง-รูด ในเลขเจาะ จะเข้าเงื่อนไขนี้
-    #* ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
+    # * ถ้า random_mode เป็นแบบต้องมีเลข วิ่ง-รูด ในเลขเจาะ จะเข้าเงื่อนไขนี้
+    # * ถ้าตัวเลขหลักหน่วยของแถวที่ 1 และ 2 ไม่มีเลขหลักอีกตัวปนอยู่เลย เราจะบังคับให้แถวที่ 1 ตัวที่ 4 เปลี่ยนเลขเป็นเลข หลักหน่วยของตัวหลัก เช่น ตัวหลักเป็น 2 - 9 ถ้าแถวที่ 1 ไม่มี 29 และแถวที่ 2 ไม่มี 92 ก็จะให้ตัวที่ 4 ของแถวที่ 1 เป็น 29
     if profileObject.random_mode == 'force_have_main_number':
         if mainSecondNumber not in subNumberRow1SecondUnitList:
             if mainFirstNumber not in subNumberRow2SecondUnitList:
