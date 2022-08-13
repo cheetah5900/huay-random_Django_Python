@@ -182,14 +182,50 @@ def EditUser(request, username):
 @login_required
 def ListHuay(request, username):
     context = {}
-
     userObject = User.objects.get(username=username)
-    huayObject = HuayTypeModel.objects.filter(user=userObject)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    huayIdMorningList = []
+    huayFullNameMorningList = []
+    huayIdAfternoonList = []
+    huayFullNameAfternoonList = []
+    huayIdEveningList = []
+    huayFullNameEveningList = []
+    huayIdOtherList = []
+    huayFullNameOtherList = []
+
+    for item in huayTypeObject:
+        time = str(item.huay_list.time)
+        if time == "07:00:00":
+            huayIdMorningList.append(item.id)
+            huayFullNameMorningList.append(item.huay_list.full_name)
+        elif time == "13:00:00":
+            huayIdAfternoonList.append(item.id)
+            huayFullNameAfternoonList.append(item.huay_list.full_name)
+        elif time == "19:00:00":
+            huayIdEveningList.append(item.id)
+            huayFullNameEveningList.append(item.huay_list.full_name)
+        elif time == "20:00:00":
+            huayIdOtherList.append(item.id)
+            huayFullNameOtherList.append(item.huay_list.full_name)
+    print("huayIdMorningList : ",huayIdMorningList)
+    print("huayFullNameMorningList : ",huayFullNameMorningList)
+    zipDataForLoopMorning = zip(huayIdMorningList,
+        huayFullNameMorningList)
+    zipDataForLoopAfternoon = zip(huayIdAfternoonList,
+        huayFullNameAfternoonList)
+    zipDataForLoopEvening = zip(huayIdEveningList,
+        huayFullNameEveningList)
+    zipDataForLoopOther = zip(huayIdOtherList,
+        huayFullNameOtherList)
+
     profileObject = ProfileModel.objects.get(user=userObject)
 
-    context['huayObject'] = huayObject
     context['username'] = username
     context['houseName'] = profileObject.house_name
+    context['zipDataForLoopMorning'] = zipDataForLoopMorning
+    context['zipDataForLoopAfternoon'] = zipDataForLoopAfternoon
+    context['zipDataForLoopEvening'] = zipDataForLoopEvening
+    context['zipDataForLoopOther'] = zipDataForLoopOther
 
     return render(request, 'huay/list_huay.html', context)
 
@@ -293,6 +329,7 @@ def AddHuay(request, username):
     context['data'] = profileObject
     context['fontList'] = fontListObject
     context['colorList'] = colorListObject
+    context['username'] = username
 
     return render(request, 'huay/add_huay.html', context)
 
@@ -383,6 +420,7 @@ def EditHuay(request, username, huay_id):
     context['huayId'] = huay_id
     context['fontList'] = fontListObject
     context['colorList'] = colorListObject
+    context['username'] = username
 
     return render(request, 'huay/edit_huay.html', context)
 
