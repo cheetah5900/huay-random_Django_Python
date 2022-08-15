@@ -16,6 +16,18 @@ body {
 .ml-3{
   margin-left: 20px;
 }
+.header-topic{
+  background-color: brown;
+  padding:7px;
+  border-radius: 10px;
+
+}
+.header-topic h3{
+  margin:0px;
+}
+h4{
+  color:#e6c41a;
+}
 .black-font{
   color:black;
   font-size: 1px;
@@ -130,6 +142,15 @@ input {
   color: #707071 !important;
   font-size: 12px !important;
 }
+.text-left{
+  text-align: left!important;
+}
+.text-right{
+  text-align: right!important;
+}
+.d-block{
+  display:block!important;
+}
 .text-gray {
   color: #707071 !important;
   font-size: 12px !important;
@@ -192,7 +213,9 @@ input {
 .game-jackpot-container .jackpot {
   left: 120px !important;
 }
-
+.font-color-white{
+  color:#ffffff!important;
+}
 /* when mobile will reduce logo height */
 /* jackpot relative move */
 @media (max-width: 992px) {

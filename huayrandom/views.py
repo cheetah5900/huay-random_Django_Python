@@ -60,18 +60,8 @@ def Backend(request):
     if request.method == 'POST':
         data = request.POST.copy()
         houseName = data.get('house_name')
-        nextPage = data.get('next_page')
         if (houseName != ""):
-            if (houseName == "none"):
-                if (nextPage == "huay"):
-                    request.session['error'] = "error"
-                    return redirect('backend')
-                else:
-                    return redirect('list_user')
-            elif (nextPage == "huay"):
                 return redirect('list_huay', houseName)
-            else:
-                return redirect('list_user')
 
         else:
             return redirect('backend')
@@ -237,14 +227,14 @@ def AddHuay(request, username):
     if request.method == 'POST':
         data = request.POST.copy()
         huayListId = data.get('huay_list_id')
-        fontTextId = data.get('font_text_id')
+        textFont = data.get('text_font')
         textColor = data.get('text_color')
         textPosX = data.get('text_pos_x')
         textPosY = data.get('text_pos_y')
         textSize = data.get('text_size')
         borderWidth = data.get('border_width')
         borderColor = data.get('text_border_color')
-        fontNumberId = data.get('number_font_id')
+        mainNumberFont = data.get('number_font_id')
         mainNumberPosX = data.get('main_number_pos_x')
         mainNumberPosY = data.get('main_number_pos_y')
         mainNumberSize = data.get('main_number_size')
@@ -265,12 +255,10 @@ def AddHuay(request, username):
             request.session['error'] = 'error'
             return redirect('add_huay', username)
         except:
-            getFontName = FontListModel.objects.get(id=fontTextId)
-            getFontName2 = FontListModel.objects.get(id=fontNumberId)
             addData = HuayTypeModel()
             addData.user = User.objects.get(username=username)
             addData.huay_list = HuayListModel.objects.get(id=huayListId)
-            addData.text_font = getFontName.font_name
+            addData.text_font = textFont
             addData.text_color = textColor
             addData.text_border_size = borderWidth
             addData.text_border_color = borderColor
@@ -282,7 +270,7 @@ def AddHuay(request, username):
             addData.date_font_size = dataFontsize
             addData.main_num_pos_x = mainNumberPosX
             addData.main_num_pos_y = mainNumberPosY
-            addData.main_num_font = getFontName2.font_name
+            addData.main_num_font = mainNumberFont
             addData.main_num_font_size = mainNumberSize
             addData.focus_num_pos_x = focusPosX
             addData.focus_num_pos_y = focusPosY
@@ -342,17 +330,18 @@ def EditHuay(request, username, huay_id):
     if request.method == 'POST':
         data = request.POST.copy()
         huayListId = data.get('huay_list_id')
-        fontTextId = data.get('font_text_id')
         # ชื่อหวย
+        textFont = data.get('text_font')
         textColor = data.get('text_color')
         textPosX = data.get('text_pos_x')
         textPosY = data.get('text_pos_y')
         textSize = data.get('text_size')
         textBorderStatus = data.get('text_border_status')
-        borderWidth = data.get('border_width')
+        textBorderSize = data.get('text_border_size')
         borderColor = data.get('text_border_color')
         # ตัวเลขหลัก 2 ตัว
-        mainNumberFontColor = data.get('main_number_font_color')
+        mainNumberFont = data.get('main_num_font')
+        mainNumberFontColor = data.get('main_num_font_color')
         mainNumberFontSize = data.get('main_num_font_size')
         mainNumberPosX = data.get('main_number_pos_x')
         mainNumberPosY = data.get('main_number_pos_y')
@@ -383,11 +372,19 @@ def EditHuay(request, username, huay_id):
         # วันที่
         dataPosX = data.get('date_pos_x')
         dataPosY = data.get('date_pos_y')
-        dataFontsize = data.get('date_fontsize')
+        dataFont = data.get('date_font')
+        dataFontColor = data.get('date_font_color')
+        dataFontSize = data.get('date_fontsize')
+        dataBorderStatus = data.get('date_border_status')
+        dataBorderSize = data.get('date_border_size')
+        dataBorderColor = data.get('date_border_color')
         # ตัวเน้น
-        focusPosX = data.get('focus_pos_x')
-        focusPosY = data.get('focus_pos_y')
-        focusFontsize = data.get('focus_fontsize')
+        focusPosX = data.get('focus_num_pos_x')
+        focusPosY = data.get('focus_num_pos_y')
+        focusFont = data.get('focus_num_font')
+        focusFontColor = data.get('focus_num_font_color')
+        focusFontSize = data.get('focus_num_font_size')
+        focusBorderSize = data.get('focus_num_border_size')
         # เลข 3 หลัก ตัวหลัก
         threeMainStatus = data.get('three_main_status')
         threeMainPosX = data.get('three_main_pos_x')
@@ -395,6 +392,9 @@ def EditHuay(request, username, huay_id):
         threeMainFontSize = data.get('three_main_font_size')
         threeMainSeparator = data.get('three_main_separator')
         threeMainFontColor = data.get('three_main_font_color')
+        threeMainBorderStatus = data.get('three_main_border_status')
+        threeMainBorderColor = data.get('three_main_border_color')
+        threeMainBorderSize = data.get('three_main_border_size')
         # เลข 3 หลัก ตัวย่อย
         threeSubStatus = data.get('three_sub_status')
         threeSubPosX = data.get('three_sub_pos_x')
@@ -418,30 +418,30 @@ def EditHuay(request, username, huay_id):
         remarkPosX = data.get('remark_pos_x')
         remarkPosY = data.get('remark_pos_y')
 
-        getFontNameOfText = FontListModel.objects.get(id=fontTextId)
-        getFontNameOfMainNumber = FontListModel.objects.get(id=mainNumberFontSize)
-        getFontRow = FontListModel.objects.get(id=numberRowFont)
-        getRemarkFont = FontListModel.objects.get(id=remarkFont)
-        getThreeSubFont = FontListModel.objects.get(id=threeSubFont)
-
         editData = HuayTypeModel.objects.get(id=huayListId, user=userObject)
 
         editData.user = User.objects.get(username=username)
-        editData.text_font = getFontNameOfText.font_name
+        editData.text_font = textFont
         editData.text_color = textColor
         editData.text_border_status = textBorderStatus
-        editData.text_border_size = borderWidth
+        editData.text_border_size = textBorderSize
         editData.text_border_color = borderColor
         editData.text_pos_x = textPosX
         editData.text_pos_y = textPosY
         editData.text_font_size = textSize
         editData.date_pos_x = dataPosX
         editData.date_pos_y = dataPosY
-        editData.date_font_size = dataFontsize
-        editData.main_num_font = getFontNameOfMainNumber.font_name
+        editData.date_font = dataFont
+        editData.date_font_color = dataFontColor
+        editData.date_font_size = dataFontSize
+        editData.date_border_status = dataBorderStatus
+        editData.date_border_size = dataBorderSize
+        editData.date_border_color = dataBorderColor
+        editData.main_num_font = mainNumberFont
         editData.main_num_pos_x = mainNumberPosX
         editData.main_num_pos_y = mainNumberPosY
         editData.main_num_font_size = mainNumberSize
+        editData.main_num_font = mainNumberFont
         editData.main_num_font_color = mainNumberFontColor
         editData.main_num_border_status = mainNumberBorderStatus
         editData.main_num_border_size = mainNumberBorderSize
@@ -449,7 +449,9 @@ def EditHuay(request, username, huay_id):
         editData.main_num_separator = mainNumberSeparator
         editData.focus_num_pos_x = focusPosX
         editData.focus_num_pos_y = focusPosY
-        editData.focus_num_font_size = focusFontsize
+        editData.focus_num_font = focusFont
+        editData.focus_num_font_color = focusFontColor
+        editData.focus_num_font_size = focusFontSize
         editData.row1_x = numberRow1PosX
         editData.row1_y = numberRow1PosY
         editData.row1_separator = row1Separator
@@ -464,7 +466,7 @@ def EditHuay(request, username, huay_id):
         editData.row2_border_status = row2BorderStatus
         editData.row2_border_color = row2BorderColor
         editData.row2_border_size = row2BorderSize
-        editData.row_font = getFontRow.font_name
+        editData.row_font = numberRowFont
         editData.row_font_size = numberRowFontsize
         editData.three_main_status = threeMainStatus
         editData.three_main_pos_x = threeMainPosX
@@ -472,10 +474,13 @@ def EditHuay(request, username, huay_id):
         editData.three_main_font_size = threeMainFontSize
         editData.three_main_separator = threeMainSeparator
         editData.three_main_font_color = threeMainFontColor
+        editData.three_main_border_status = threeMainBorderStatus
+        editData.three_main_border_color = threeMainBorderColor
+        editData.three_main_border_size = threeMainBorderSize
         editData.three_sub_status = threeSubStatus
         editData.three_sub_pos_x = threeSubPosX
         editData.three_sub_pos_y = threeSubPosY
-        editData.three_sub_font = getThreeSubFont.font_name
+        editData.three_sub_font = threeSubFont
         editData.three_sub_font_size = threeSubFontSize
         editData.three_sub_separator = threeSubSeparator
         editData.three_sub_font_color = threeSubFontColor
@@ -484,7 +489,7 @@ def EditHuay(request, username, huay_id):
         editData.three_sub_border_size = threeSubBorderSize
         editData.remark_status = remarkStatus
         editData.remark_text = remarkText
-        editData.remark_font = getRemarkFont.font_name
+        editData.remark_font = remarkFont
         editData.remark_font_size = remarkFontSize
         editData.remark_font_color = remarkFontColor
         editData.remark_border_status = remarkBorderStatus
@@ -505,9 +510,9 @@ def EditHuay(request, username, huay_id):
     colorListObject = ColorListModel.objects.all()
 
     imgLocation = GenerateImageWIthText(username, huayTypeObject.huay_list.full_name, huayTypeObject.text_font, huayTypeObject.main_num_font, huayTypeObject.text_color, huayTypeObject.text_border_status, huayTypeObject.text_border_size, huayTypeObject.text_border_color, huayTypeObject.text_pos_x, huayTypeObject.text_pos_y, huayTypeObject.text_font_size,
-                                        huayTypeObject.date_pos_x, huayTypeObject.date_pos_y, huayTypeObject.date_font_size, huayTypeObject.main_num_pos_x, huayTypeObject.main_num_pos_y, huayTypeObject.main_num_font_size, huayTypeObject.main_num_border_status, huayTypeObject.main_num_border_color, huayTypeObject.main_num_border_size, huayTypeObject.focus_num_pos_x,
-                                        huayTypeObject.focus_num_pos_y, huayTypeObject.focus_num_font_size, huayTypeObject.focus_num_border_status, huayTypeObject.focus_num_border_color, huayTypeObject.focus_num_border_size, huayTypeObject.row1_x, huayTypeObject.row1_y, huayTypeObject.row1_border_status, huayTypeObject.row1_border_color, huayTypeObject.row1_border_size,
-                                        huayTypeObject.row2_x, huayTypeObject.row2_y,  huayTypeObject.row2_border_status, huayTypeObject.row2_border_color, huayTypeObject.row2_border_size, huayTypeObject.row_font_size, huayTypeObject.main_num_separator, huayTypeObject.row1_separator, huayTypeObject.row2_separator, huayTypeObject.date_color, huayTypeObject.main_num_font_color, huayTypeObject.focus_num_color,
+                                        huayTypeObject.date_pos_x, huayTypeObject.date_pos_y, huayTypeObject.date_font,huayTypeObject.date_font_size,huayTypeObject.date_font_color,huayTypeObject.date_border_status,huayTypeObject.date_border_color,huayTypeObject.date_border_size,huayTypeObject.main_num_pos_x, huayTypeObject.main_num_pos_y, huayTypeObject.main_num_font_size, huayTypeObject.main_num_border_status, huayTypeObject.main_num_border_color, huayTypeObject.main_num_border_size, huayTypeObject.focus_num_pos_x,
+                                        huayTypeObject.focus_num_pos_y, huayTypeObject.focus_num_font_size,huayTypeObject.focus_num_font_color, huayTypeObject.focus_num_border_status, huayTypeObject.focus_num_border_color, huayTypeObject.focus_num_border_size, huayTypeObject.row1_x, huayTypeObject.row1_y, huayTypeObject.row1_border_status, huayTypeObject.row1_border_color, huayTypeObject.row1_border_size,
+                                        huayTypeObject.row2_x, huayTypeObject.row2_y,  huayTypeObject.row2_border_status, huayTypeObject.row2_border_color, huayTypeObject.row2_border_size, huayTypeObject.row_font_size, huayTypeObject.main_num_separator, huayTypeObject.row1_separator, huayTypeObject.row2_separator, huayTypeObject.main_num_font_color,
                                         huayTypeObject.row1_color, huayTypeObject.row2_color, huayTypeObject.credit_shop_pos_x, huayTypeObject.credit_shop_pos_y, huayTypeObject.credit_shop_border_status, huayTypeObject.credit_shop_border_color, huayTypeObject.credit_shop_border_size,huayTypeObject.three_main_status,huayTypeObject.three_main_font,huayTypeObject.three_main_font_size,
                                         huayTypeObject.three_main_font_color,huayTypeObject.three_main_border_status,huayTypeObject.three_main_border_size,huayTypeObject.three_main_border_color,huayTypeObject.three_main_pos_x,huayTypeObject.three_main_pos_y,huayTypeObject.three_main_separator,huayTypeObject.three_sub_status,huayTypeObject.three_sub_font,
                                         huayTypeObject.three_sub_font_size,huayTypeObject.three_sub_font_color,huayTypeObject.three_sub_border_status,huayTypeObject.three_sub_border_size,huayTypeObject.three_sub_border_color,huayTypeObject.three_sub_pos_x,huayTypeObject.three_sub_pos_y,huayTypeObject.three_sub_separator,huayTypeObject.remark_status,huayTypeObject.remark_text,
@@ -637,9 +642,9 @@ def Result(request, username, link):
     profileObject = ProfileModel.objects.get(user=userObject)
 
     imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.text_font, data.main_num_font, data.text_color, data.text_border_status, data.text_border_size, data.text_border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
-                                        data.focus_num_pos_y, data.focus_num_font_size, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
-                                        data.row2_x, data.row2_y,  data.row2_border_status, data.row2_border_color, data.row2_border_size, data.row_font_size, data.main_num_separator, data.row1_separator, data.row2_separator, data.date_color, data.main_num_font_color, data.focus_num_color,
+                                        data.date_pos_x, data.date_pos_y, data.date_font,data.date_font_size,data.date_font_color,data.date_border_status,data.date_border_color,data.date_border_size,data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
+                                        data.focus_num_pos_y, data.focus_num_font_size,data.focus_num_font_color, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
+                                        data.row2_x, data.row2_y,  data.row2_border_status, data.row2_border_color, data.row2_border_size, data.row_font_size, data.main_num_separator, data.row1_separator, data.row2_separator, data.main_num_font_color,
                                         data.row1_color, data.row2_color, data.credit_shop_pos_x, data.credit_shop_pos_y, data.credit_shop_border_status, data.credit_shop_border_color, data.credit_shop_border_size,data.three_main_status,data.three_main_font,data.three_main_font_size,
                                         data.three_main_font_color,data.three_main_border_status,data.three_main_border_size,data.three_main_border_color,data.three_main_pos_x,data.three_main_pos_y,data.three_main_separator,data.three_sub_status,data.three_sub_font,
                                         data.three_sub_font_size,data.three_sub_font_color,data.three_sub_border_status,data.three_sub_border_size,data.three_sub_border_color,data.three_sub_pos_x,data.three_sub_pos_y,data.three_sub_separator,data.remark_status,data.remark_text,
@@ -700,12 +705,12 @@ def CheckExpireDate(username):
 
 
 def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textBorderStatus, textBorderSize, 
-textBorderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFontSize, mainNumberPosX, 
-mainNumberPosY, mainNumberFontSize, mainNumberBorderStatus, mainNumberBorderColor, 
-mainNumberBorderSize, focusNumberX, focusNumberY, focusNumberFontSize, forcusNumberBorderStatus, 
+textBorderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFont,dateFontSize,dateFontColor,dateBorderStatus,dateBorderColor,
+dateBorderSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, mainNumberBorderStatus, mainNumberBorderColor, 
+mainNumberBorderSize, focusNumberX, focusNumberY, focusNumberFontSize,focusNumColor, forcusNumberBorderStatus, 
 forcusNumberBorderColor, forcusNumberBorderSize, row1X, row1Y, row1BorderStatus, row1BorderColor, 
 row1BorderSize, row2X, row2Y, row2BorderStatus, row2BorderColor, row2BorderSize, rowFontSize, 
-mainNumSeparator, row1Separator, row2Separator, dateColor, mainNumFontColor, focusNumColor, row1Color, 
+mainNumSeparator, row1Separator, row2Separator, mainNumFontColor, row1Color, 
 row2Color, creditShopPosX, creditShopPosY, creditShopBorderStatus, creditShopBorderColor, creditShopBorderSize,
 threeMainStatus,threeMainFont,threeMainFontSize,threeMainFontColor,threeMainBorderStatus, threeMainBorderSize,
 threeMainBorderColor,threeMainPosX,threeMainPosY,threeMainSeparator,threeSubStatus,threeSubFont,threeSubFontSize,threeSubFontColor,
@@ -731,48 +736,40 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     threeNumberSet1 = randomResult[14]
     threeNumberSet2 = randomResult[15]
     threeNumberSet3 = randomResult[16]
-    path = os.getcwd()
+    
+    # * ================= START :  ENV =================
+    # ? LOCAL
+    # path = os.getcwd()
+    # locationTemplate = path + \
+    #     '/static/images/template-hua/{}-template.jpg'.format(username)
+    # ? SERVER
+    path = '/home/cheetah/random.huay-vip-net'
+    locationTemplate =  '/static/images/template-hua/{}-template.jpg'.format(username)
+    # * ================= END :  ENV =================
+
     # * ================= START :  SET FONT =================
 
-    # ? SERVER
+    dateFont = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(dateFont), dateFontSize)
     font0 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontText), txtFontSize)
+        path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
     font1 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
+        path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
     font2 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
+        path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
     font3 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
+        path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
     font4 = ImageFont.truetype(
-        '/home/cheetah/random.huay-vip-net/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    location = '/home/cheetah/random.huay-vip-net/static/images/result-hua/{}-result.jpg'.format(
-        username)
-    locationTemplate = '/home/cheetah/random.huay-vip-net/static/images/template-hua/{}-template.jpg'.format(
-        username)
-
-    # ? LOCAL
-    # font0 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontText), txtFontSize)
-    # font1 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), dateFontSize)
-    # font2 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), mainNumberFontSize)
-    # font3 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), rowFontSize)
-    # font4 = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
-    # threeMainFont = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(threeMainFont), threeMainFontSize)
-    # threeSubFont = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(threeSubFont), threeSubFontSize)
-    # remarkFont = ImageFont.truetype(
-    #     path+'/static/assets/fonts/{}'.format(remarkFont), remarkFontSize)
+        path+'/static/assets/fonts/{}'.format(fontNumber), focusNumberFontSize)
+    threeMainFont = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(threeMainFont), threeMainFontSize)
+    threeSubFont = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(threeSubFont), threeSubFontSize)
+    remarkFont = ImageFont.truetype(
+        path+'/static/assets/fonts/{}'.format(remarkFont), remarkFontSize)
+    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
 
     # * ================= END :  SET FONT =================
-
-    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
-    locationTemplate = path + \
-        '/static/images/template-hua/{}-template.jpg'.format(username)
 
     img = Image.open(locationTemplate)
     imgObj = ImageDraw.Draw(img)
@@ -784,12 +781,12 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     # * ================= START :  GET FONT COLOR =================
     
     #? date text
-    dateColorObject = ColorListModel.objects.get(id=dateColor)
-    dateColorSeparate = dateColorObject.color_code.split(",")
-    dateColorConverted0 = int(dateColorSeparate[0])
-    dateColorConverted1 = int(dateColorSeparate[1])
-    dateColorConverted2 = int(dateColorSeparate[2])
-    dateColorConverted = dateColorConverted0, dateColorConverted1, dateColorConverted2
+    dateFontColorObject = ColorListModel.objects.get(id=dateFontColor)
+    dateFontColorSeparate = dateFontColorObject.color_code.split(",")
+    dateFontColorConverted0 = int(dateFontColorSeparate[0])
+    dateFontColorConverted1 = int(dateFontColorSeparate[1])
+    dateFontColorConverted2 = int(dateFontColorSeparate[2])
+    dateFontColorConverted = dateFontColorConverted0, dateFontColorConverted1, dateFontColorConverted2
     
     #? name text
     textColorObject = ColorListModel.objects.get(id=textColor)
@@ -857,6 +854,23 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
 
     # * ================= END :  GET FONT COLOR =================
     # * ================= START : BORDER =================
+    # ? date
+    if dateBorderStatus == "on":
+        dateBorderColorObject = ColorListModel.objects.get(id=dateBorderColor)
+        dateBorderColorSeparate = dateBorderColorObject.color_code.split(",")
+        dateBorderColorConverted0 = int(dateBorderColorSeparate[0])
+        dateBorderColorConverted1 = int(dateBorderColorSeparate[1])
+        dateBorderColorConverted2 = int(dateBorderColorSeparate[2])
+        dateBorderColorConverted = dateBorderColorConverted0, dateBorderColorConverted1, dateBorderColorConverted2
+
+        imgObj.text((datePosX-dateBorderSize, datePosY), curDate,
+                    font=dateFont, fill=dateBorderColorConverted)
+        imgObj.text((datePosX+dateBorderSize, datePosY), curDate,
+                    font=dateFont, fill=dateBorderColorConverted)
+        imgObj.text((datePosX, datePosY-dateBorderSize), curDate,
+                    font=dateFont, fill=dateBorderColorConverted)
+        imgObj.text((datePosX, datePosY+dateBorderSize), curDate,
+                    font=dateFont, fill=dateBorderColorConverted)
     # ? text
     if textBorderStatus == "on":
         textBorderColorObject = ColorListModel.objects.get(id=textBorderColor)
@@ -969,6 +983,25 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
                     font=font0, fill=creditShopBorderColorConverted)
         imgObj.text((creditShopPosX, creditShopPosY+creditShopBorderSize), type,
                     font=font0, fill=creditShopBorderColorConverted)
+    # ? three main border
+    if threeMainBorderStatus == "on":
+        threeMainBorderColorObject = ColorListModel.objects.get(
+            id=threeMainBorderColor)
+        threeMainBorderColorSeparate = threeMainBorderColorObject.color_code.split(
+            ",")
+        threeMainBorderColorConverted0 = int(threeMainBorderColorSeparate[0])
+        threeMainBorderColorConverted1 = int(threeMainBorderColorSeparate[1])
+        threeMainBorderColorConverted2 = int(threeMainBorderColorSeparate[2])
+        threeMainBorderColorConverted = threeMainBorderColorConverted0, threeMainBorderColorConverted1, threeMainBorderColorConverted2
+
+        imgObj.text((threeMainPosX-threeMainBorderSize, threeMainPosY),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+                    font=threeMainFont, fill=threeMainBorderColorConverted)
+        imgObj.text((threeMainPosX+threeMainBorderSize, threeMainPosY),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+                    font=threeMainFont, fill=threeMainBorderColorConverted)
+        imgObj.text((threeMainPosX, threeMainPosY-threeMainBorderSize),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+                    font=threeMainFont, fill=threeMainBorderColorConverted)
+        imgObj.text((threeMainPosX, threeMainPosY+threeMainBorderSize),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+                    font=threeMainFont, fill=threeMainBorderColorConverted)
     # ? three sub border
     if threeSubBorderStatus == "on":
         threeSubBorderColorObject = ColorListModel.objects.get(
@@ -1011,7 +1044,7 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     # * ================= START : TEXT =================
     imgObj.text((txtPosX, txtPosY), type, font=font0, fill=textColorConverted)
     imgObj.text((datePosX, datePosY), curDate,
-                font=font1, fill=dateColorConverted)
+                font=font1, fill=dateFontColorConverted)
     imgObj.text((mainNumberPosX, mainNumberPosY), "{}{}{}".format(mainFirstNumber, mainNumSeparator,
                                                                   mainSecondNumber), font=font2, fill=mainNumFontColorConverted)
     imgObj.text((row1X, row1Y), "{}{}{}{}{}{}{}".format(row1Set1, row1Separator,
