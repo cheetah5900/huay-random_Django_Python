@@ -744,7 +744,7 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     #     '/static/images/template-hua/{}-template.jpg'.format(username)
     # ? SERVER
     path = '/home/cheetah/random.huay-vip-net'
-    locationTemplate =  '/static/images/template-hua/{}-template.jpg'.format(username)
+    locationTemplate =  path+'/static/images/template-hua/{}-template.jpg'.format(username)
     # * ================= END :  ENV =================
 
     # * ================= START :  SET FONT =================
