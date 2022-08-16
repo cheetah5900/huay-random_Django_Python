@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+import os
 
 from huayrandom.models import *
 from PIL import Image
@@ -9,7 +10,6 @@ from PIL import ImageFont
 import random
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import os
 
 
 def Index(request):
@@ -50,7 +50,6 @@ def Login(request):
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
     return render(request, 'login.html', context)
-
 
 @login_required
 def Backend(request):
@@ -197,8 +196,6 @@ def ListHuay(request, username):
         elif time == "20:00:00":
             huayIdOtherList.append(item.id)
             huayFullNameOtherList.append(item.huay_list.full_name)
-    print("huayIdMorningList : ", huayIdMorningList)
-    print("huayFullNameMorningList : ", huayFullNameMorningList)
     zipDataForLoopMorning = zip(huayIdMorningList,
                                 huayFullNameMorningList)
     zipDataForLoopAfternoon = zip(huayIdAfternoonList,
@@ -547,50 +544,57 @@ def Home(request, username):
         year = profileObject.expire_date.strftime("%Y")
         thaiMonth = ConvertToThaiMonth(month)
         expireDateThai = "{} {} {}".format(day, thaiMonth, year)
-        for x in range(0, 4):
-            if x == 0:
-                huayObject = HuayListModel.objects.filter(time="07:00:00")
-            elif x == 1:
-                huayObject = HuayListModel.objects.filter(time="13:00:00")
-            elif x == 2:
-                huayObject = HuayListModel.objects.filter(time="19:00:00")
-            elif x == 3:
-                huayObject = HuayListModel.objects.filter(time="20:00:00")
 
-            huayShortNameList = []
-            huayLinkList = []
-            btnColorList = []
+        huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+        huayLinkMorningList = []
+        btnColorList = []
+        huayFullNameMorningList = []
+        huayLinkAfternoonList = []
+        huayFullNameAfternoonList = []
+        huayLinkEveningList = []
+        huayFullNameEveningList = []
+        huayLinkOtherList = []
+        huayFullNameOtherList = []
 
-            i = 1
-            listPurple = [1, 5, 9, 13, 17, 21, 25, 29]
-            listOrange = [2, 6, 10, 14, 18, 22, 26, 30]
-            listPink = [3, 7, 11, 15, 19, 23, 27, 31]
-            listGreen = [4, 8, 12, 16, 20, 24, 28, 32]
+        i = 1
+        listPurple = [1, 5, 9, 13, 17, 21, 25, 29]
+        listOrange = [2, 6, 10, 14, 18, 22, 26, 30]
+        listPink = [3, 7, 11, 15, 19, 23, 27, 31]
+        listGreen = [4, 8, 12, 16, 20, 24, 28, 32]
 
-            for item in huayObject:
-                huayShortNameList.append(item.short_name)
-                huayLinkList.append(item.link)
-                if i in listPurple:
-                    btnColorList.append('purple')
-                elif i in listOrange:
-                    btnColorList.append('orange')
-                elif i in listPink:
-                    btnColorList.append('pink')
-                elif i in listGreen:
-                    btnColorList.append('green')
-                i += 1
-            if x == 0:
-                zipDataForLoopMorning = zip(
-                    huayShortNameList, huayLinkList, btnColorList)
-            elif x == 1:
-                zipDataForLoopAfternoon = zip(
-                    huayShortNameList, huayLinkList, btnColorList)
-            elif x == 2:
-                zipDataForLoopEvening = zip(
-                    huayShortNameList, huayLinkList, btnColorList)
-            elif x == 3:
-                zipDataForLoopOther = zip(
-                    huayShortNameList, huayLinkList, btnColorList)
+        for item in huayTypeObject:
+            time = str(item.huay_list.time)
+            if time == "07:00:00":
+                huayLinkMorningList.append(item.huay_list.link)
+                huayFullNameMorningList.append(item.huay_list.full_name)
+            elif time == "13:00:00":
+                huayLinkAfternoonList.append(item.huay_list.link)
+                huayFullNameAfternoonList.append(item.huay_list.full_name)
+            elif time == "19:00:00":
+                huayLinkEveningList.append(item.huay_list.link)
+                huayFullNameEveningList.append(item.huay_list.full_name)
+            elif time == "20:00:00":
+                huayLinkOtherList.append(item.huay_list.link)
+                huayFullNameOtherList.append(item.huay_list.full_name)
+
+            if i in listPurple:
+                btnColorList.append('purple')
+            elif i in listOrange:
+                btnColorList.append('orange')
+            elif i in listPink:
+                btnColorList.append('pink')
+            elif i in listGreen:
+                btnColorList.append('green')
+
+            i += 1
+        zipDataForLoopMorning = zip(
+                                    huayFullNameMorningList,huayLinkMorningList,btnColorList)
+        zipDataForLoopAfternoon = zip(
+                                    huayFullNameAfternoonList,huayLinkAfternoonList,btnColorList)
+        zipDataForLoopEvening = zip(
+                                    huayFullNameEveningList,huayLinkEveningList,btnColorList)
+        zipDataForLoopOther = zip(
+                                huayFullNameOtherList,huayLinkOtherList,btnColorList)
 
         context['houseNameThai'] = profileObject.house_name
         context['expireDateThai'] = expireDateThai
@@ -739,12 +743,12 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     
     # * ================= START :  ENV =================
     # ? LOCAL
-    # path = os.getcwd()
-    # locationTemplate = path + \
-    #     '/static/images/template-hua/{}-template.jpg'.format(username)
+    path = os.getcwd()
+    locationTemplate = path + \
+        '/static/images/template-hua/{}-template.jpg'.format(username)
     # ? SERVER
-    path = '/home/cheetah/random.huay-vip-net'
-    locationTemplate =  path+'/static/images/template-hua/{}-template.jpg'.format(username)
+    # path = '/home/cheetah/random.huay-vip-net'
+    # locationTemplate =  path+'/static/images/template-hua/{}-template.jpg'.format(username)
     # * ================= END :  ENV =================
 
     # * ================= START :  SET FONT =================

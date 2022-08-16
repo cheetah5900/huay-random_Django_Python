@@ -24,89 +24,6 @@
                 </div>
                 <div class="table-responsive" style="height:550px;">
                   <div class="header-topic">
-                    <h3>วันที่</h3>
-                  </div>
-                  <table class="table">
-                    <tr>
-                      <td colspan="4" class="text-center">
-                        <h4>ทั่วไป</h4>
-                      </td>
-                    </tr><tr>
-                      <td class="text-right">Font ข้อความ </td>
-                      <td class="text-center">
-                        <div class="form-group"><select name="date_font" class="form-control"> {%for font in fontList%}
-                            <option {%if font.font_name == huayTypeObject.date_font %} selected {%endif%}
-                              value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}
-                          </select>
-                        </div>
-                      </td>
-                      <td class="text-right">สีข้อความ </td>
-                      <td class="text-center">
-                        <div class="form-group"><select name="date_font_color" class="form-control"> {% for item in colorList%} <option {%if huayTypeObject.date_font_color == item.id %} selected {%endif%}
-                              value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-right">ขนาด </td>
-                      <td class="text-center">
-                        <div class="form-group"><input value="{{huayTypeObject.date_font_size}}" name="date_fontsize"
-                            type="number" class="form-control" placeholder="1">
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="4" class="text-center">
-                        <h4>ตำแหน่ง</h4>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-right">ตำแหน่ง X </td>
-                      <td class="text-center">
-                        <div class="form-group"><input value="{{huayTypeObject.date_pos_x}}" name="date_pos_x"
-                            type="number" class="form-control" placeholder="1">
-                        </div>
-                      </td>
-                      <td class="text-right">ตำแหน่ง Y </td>
-                      <td class="text-center">
-                        <div class="form-group"><input value="{{huayTypeObject.date_pos_y}}" name="date_pos_y"
-                            type="number" class="form-control" placeholder="1">
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="4" class="text-center">
-                        <h4>เส้นขอบ</h4>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-right">เปิด-ปิด เส้นขอบ </td>
-                      <td class="text-center">
-                        <div class="form-group"> <select name="date_border_status" class="form-control">
-                            <option {% if huayTypeObject.date_border_status == "on" %} selected {%endif%}value="on">
-                              เปิด</option>
-                            <option {% if huayTypeObject.date_border_status == "off" %} selected {%endif%}value="off">
-                              ปิด</option>
-                          </select>
-                        </div>
-                      </td>
-                      <td class="text-right">ความหนาเส้นขอบ </td>
-                      <td class="text-center">
-                        <div class="form-group"><input value="{{huayTypeObject.date_border_size}}" type="number"
-                            class="form-control" placeholder="1" name="date_border_size">
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-right">สีเส้นขอบ </td>
-                      <td class="text-center">
-                        <div class="form-group"><select name="date_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.date_border_color == item.id %} selected {%endif%}
-                              value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-                  <div class="header-topic">
                     <h3>ชื่อหวย</h3>
                   </div>
                   <table class="table">
@@ -828,6 +745,89 @@
                       <td class="text-center">
                         <div class="form-group"><input value="{{huayTypeObject.remark_border_size}}" type="number"
                             class="form-control" placeholder="1" name="remark_border_size">
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="header-topic">
+                    <h3>วันที่</h3>
+                  </div>
+                  <table class="table">
+                    <tr>
+                      <td colspan="4" class="text-center">
+                        <h4>ทั่วไป</h4>
+                      </td>
+                    </tr><tr>
+                      <td class="text-right">Font ข้อความ </td>
+                      <td class="text-center">
+                        <div class="form-group"><select name="date_font" class="form-control"> {%for font in fontList%}
+                            <option {%if font.font_name == huayTypeObject.date_font %} selected {%endif%}
+                              value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}
+                          </select>
+                        </div>
+                      </td>
+                      <td class="text-right">สีข้อความ </td>
+                      <td class="text-center">
+                        <div class="form-group"><select name="date_font_color" class="form-control"> {% for item in colorList%} <option {%if huayTypeObject.date_font_color == item.id %} selected {%endif%}
+                              value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">ขนาด </td>
+                      <td class="text-center">
+                        <div class="form-group"><input value="{{huayTypeObject.date_font_size}}" name="date_fontsize"
+                            type="number" class="form-control" placeholder="1">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" class="text-center">
+                        <h4>ตำแหน่ง</h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">ตำแหน่ง X </td>
+                      <td class="text-center">
+                        <div class="form-group"><input value="{{huayTypeObject.date_pos_x}}" name="date_pos_x"
+                            type="number" class="form-control" placeholder="1">
+                        </div>
+                      </td>
+                      <td class="text-right">ตำแหน่ง Y </td>
+                      <td class="text-center">
+                        <div class="form-group"><input value="{{huayTypeObject.date_pos_y}}" name="date_pos_y"
+                            type="number" class="form-control" placeholder="1">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" class="text-center">
+                        <h4>เส้นขอบ</h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">เปิด-ปิด เส้นขอบ </td>
+                      <td class="text-center">
+                        <div class="form-group"> <select name="date_border_status" class="form-control">
+                            <option {% if huayTypeObject.date_border_status == "on" %} selected {%endif%}value="on">
+                              เปิด</option>
+                            <option {% if huayTypeObject.date_border_status == "off" %} selected {%endif%}value="off">
+                              ปิด</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td class="text-right">ความหนาเส้นขอบ </td>
+                      <td class="text-center">
+                        <div class="form-group"><input value="{{huayTypeObject.date_border_size}}" type="number"
+                            class="form-control" placeholder="1" name="date_border_size">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">สีเส้นขอบ </td>
+                      <td class="text-center">
+                        <div class="form-group"><select name="date_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.date_border_color == item.id %} selected {%endif%}
+                              value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
                     </tr>
