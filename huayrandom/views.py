@@ -92,6 +92,7 @@ def AddUser(request):
         data = request.POST.copy()
         username = data.get('username')
         creditShop = data.get('credit_shop')
+        houseName = data.get('house_name')
         expireDate = data.get('expire_date')
         expireTime = data.get('expire_time')
         randomMode = data.get('random_mode')
@@ -109,7 +110,7 @@ def AddUser(request):
 
             addProfileData = ProfileModel()
             addProfileData.user = User.objects.get(username=username)
-            addProfileData.house_name = username
+            addProfileData.house_name = houseName
             addProfileData.credit_shop = creditShop
             addProfileData.random_mode = randomMode
             addProfileData.expire_date = "{} {}:00".format(
@@ -145,12 +146,14 @@ def EditUser(request, username):
     if request.method == 'POST':
         data = request.POST.copy()
         creditShop = data.get('credit_shop')
+        houseName = data.get('house_name')
         expireDate = data.get('expire_date')
         expireTime = data.get('expire_time')
         randomMode = data.get('random_mode')
 
         editData = ProfileModel.objects.get(user=userObject)
         editData.user = userObject
+        editData.house_name = houseName
         editData.credit_shop = creditShop
         editData.random_mode = randomMode
         editData.expire_date = "{} {}:00".format(expireDate, expireTime)
