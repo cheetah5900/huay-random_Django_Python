@@ -51,6 +51,7 @@ def Login(request):
         request.session['error'] = ''  # clear stuck error in session
     return render(request, 'login.html', context)
 
+
 @login_required
 def Backend(request):
     context = {}
@@ -60,7 +61,7 @@ def Backend(request):
         data = request.POST.copy()
         houseName = data.get('house_name')
         if (houseName != ""):
-                return redirect('list_huay', houseName)
+            return redirect('list_huay_type', houseName)
 
         else:
             return redirect('backend')
@@ -71,8 +72,7 @@ def Backend(request):
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
 
-    return render(request, 'list_house.html', context)
-
+    return render(request, 'backend.html', context)
 
 @login_required
 def ListUser(request):
@@ -172,7 +172,122 @@ def EditUser(request, username):
 
 
 @login_required
-def ListHuay(request, username):
+def ListHuay(request):
+    context = {}
+    huayListObject = HuayListModel.objects.all()
+
+    context['huayListObject'] = huayListObject
+
+    return render(request, 'huay_list/list_huay.html', context)
+
+@login_required
+def AddHuayList(request):
+    context = {}
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        shortName = data.get('short_name')
+        fullName = data.get('full_name')
+        pageName = data.get('page_name')
+        time = data.get('time')
+        link = data.get('link')
+        if shortName == '' or fullName == '' or pageName == '' or time == '' or link == '':
+            request.session['errorfill'] = 'error'
+            return redirect('add_huay_list')
+        try:
+            checkDuplicated = HuayListModel.objects.get(link=link)
+            request.session['error'] = 'error'
+            return redirect('add_huay_list')
+        except:
+            addData = HuayListModel()
+            addData.short_name = shortName
+            addData.full_name = fullName
+            addData.page_name = pageName
+            addData.time = time
+            addData.link = link
+            addData.save()
+
+
+            request.session['status'] = 'Done'
+
+            return redirect('list_huay')
+
+    if 'errorfill' in request.session:
+        context['errorfill'] = request.session['errorfill']
+        request.session['errorfill'] = ''  # clear stuck error in session
+    if 'error' in request.session:
+        context['error'] = request.session['error']
+        request.session['error'] = ''  # clear stuck error in session
+    if 'status' in request.session:
+        context['status'] = request.session['status']
+        request.session['status'] = ''  # clear stuck error in session
+
+    return render(request, 'huay_list/add_huay_list.html', context)
+
+@login_required
+def EditHuayList(request,id):
+    context = {}
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        # id = data.get('id')
+        shortName = data.get('short_name')
+        fullName = data.get('full_name')
+        pageName = data.get('page_name')
+        time = data.get('time')
+        link = data.get('link')
+        if shortName == '' or fullName == '' or pageName == '' or time == '' or link == '':
+            request.session['error'] = 'error'
+        try:
+            checkDuplicated = HuayListModel.objects.get(id=id)
+            oldLink = checkDuplicated.link
+            if oldLink != link:
+                checkDuplicated = HuayListModel.objects.get(link=link)
+                request.session['error'] = 'error'
+                return redirect('edit_huay_list',id)
+            else:
+                editData = HuayListModel.objects.get(id=id)
+                editData.short_name = shortName
+                editData.full_name = fullName
+                editData.page_name = pageName
+                editData.time = time
+                editData.link = link
+                editData.save()
+                request.session['status'] = 'Done'
+                return redirect('list_huay')
+        except:
+            editData = HuayListModel.objects.get(id=id)
+            editData.short_name = shortName
+            editData.full_name = fullName
+            editData.page_name = pageName
+            editData.time = time
+            editData.link = link
+            editData.save()
+            request.session['status'] = 'Done'
+            return redirect('list_huay')
+
+    if 'error' in request.session:
+        context['error'] = request.session['error']
+        request.session['error'] = ''  # clear stuck error in session
+    if 'status' in request.session:
+        context['status'] = request.session['status']
+        request.session['status'] = ''  # clear stuck error in session
+
+    data = HuayListModel.objects.get(id=id)
+
+    context['data'] = HuayListModel.objects.get(id=id)
+    context['shortName'] = data.short_name
+    context['fullName'] = data.full_name
+    context['pageName'] = data.page_name
+    context['link'] = data.link
+    context['time'] = str(data.time)
+
+
+    return render(request, 'huay_list/edit_huay_list.html', context)
+
+
+@login_required
+def ListHuayType(request, username):
     context = {}
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
@@ -217,11 +332,11 @@ def ListHuay(request, username):
     context['zipDataForLoopEvening'] = zipDataForLoopEvening
     context['zipDataForLoopOther'] = zipDataForLoopOther
 
-    return render(request, 'huay/list_huay.html', context)
+    return render(request, 'huay_type/list_huay_type.html', context)
 
 
 @login_required
-def AddHuay(request, username):
+def AddHuayType(request, username):
     context = {}
 
     if request.method == 'POST':
@@ -253,7 +368,7 @@ def AddHuay(request, username):
             checkDuplicated = HuayTypeModel.objects.get(
                 id=huayListId, user=userObject)
             request.session['error'] = 'error'
-            return redirect('add_huay', username)
+            return redirect('add_huay_type', username)
         except:
             addData = HuayTypeModel()
             addData.user = User.objects.get(username=username)
@@ -284,7 +399,7 @@ def AddHuay(request, username):
 
             request.session['status'] = 'Done'
 
-            return redirect('add_huay', username)
+            return redirect('add_huay_type', username)
 
     if 'error' in request.session:
         context['error'] = request.session['error']
@@ -319,11 +434,11 @@ def AddHuay(request, username):
     context['colorList'] = colorListObject
     context['username'] = username
 
-    return render(request, 'huay/add_huay.html', context)
+    return render(request, 'huay_list/add_huay_list.html', context)
 
 
 @login_required
-def EditHuay(request, username, huay_id):
+def EditHuayType(request, username, huay_id):
     context = {}
     userObject = User.objects.get(username=username)
 
@@ -510,13 +625,13 @@ def EditHuay(request, username, huay_id):
     colorListObject = ColorListModel.objects.all()
 
     imgLocation = GenerateImageWIthText(username, huayTypeObject.huay_list.full_name, huayTypeObject.text_font, huayTypeObject.main_num_font, huayTypeObject.text_color, huayTypeObject.text_border_status, huayTypeObject.text_border_size, huayTypeObject.text_border_color, huayTypeObject.text_pos_x, huayTypeObject.text_pos_y, huayTypeObject.text_font_size,
-                                        huayTypeObject.date_pos_x, huayTypeObject.date_pos_y, huayTypeObject.date_font,huayTypeObject.date_font_size,huayTypeObject.date_font_color,huayTypeObject.date_border_status,huayTypeObject.date_border_color,huayTypeObject.date_border_size,huayTypeObject.main_num_pos_x, huayTypeObject.main_num_pos_y, huayTypeObject.main_num_font_size, huayTypeObject.main_num_border_status, huayTypeObject.main_num_border_color, huayTypeObject.main_num_border_size, huayTypeObject.focus_num_pos_x,
-                                        huayTypeObject.focus_num_pos_y, huayTypeObject.focus_num_font_size,huayTypeObject.focus_num_font_color, huayTypeObject.focus_num_border_status, huayTypeObject.focus_num_border_color, huayTypeObject.focus_num_border_size, huayTypeObject.row1_x, huayTypeObject.row1_y, huayTypeObject.row1_border_status, huayTypeObject.row1_border_color, huayTypeObject.row1_border_size,
+                                        huayTypeObject.date_pos_x, huayTypeObject.date_pos_y, huayTypeObject.date_font, huayTypeObject.date_font_size, huayTypeObject.date_font_color, huayTypeObject.date_border_status, huayTypeObject.date_border_color, huayTypeObject.date_border_size, huayTypeObject.main_num_pos_x, huayTypeObject.main_num_pos_y, huayTypeObject.main_num_font_size, huayTypeObject.main_num_border_status, huayTypeObject.main_num_border_color, huayTypeObject.main_num_border_size, huayTypeObject.focus_num_pos_x,
+                                        huayTypeObject.focus_num_pos_y, huayTypeObject.focus_num_font_size, huayTypeObject.focus_num_font_color, huayTypeObject.focus_num_border_status, huayTypeObject.focus_num_border_color, huayTypeObject.focus_num_border_size, huayTypeObject.row1_x, huayTypeObject.row1_y, huayTypeObject.row1_border_status, huayTypeObject.row1_border_color, huayTypeObject.row1_border_size,
                                         huayTypeObject.row2_x, huayTypeObject.row2_y,  huayTypeObject.row2_border_status, huayTypeObject.row2_border_color, huayTypeObject.row2_border_size, huayTypeObject.row_font_size, huayTypeObject.main_num_separator, huayTypeObject.row1_separator, huayTypeObject.row2_separator, huayTypeObject.main_num_font_color,
-                                        huayTypeObject.row1_color, huayTypeObject.row2_color, huayTypeObject.credit_shop_pos_x, huayTypeObject.credit_shop_pos_y, huayTypeObject.credit_shop_border_status, huayTypeObject.credit_shop_border_color, huayTypeObject.credit_shop_border_size,huayTypeObject.three_main_status,huayTypeObject.three_main_font,huayTypeObject.three_main_font_size,
-                                        huayTypeObject.three_main_font_color,huayTypeObject.three_main_border_status,huayTypeObject.three_main_border_size,huayTypeObject.three_main_border_color,huayTypeObject.three_main_pos_x,huayTypeObject.three_main_pos_y,huayTypeObject.three_main_separator,huayTypeObject.three_sub_status,huayTypeObject.three_sub_font,
-                                        huayTypeObject.three_sub_font_size,huayTypeObject.three_sub_font_color,huayTypeObject.three_sub_border_status,huayTypeObject.three_sub_border_size,huayTypeObject.three_sub_border_color,huayTypeObject.three_sub_pos_x,huayTypeObject.three_sub_pos_y,huayTypeObject.three_sub_separator,huayTypeObject.remark_status,huayTypeObject.remark_text,
-                                        huayTypeObject.remark_font,huayTypeObject.remark_font_size,huayTypeObject.remark_font_color,huayTypeObject.remark_border_status,huayTypeObject.remark_border_size,huayTypeObject.remark_border_color,huayTypeObject.remark_pos_x,huayTypeObject.remark_pos_y)
+                                        huayTypeObject.row1_color, huayTypeObject.row2_color, huayTypeObject.credit_shop_pos_x, huayTypeObject.credit_shop_pos_y, huayTypeObject.credit_shop_border_status, huayTypeObject.credit_shop_border_color, huayTypeObject.credit_shop_border_size, huayTypeObject.three_main_status, huayTypeObject.three_main_font, huayTypeObject.three_main_font_size,
+                                        huayTypeObject.three_main_font_color, huayTypeObject.three_main_border_status, huayTypeObject.three_main_border_size, huayTypeObject.three_main_border_color, huayTypeObject.three_main_pos_x, huayTypeObject.three_main_pos_y, huayTypeObject.three_main_separator, huayTypeObject.three_sub_status, huayTypeObject.three_sub_font,
+                                        huayTypeObject.three_sub_font_size, huayTypeObject.three_sub_font_color, huayTypeObject.three_sub_border_status, huayTypeObject.three_sub_border_size, huayTypeObject.three_sub_border_color, huayTypeObject.three_sub_pos_x, huayTypeObject.three_sub_pos_y, huayTypeObject.three_sub_separator, huayTypeObject.remark_status, huayTypeObject.remark_text,
+                                        huayTypeObject.remark_font, huayTypeObject.remark_font_size, huayTypeObject.remark_font_color, huayTypeObject.remark_border_status, huayTypeObject.remark_border_size, huayTypeObject.remark_border_color, huayTypeObject.remark_pos_x, huayTypeObject.remark_pos_y)
 
     context['imgLocation'] = imgLocation
 
@@ -527,7 +642,7 @@ def EditHuay(request, username, huay_id):
     context['colorList'] = colorListObject
     context['username'] = username
 
-    return render(request, 'huay/edit_huay.html', context)
+    return render(request, 'huay_list/edit_huay_list.html', context)
 
 
 def Home(request, username):
@@ -591,13 +706,13 @@ def Home(request, username):
 
             i += 1
         zipDataForLoopMorning = zip(
-                                    huayFullNameMorningList,huayLinkMorningList,btnColorList)
+            huayFullNameMorningList, huayLinkMorningList, btnColorList)
         zipDataForLoopAfternoon = zip(
-                                    huayFullNameAfternoonList,huayLinkAfternoonList,btnColorList)
+            huayFullNameAfternoonList, huayLinkAfternoonList, btnColorList)
         zipDataForLoopEvening = zip(
-                                    huayFullNameEveningList,huayLinkEveningList,btnColorList)
+            huayFullNameEveningList, huayLinkEveningList, btnColorList)
         zipDataForLoopOther = zip(
-                                huayFullNameOtherList,huayLinkOtherList,btnColorList)
+            huayFullNameOtherList, huayLinkOtherList, btnColorList)
 
         context['houseNameThai'] = profileObject.house_name
         context['expireDateThai'] = expireDateThai
@@ -649,13 +764,13 @@ def Result(request, username, link):
     profileObject = ProfileModel.objects.get(user=userObject)
 
     imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.text_font, data.main_num_font, data.text_color, data.text_border_status, data.text_border_size, data.text_border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font,data.date_font_size,data.date_font_color,data.date_border_status,data.date_border_color,data.date_border_size,data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
-                                        data.focus_num_pos_y, data.focus_num_font_size,data.focus_num_font_color, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
+                                        data.date_pos_x, data.date_pos_y, data.date_font, data.date_font_size, data.date_font_color, data.date_border_status, data.date_border_color, data.date_border_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
+                                        data.focus_num_pos_y, data.focus_num_font_size, data.focus_num_font_color, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
                                         data.row2_x, data.row2_y,  data.row2_border_status, data.row2_border_color, data.row2_border_size, data.row_font_size, data.main_num_separator, data.row1_separator, data.row2_separator, data.main_num_font_color,
-                                        data.row1_color, data.row2_color, data.credit_shop_pos_x, data.credit_shop_pos_y, data.credit_shop_border_status, data.credit_shop_border_color, data.credit_shop_border_size,data.three_main_status,data.three_main_font,data.three_main_font_size,
-                                        data.three_main_font_color,data.three_main_border_status,data.three_main_border_size,data.three_main_border_color,data.three_main_pos_x,data.three_main_pos_y,data.three_main_separator,data.three_sub_status,data.three_sub_font,
-                                        data.three_sub_font_size,data.three_sub_font_color,data.three_sub_border_status,data.three_sub_border_size,data.three_sub_border_color,data.three_sub_pos_x,data.three_sub_pos_y,data.three_sub_separator,data.remark_status,data.remark_text,
-                                        data.remark_font,data.remark_font_size,data.remark_font_color,data.remark_border_status,data.remark_border_size,data.remark_border_color,data.remark_pos_x,data.remark_pos_y)
+                                        data.row1_color, data.row2_color, data.credit_shop_pos_x, data.credit_shop_pos_y, data.credit_shop_border_status, data.credit_shop_border_color, data.credit_shop_border_size, data.three_main_status, data.three_main_font, data.three_main_font_size,
+                                        data.three_main_font_color, data.three_main_border_status, data.three_main_border_size, data.three_main_border_color, data.three_main_pos_x, data.three_main_pos_y, data.three_main_separator, data.three_sub_status, data.three_sub_font,
+                                        data.three_sub_font_size, data.three_sub_font_color, data.three_sub_border_status, data.three_sub_border_size, data.three_sub_border_color, data.three_sub_pos_x, data.three_sub_pos_y, data.three_sub_separator, data.remark_status, data.remark_text,
+                                        data.remark_font, data.remark_font_size, data.remark_font_color, data.remark_border_status, data.remark_border_size, data.remark_border_color, data.remark_pos_x, data.remark_pos_y)
 
     context['imgLocation'] = imgLocation
     # except:
@@ -711,18 +826,18 @@ def CheckExpireDate(username):
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
 
 
-def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textBorderStatus, textBorderSize, 
-textBorderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFont,dateFontSize,dateFontColor,dateBorderStatus,dateBorderColor,
-dateBorderSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, mainNumberBorderStatus, mainNumberBorderColor, 
-mainNumberBorderSize, focusNumberX, focusNumberY, focusNumberFontSize,focusNumColor, forcusNumberBorderStatus, 
-forcusNumberBorderColor, forcusNumberBorderSize, row1X, row1Y, row1BorderStatus, row1BorderColor, 
-row1BorderSize, row2X, row2Y, row2BorderStatus, row2BorderColor, row2BorderSize, rowFontSize, 
-mainNumSeparator, row1Separator, row2Separator, mainNumFontColor, row1Color, 
-row2Color, creditShopPosX, creditShopPosY, creditShopBorderStatus, creditShopBorderColor, creditShopBorderSize,
-threeMainStatus,threeMainFont,threeMainFontSize,threeMainFontColor,threeMainBorderStatus, threeMainBorderSize,
-threeMainBorderColor,threeMainPosX,threeMainPosY,threeMainSeparator,threeSubStatus,threeSubFont,threeSubFontSize,threeSubFontColor,
-threeSubBorderStatus, threeSubBorderSize,threeSubBorderColor,threeSubPosX,threeSubPosY,threeSubSeparator,
-remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderStatus,remarkBorderSize,remarkBorderColor,remarkPosX,remarkPosY):
+def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textBorderStatus, textBorderSize,
+                          textBorderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFont, dateFontSize, dateFontColor, dateBorderStatus, dateBorderColor,
+                          dateBorderSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, mainNumberBorderStatus, mainNumberBorderColor,
+                          mainNumberBorderSize, focusNumberX, focusNumberY, focusNumberFontSize, focusNumColor, forcusNumberBorderStatus,
+                          forcusNumberBorderColor, forcusNumberBorderSize, row1X, row1Y, row1BorderStatus, row1BorderColor,
+                          row1BorderSize, row2X, row2Y, row2BorderStatus, row2BorderColor, row2BorderSize, rowFontSize,
+                          mainNumSeparator, row1Separator, row2Separator, mainNumFontColor, row1Color,
+                          row2Color, creditShopPosX, creditShopPosY, creditShopBorderStatus, creditShopBorderColor, creditShopBorderSize,
+                          threeMainStatus, threeMainFont, threeMainFontSize, threeMainFontColor, threeMainBorderStatus, threeMainBorderSize,
+                          threeMainBorderColor, threeMainPosX, threeMainPosY, threeMainSeparator, threeSubStatus, threeSubFont, threeSubFontSize, threeSubFontColor,
+                          threeSubBorderStatus, threeSubBorderSize, threeSubBorderColor, threeSubPosX, threeSubPosY, threeSubSeparator,
+                          remarkStatus, remarkText, remarkFont, remarkFontSize, remarkFontColor, remarkBorderStatus, remarkBorderSize, remarkBorderColor, remarkPosX, remarkPosY):
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
     randomResult = random2NumberResult(profileObject)
@@ -743,7 +858,7 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     threeNumberSet1 = randomResult[14]
     threeNumberSet2 = randomResult[15]
     threeNumberSet3 = randomResult[16]
-    
+
     # * ================= START :  ENV =================
     # ? LOCAL
     path = os.getcwd()
@@ -786,64 +901,65 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # * ================= START :  GET FONT COLOR =================
-    
-    #? date text
+
+    # ? date text
     dateFontColorObject = ColorListModel.objects.get(id=dateFontColor)
     dateFontColorSeparate = dateFontColorObject.color_code.split(",")
     dateFontColorConverted0 = int(dateFontColorSeparate[0])
     dateFontColorConverted1 = int(dateFontColorSeparate[1])
     dateFontColorConverted2 = int(dateFontColorSeparate[2])
     dateFontColorConverted = dateFontColorConverted0, dateFontColorConverted1, dateFontColorConverted2
-    
-    #? name text
+
+    # ? name text
     textColorObject = ColorListModel.objects.get(id=textColor)
     textColorSeparate = textColorObject.color_code.split(",")
     textColorConverted0 = int(textColorSeparate[0])
     textColorConverted1 = int(textColorSeparate[1])
     textColorConverted2 = int(textColorSeparate[2])
     textColorConverted = textColorConverted0, textColorConverted1, textColorConverted2
-    
-    #? main number text
+
+    # ? main number text
     mainNumFontColorObject = ColorListModel.objects.get(id=mainNumFontColor)
     mainNumFontColorSeparate = mainNumFontColorObject.color_code.split(",")
     mainNumFontColorConverted0 = int(mainNumFontColorSeparate[0])
     mainNumFontColorConverted1 = int(mainNumFontColorSeparate[1])
     mainNumFontColorConverted2 = int(mainNumFontColorSeparate[2])
     mainNumFontColorConverted = mainNumFontColorConverted0, mainNumFontColorConverted1, mainNumFontColorConverted2
-    
-    #? focus number text
+
+    # ? focus number text
     focusNumColorObject = ColorListModel.objects.get(id=focusNumColor)
     focusNumColorSeparate = focusNumColorObject.color_code.split(",")
     focusNumColorConverted0 = int(focusNumColorSeparate[0])
     focusNumColorConverted1 = int(focusNumColorSeparate[1])
     focusNumColorConverted2 = int(focusNumColorSeparate[2])
     focusNumColorConverted = focusNumColorConverted0, focusNumColorConverted1, focusNumColorConverted2
-    
-    #? row 1 text
+
+    # ? row 1 text
     row1ColorObject = ColorListModel.objects.get(id=row1Color)
     row1ColorSeparate = row1ColorObject.color_code.split(",")
     row1ColorConverted0 = int(row1ColorSeparate[0])
     row1ColorConverted1 = int(row1ColorSeparate[1])
     row1ColorConverted2 = int(row1ColorSeparate[2])
     row1ColorConverted = row1ColorConverted0, row1ColorConverted1, row1ColorConverted2
-    
-    #? row 2 text
+
+    # ? row 2 text
     row2ColorObject = ColorListModel.objects.get(id=row2Color)
     row2ColorSeparate = row2ColorObject.color_code.split(",")
     row2ColorConverted0 = int(row2ColorSeparate[0])
     row2ColorConverted1 = int(row2ColorSeparate[1])
     row2ColorConverted2 = int(row2ColorSeparate[2])
     row2ColorConverted = row2ColorConverted0, row2ColorConverted1, row2ColorConverted2
-    
-    #? three main text
-    threeMainFontColorObject = ColorListModel.objects.get(id=threeMainFontColor)
+
+    # ? three main text
+    threeMainFontColorObject = ColorListModel.objects.get(
+        id=threeMainFontColor)
     threeMainFontColorSeparate = threeMainFontColorObject.color_code.split(",")
     threeMainFontColorConverted0 = int(threeMainFontColorSeparate[0])
     threeMainFontColorConverted1 = int(threeMainFontColorSeparate[1])
     threeMainFontColorConverted2 = int(threeMainFontColorSeparate[2])
     threeMainFontColorConverted = threeMainFontColorConverted0, threeMainFontColorConverted1, threeMainFontColorConverted2
-    
-    #? three sub text
+
+    # ? three sub text
     threeSubFontColorObject = ColorListModel.objects.get(id=threeSubFontColor)
     threeSubFontColorSeparate = threeSubFontColorObject.color_code.split(",")
     threeSubFontColorConverted0 = int(threeSubFontColorSeparate[0])
@@ -851,7 +967,7 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
     threeSubFontColorConverted2 = int(threeSubFontColorSeparate[2])
     threeSubFontColorConverted = threeSubFontColorConverted0, threeSubFontColorConverted1, threeSubFontColorConverted2
 
-    #? remark text
+    # ? remark text
     remarkFontColorObject = ColorListModel.objects.get(id=remarkFontColor)
     remarkFontColorSeparate = remarkFontColorObject.color_code.split(",")
     remarkFontColorConverted0 = int(remarkFontColorSeparate[0])
@@ -1001,13 +1117,13 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
         threeMainBorderColorConverted2 = int(threeMainBorderColorSeparate[2])
         threeMainBorderColorConverted = threeMainBorderColorConverted0, threeMainBorderColorConverted1, threeMainBorderColorConverted2
 
-        imgObj.text((threeMainPosX-threeMainBorderSize, threeMainPosY),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+        imgObj.text((threeMainPosX-threeMainBorderSize, threeMainPosY),  "{}{}{}{}{}".format(threeNumberSet1, threeMainSeparator, threeNumberSet2, threeMainSeparator, threeNumberSet3),
                     font=threeMainFont, fill=threeMainBorderColorConverted)
-        imgObj.text((threeMainPosX+threeMainBorderSize, threeMainPosY),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+        imgObj.text((threeMainPosX+threeMainBorderSize, threeMainPosY),  "{}{}{}{}{}".format(threeNumberSet1, threeMainSeparator, threeNumberSet2, threeMainSeparator, threeNumberSet3),
                     font=threeMainFont, fill=threeMainBorderColorConverted)
-        imgObj.text((threeMainPosX, threeMainPosY-threeMainBorderSize),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+        imgObj.text((threeMainPosX, threeMainPosY-threeMainBorderSize),  "{}{}{}{}{}".format(threeNumberSet1, threeMainSeparator, threeNumberSet2, threeMainSeparator, threeNumberSet3),
                     font=threeMainFont, fill=threeMainBorderColorConverted)
-        imgObj.text((threeMainPosX, threeMainPosY+threeMainBorderSize),  "{}{}{}{}{}".format(threeNumberSet1,threeMainSeparator, threeNumberSet2,threeMainSeparator,threeNumberSet3),
+        imgObj.text((threeMainPosX, threeMainPosY+threeMainBorderSize),  "{}{}{}{}{}".format(threeNumberSet1, threeMainSeparator, threeNumberSet2, threeMainSeparator, threeNumberSet3),
                     font=threeMainFont, fill=threeMainBorderColorConverted)
     # ? three sub border
     if threeSubBorderStatus == "on":
@@ -1020,13 +1136,13 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
         threeSubBorderColorConverted2 = int(threeSubBorderColorSeparate[2])
         threeSubBorderColorConverted = threeSubBorderColorConverted0, threeSubBorderColorConverted1, threeSubBorderColorConverted2
 
-        imgObj.text((threeSubPosX-threeSubBorderSize, threeSubPosY),  "{}{}{}{}{}".format(threeNumberSet1,threeSubSeparator, threeNumberSet2,threeSubSeparator,threeNumberSet3),
+        imgObj.text((threeSubPosX-threeSubBorderSize, threeSubPosY),  "{}{}{}{}{}".format(threeNumberSet1, threeSubSeparator, threeNumberSet2, threeSubSeparator, threeNumberSet3),
                     font=threeSubFont, fill=threeSubBorderColorConverted)
-        imgObj.text((threeSubPosX+threeSubBorderSize, threeSubPosY),  "{}{}{}{}{}".format(threeNumberSet1,threeSubSeparator, threeNumberSet2,threeSubSeparator,threeNumberSet3),
+        imgObj.text((threeSubPosX+threeSubBorderSize, threeSubPosY),  "{}{}{}{}{}".format(threeNumberSet1, threeSubSeparator, threeNumberSet2, threeSubSeparator, threeNumberSet3),
                     font=threeSubFont, fill=threeSubBorderColorConverted)
-        imgObj.text((threeSubPosX, threeSubPosY-threeSubBorderSize),  "{}{}{}{}{}".format(threeNumberSet1,threeSubSeparator, threeNumberSet2,threeSubSeparator,threeNumberSet3),
+        imgObj.text((threeSubPosX, threeSubPosY-threeSubBorderSize),  "{}{}{}{}{}".format(threeNumberSet1, threeSubSeparator, threeNumberSet2, threeSubSeparator, threeNumberSet3),
                     font=threeSubFont, fill=threeSubBorderColorConverted)
-        imgObj.text((threeSubPosX, threeSubPosY+threeSubBorderSize),  "{}{}{}{}{}".format(threeNumberSet1,threeSubSeparator, threeNumberSet2,threeSubSeparator,threeNumberSet3),
+        imgObj.text((threeSubPosX, threeSubPosY+threeSubBorderSize),  "{}{}{}{}{}".format(threeNumberSet1, threeSubSeparator, threeNumberSet2, threeSubSeparator, threeNumberSet3),
                     font=threeSubFont, fill=threeSubBorderColorConverted)
     # ? remark border
     if remarkBorderStatus == "on":
@@ -1060,17 +1176,20 @@ remarkStatus,remarkText,remarkFont,remarkFontSize,remarkFontColor,remarkBorderSt
                 row2Set2, row2Separator, row2Set3, row2Separator, row2Set4, row2Separator), font=font3, fill=row2ColorConverted)
     imgObj.text((focusNumberX, focusNumberY), "{}".format(focusNumber),
                 font=font4, fill=focusNumColorConverted)
-    # * == START : THREE SET 
+    # * == START : THREE SET
     if threeMainStatus == 'on':
-        imgObj.text((threeMainPosX, threeMainPosY), "{}{}{}{}{}".format(mainThreeNumbers1,threeMainSeparator, mainThreeNumbers2,threeMainSeparator,mainThreeNumbers3), font=threeMainFont, fill=threeMainFontColorConverted)
+        imgObj.text((threeMainPosX, threeMainPosY), "{}{}{}{}{}".format(mainThreeNumbers1, threeMainSeparator,
+                    mainThreeNumbers2, threeMainSeparator, mainThreeNumbers3), font=threeMainFont, fill=threeMainFontColorConverted)
 
     if threeSubStatus == 'on':
-        imgObj.text((threeSubPosX, threeSubPosY), "{}{}{}{}{}".format(threeNumberSet1,threeSubSeparator, threeNumberSet2,threeSubSeparator,threeNumberSet3), font=threeSubFont, fill=threeSubFontColorConverted)
+        imgObj.text((threeSubPosX, threeSubPosY), "{}{}{}{}{}".format(threeNumberSet1, threeSubSeparator,
+                    threeNumberSet2, threeSubSeparator, threeNumberSet3), font=threeSubFont, fill=threeSubFontColorConverted)
 
     if remarkStatus == 'on':
-        imgObj.text((remarkPosX, remarkPosY), remarkText, font=remarkFont, fill=remarkFontColorConverted)
+        imgObj.text((remarkPosX, remarkPosY), remarkText,
+                    font=remarkFont, fill=remarkFontColorConverted)
 
-    # * == END : THREE SET 
+    # * == END : THREE SET
     # * ================= END : TEXT =================
 
     img.save(location)
@@ -1206,30 +1325,32 @@ def random2NumberResult(profileObject):
     row2Set3 = str(mainSecondNumber) + str(newSortedNumber2SecondUnit[2])
     row2Set4 = str(mainSecondNumber) + str(newSortedNumber2SecondUnit[3])
 
-
-    #* random main 3 numbers
-    randomMainThreeNumbersList = [mainFirstNumber, mainSecondNumber,subNumberRow1SecondUnit1,subNumberRow1SecondUnit2,subNumberRow1SecondUnit3,subNumberRow1SecondUnit4,subNumberRow2SecondUnit1,subNumberRow2SecondUnit2,subNumberRow2SecondUnit3,subNumberRow2SecondUnit4]
+    # * random main 3 numbers
+    randomMainThreeNumbersList = [mainFirstNumber, mainSecondNumber, subNumberRow1SecondUnit1, subNumberRow1SecondUnit2, subNumberRow1SecondUnit3,
+                                  subNumberRow1SecondUnit4, subNumberRow2SecondUnit1, subNumberRow2SecondUnit2, subNumberRow2SecondUnit3, subNumberRow2SecondUnit4]
     randomMainThreeNumbersUniqueList = []
     randomMainThreeNumbersResult1 = random.choice(randomMainThreeNumbersList)
     randomMainThreeNumbersUniqueList.append(randomMainThreeNumbersResult1)
-    randomMainThreeNumbersResult2 = RandomNumberForMainThreeNumbers(randomMainThreeNumbersUniqueList,randomMainThreeNumbersList)
+    randomMainThreeNumbersResult2 = RandomNumberForMainThreeNumbers(
+        randomMainThreeNumbersUniqueList, randomMainThreeNumbersList)
     randomMainThreeNumbersUniqueList.append(randomMainThreeNumbersResult2)
-    randomMainThreeNumbersResult3 = RandomNumberForMainThreeNumbers(randomMainThreeNumbersUniqueList,randomMainThreeNumbersList)
+    randomMainThreeNumbersResult3 = RandomNumberForMainThreeNumbers(
+        randomMainThreeNumbersUniqueList, randomMainThreeNumbersList)
     randomMainThreeNumbersUniqueList.append(randomMainThreeNumbersResult3)
 
-    #* สุ่มจำนวนว่าใน 3 ชุดนั้น จะให้มีเลขที่เกี่ยวข้องกับ 2 หลักทั้งหมดกี่ชุด
-    amountRelatedSetOfThreeNumbers = random.randint(1,3)
+    # * สุ่มจำนวนว่าใน 3 ชุดนั้น จะให้มีเลขที่เกี่ยวข้องกับ 2 หลักทั้งหมดกี่ชุด
+    amountRelatedSetOfThreeNumbers = random.randint(1, 3)
 
-    #* random n set of above to put after main three numbers
+    # * random n set of above to put after main three numbers
     randomPairForEachSetOfThereNumberMainNumber = [
-    [mainFirstNumber, mainSecondNumber]
-    ]    
-    randomPairForEachSetOfThereNumberRow1 = [
-        [mainFirstNumber, subNumberRow1SecondUnit2], [mainFirstNumber, subNumberRow1SecondUnit3], [mainFirstNumber, subNumberRow1SecondUnit4]
-    ]    
-    randomPairForEachSetOfThereNumberRow2 = [[mainSecondNumber,subNumberRow2SecondUnit1],[mainSecondNumber,subNumberRow2SecondUnit2],[mainSecondNumber,subNumberRow2SecondUnit3]
-    ,[mainSecondNumber,subNumberRow2SecondUnit4]
+        [mainFirstNumber, mainSecondNumber]
     ]
+    randomPairForEachSetOfThereNumberRow1 = [
+        [mainFirstNumber, subNumberRow1SecondUnit2], [mainFirstNumber,
+                                                      subNumberRow1SecondUnit3], [mainFirstNumber, subNumberRow1SecondUnit4]
+    ]
+    randomPairForEachSetOfThereNumberRow2 = [[mainSecondNumber, subNumberRow2SecondUnit1], [mainSecondNumber, subNumberRow2SecondUnit2], [mainSecondNumber, subNumberRow2SecondUnit3], [mainSecondNumber, subNumberRow2SecondUnit4]
+                                             ]
 
     # set default
     resultRandomSubNumberThree1 = ""
@@ -1237,47 +1358,60 @@ def random2NumberResult(profileObject):
     resultRandomSubNumberThree3 = ""
 
     if amountRelatedSetOfThreeNumbers >= 1:
-        resultRandomSubNumberThree1 = random.choices(randomPairForEachSetOfThereNumberRow1)
-        #? ถ้าสุ่มแล้วได้เลข 2 ให้ swap ตัวเลข
-        randomSwap = random.randint(1,2)
+        resultRandomSubNumberThree1 = random.choices(
+            randomPairForEachSetOfThereNumberRow1)
+        # ? ถ้าสุ่มแล้วได้เลข 2 ให้ swap ตัวเลข
+        randomSwap = random.randint(1, 2)
         if randomSwap == 2:
-            resultRandomSubNumberThree1[0][0],resultRandomSubNumberThree1[0][1] = resultRandomSubNumberThree1[0][1],resultRandomSubNumberThree1[0][0]
+            resultRandomSubNumberThree1[0][0], resultRandomSubNumberThree1[0][
+                1] = resultRandomSubNumberThree1[0][1], resultRandomSubNumberThree1[0][0]
         resultRandomSubNumberThree1_1 = resultRandomSubNumberThree1[0][0]
         resultRandomSubNumberThree1_2 = resultRandomSubNumberThree1[0][1]
     if amountRelatedSetOfThreeNumbers > 1:
-        resultRandomSubNumberThree2 = random.choices(randomPairForEachSetOfThereNumberRow2)
-        #? ถ้าสุ่มแล้วได้เลข 2 ให้ swap ตัวเลข
-        randomSwap = random.randint(1,2)
+        resultRandomSubNumberThree2 = random.choices(
+            randomPairForEachSetOfThereNumberRow2)
+        # ? ถ้าสุ่มแล้วได้เลข 2 ให้ swap ตัวเลข
+        randomSwap = random.randint(1, 2)
         if randomSwap == 2:
-            resultRandomSubNumberThree2[0][0],resultRandomSubNumberThree2[0][1] = resultRandomSubNumberThree2[0][1],resultRandomSubNumberThree2[0][0]
+            resultRandomSubNumberThree2[0][0], resultRandomSubNumberThree2[0][
+                1] = resultRandomSubNumberThree2[0][1], resultRandomSubNumberThree2[0][0]
         resultRandomSubNumberThree2_1 = resultRandomSubNumberThree2[0][0]
         resultRandomSubNumberThree2_2 = resultRandomSubNumberThree2[0][1]
     else:
-        #? สุ่มเลขมั่วๆ จากเลขในใบได้เลย
-        resultRandomSubNumberThree2_1 = random.choice(randomMainThreeNumbersList)
-        resultRandomSubNumberThree2_2 = random.choice(randomMainThreeNumbersList)
-        
-    if amountRelatedSetOfThreeNumbers >2:
-        resultRandomSubNumberThree3 = random.choices(randomPairForEachSetOfThereNumberMainNumber)
-        #? ถ้าสุ่มแล้วได้เลข 2 ให้ swap ตัวเลข
-        randomSwap = random.randint(1,2)
+        # ? สุ่มเลขมั่วๆ จากเลขในใบได้เลย
+        resultRandomSubNumberThree2_1 = random.choice(
+            randomMainThreeNumbersList)
+        resultRandomSubNumberThree2_2 = random.choice(
+            randomMainThreeNumbersList)
+
+    if amountRelatedSetOfThreeNumbers > 2:
+        resultRandomSubNumberThree3 = random.choices(
+            randomPairForEachSetOfThereNumberMainNumber)
+        # ? ถ้าสุ่มแล้วได้เลข 2 ให้ swap ตัวเลข
+        randomSwap = random.randint(1, 2)
         if randomSwap == 2:
-            resultRandomSubNumberThree3[0][0],resultRandomSubNumberThree3[0][1] = resultRandomSubNumberThree3[0][1],resultRandomSubNumberThree3[0][0]
+            resultRandomSubNumberThree3[0][0], resultRandomSubNumberThree3[0][
+                1] = resultRandomSubNumberThree3[0][1], resultRandomSubNumberThree3[0][0]
         resultRandomSubNumberThree3_1 = resultRandomSubNumberThree3[0][0]
         resultRandomSubNumberThree3_2 = resultRandomSubNumberThree3[0][1]
     else:
-        #? สุ่มเลขมั่วๆ จากเลขในใบได้เลย
-        resultRandomSubNumberThree3_1 = random.choice(randomMainThreeNumbersList)
-        resultRandomSubNumberThree3_2 = random.choice(randomMainThreeNumbersList)
+        # ? สุ่มเลขมั่วๆ จากเลขในใบได้เลย
+        resultRandomSubNumberThree3_1 = random.choice(
+            randomMainThreeNumbersList)
+        resultRandomSubNumberThree3_2 = random.choice(
+            randomMainThreeNumbersList)
 
-    threeNumberSet1 = str(randomMainThreeNumbersResult1) + str(resultRandomSubNumberThree1_1) + str(resultRandomSubNumberThree1_2)
-    threeNumberSet2 = str(randomMainThreeNumbersResult2) + str(resultRandomSubNumberThree2_1) + str(resultRandomSubNumberThree2_2)
-    threeNumberSet3 = str(randomMainThreeNumbersResult3) + str(resultRandomSubNumberThree3_1) + str(resultRandomSubNumberThree3_2)
+    threeNumberSet1 = str(randomMainThreeNumbersResult1) + \
+        str(resultRandomSubNumberThree1_1) + str(resultRandomSubNumberThree1_2)
+    threeNumberSet2 = str(randomMainThreeNumbersResult2) + \
+        str(resultRandomSubNumberThree2_1) + str(resultRandomSubNumberThree2_2)
+    threeNumberSet3 = str(randomMainThreeNumbersResult3) + \
+        str(resultRandomSubNumberThree3_1) + str(resultRandomSubNumberThree3_2)
 
     result = [mainFirstNumber, mainSecondNumber, focusNumber, row1Set1,
               row1Set2, row1Set3, row1Set4, row2Set1, row2Set2, row2Set3, row2Set4,
-              randomMainThreeNumbersResult1,randomMainThreeNumbersResult2,randomMainThreeNumbersResult3,
-              threeNumberSet1,threeNumberSet2,threeNumberSet3
+              randomMainThreeNumbersResult1, randomMainThreeNumbersResult2, randomMainThreeNumbersResult3,
+              threeNumberSet1, threeNumberSet2, threeNumberSet3
               ]
     return result
 
@@ -1296,7 +1430,7 @@ def RandomNumberUniqueToListFrom1To3(list):
     return number
 
 
-def RandomNumberForMainThreeNumbers(listUnique,randomMainThreeNumbersList):
+def RandomNumberForMainThreeNumbers(listUnique, randomMainThreeNumbersList):
     checkDuplicated = True
     while checkDuplicated == True:
         # สุ่มเลข

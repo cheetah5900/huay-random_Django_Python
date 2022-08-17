@@ -1,0 +1,88 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+<style>
+  table>tbody>tr>td:first-child {
+    width: 250px;
+  }
+</style>
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">เพิ่มรายการหวยเข้าระบบ</h1>
+      </div>
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+            </div>
+          </div>
+          <div class="slot-intro">
+            <form method="post">
+              {%csrf_token%}
+              <h3>หวย</h3>
+              <table class="table table-striped">
+                <tr>
+                  <td class="text-right">ชื่อสั้น : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="short_name" value="{{shortName}}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ชื่อยาว : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="full_name" value="{{fullName}}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ชื่อหน้า : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="page_name" value="{{pageName}}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">Link : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="link" value="{{link}}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">เวลา : </td>
+                  <td colspan="9" class="text-center">
+                    <div class="form-group">
+                      <select name="time" class="form-control">
+                        <option {% if time == "07:00:00" %} selected {%endif%} value="07:00:00">เช้า</option>
+                        <option {% if time == "13:00:00" %} selected {%endif%} value="13:00:00">เที่ยง</option>
+                        <option {% if time == "19:00:00" %} selected {%endif%} value="19:00:00">เย็น</option>
+                        <option {% if time == "20:00:00" %} selected {%endif%} value="20:00:00">อื่นๆ</option>
+                      </select>
+                      <p class="help-block help-block-error" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <div class="text-center">
+                <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
+                <a class="btn btn-danger" href="/backend/huay/list">ยกเลิก</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {% if error %}
+    <script>
+      swal("Link นี้มีในระบบแล้ว", "Link นี้มีในระบบแล้ว", "error");
+    </script>
+    {% endif %}
+    {%endblock content%}

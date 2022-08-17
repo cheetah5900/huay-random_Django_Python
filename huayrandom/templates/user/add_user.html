@@ -22,7 +22,7 @@
           <div class="slot-intro">
             <form method="post">
               {%csrf_token%}
-             
+
               <h3>เพิ่ม Username</h3>
               <table class="table table-striped">
                 <tr>
@@ -30,7 +30,7 @@
                   <td class="text-center">
                     <div class="form-group">
                       <input type="text" class="form-control" name="username">
-                      
+
                     </div>
                   </td>
                 </tr>
@@ -83,7 +83,7 @@
               </table>
               <div class="text-center">
                 <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
-                <a class="btn btn-danger" href="/backend/listuser">ยกเลิก</a>
+                <a class="btn btn-danger" href="/backend/user/list">ยกเลิก</a>
               </div>
             </form>
           </div>
