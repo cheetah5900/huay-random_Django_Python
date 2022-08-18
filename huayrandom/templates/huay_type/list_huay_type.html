@@ -12,8 +12,11 @@
       <section class="content">
         <div class="container">
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6 text-left d-block">
               <a href="/backend/" class="btn btn-default">ย้อนกลับ</a>
+            </div>
+            <div class="col-sm-6 text-right d-block">
+              <a class="btn btn-success font-color-white" href="/backend/huay/type/add/{{username}}">เพิ่มหวยเข้าบ้าน</a>
             </div>
           </div>
           <div class="slot-intro">
@@ -138,6 +141,10 @@
           </div>
         </div>
       </section>
-
     </div>
+    {% if status %}
+    <script>
+      swal("เพิ่มข้อมูลสำเร็จ", "เพิ่มข้อมูลสำเร็จ", "success");
+    </script>
+    {% endif %}
     {%endblock content%}

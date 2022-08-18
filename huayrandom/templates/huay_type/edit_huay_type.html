@@ -870,14 +870,9 @@
       </section>
 
     </div>
-    {% if status %}
+    {% if statusedit %}
     <script>
-      swal("เพิ่มข้อมูลสำเร็จ", "เพิ่มข้อมูลสำเร็จ", "success");
-    </script>
-    {% endif %}
-    {% if error %}
-    <script>
-      swal("บ้านนี้มีรายละเอียดหวยนี้แล้ว", "บ้านนี้มีรายละเอียดหวยนี้แล้ว", "error");
+      swal("แก้ไขข้อมูลสำเร็จ", "แก้ไขข้อมูลสำเร็จ", "success");
     </script>
     {% endif %}
     {%endblock content%}

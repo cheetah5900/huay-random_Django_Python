@@ -325,6 +325,10 @@ def ListHuayType(request, username):
 
     profileObject = ProfileModel.objects.get(user=userObject)
 
+    if 'status' in request.session:
+        context['status'] = request.session['status']
+        request.session['status'] = ''  # clear stuck status in session
+
     context['username'] = username
     context['houseName'] = profileObject.house_name
     context['zipDataForLoopMorning'] = zipDataForLoopMorning
@@ -342,28 +346,7 @@ def AddHuayType(request, username):
     if request.method == 'POST':
         data = request.POST.copy()
         huayListId = data.get('huay_list_id')
-        textFont = data.get('text_font')
-        textColor = data.get('text_color')
-        textPosX = data.get('text_pos_x')
-        textPosY = data.get('text_pos_y')
-        textSize = data.get('text_size')
-        borderWidth = data.get('border_width')
-        borderColor = data.get('text_border_color')
-        mainNumberFont = data.get('number_font_id')
-        mainNumberPosX = data.get('main_number_pos_x')
-        mainNumberPosY = data.get('main_number_pos_y')
-        mainNumberSize = data.get('main_number_size')
-        dataPosX = data.get('date_pos_x')
-        dataPosY = data.get('date_pos_y')
-        dataFontsize = data.get('date_fontsize')
-        focusPosX = data.get('focus_pos_x')
-        focusPosY = data.get('focus_pos_y')
-        focusFontsize = data.get('focus_fontsize')
-        numberRow1PosX = data.get('number_row1_pos_x')
-        numberRow1PosY = data.get('number_row1_pos_y')
-        numberRow2PosX = data.get('number_row2_pos_x')
-        numberRow2PosY = data.get('number_row2_pos_y')
-        numberRowFontsize = data.get('number_row_fontsize')
+
         try:
             checkDuplicated = HuayTypeModel.objects.get(
                 id=huayListId, user=userObject)
@@ -373,40 +356,15 @@ def AddHuayType(request, username):
             addData = HuayTypeModel()
             addData.user = User.objects.get(username=username)
             addData.huay_list = HuayListModel.objects.get(id=huayListId)
-            addData.text_font = textFont
-            addData.text_color = textColor
-            addData.text_border_size = borderWidth
-            addData.text_border_color = borderColor
-            addData.text_pos_x = textPosX
-            addData.text_pos_y = textPosY
-            addData.text_font_size = textSize
-            addData.date_pos_x = dataPosX
-            addData.date_pos_y = dataPosY
-            addData.date_font_size = dataFontsize
-            addData.main_num_pos_x = mainNumberPosX
-            addData.main_num_pos_y = mainNumberPosY
-            addData.main_num_font = mainNumberFont
-            addData.main_num_font_size = mainNumberSize
-            addData.focus_num_pos_x = focusPosX
-            addData.focus_num_pos_y = focusPosY
-            addData.focus_num_font_size = focusFontsize
-            addData.row1_x = numberRow1PosX
-            addData.row1_y = numberRow1PosY
-            addData.row2_x = numberRow2PosX
-            addData.row2_y = numberRow2PosY
-            addData.row_font_size = numberRowFontsize
             addData.save()
 
             request.session['status'] = 'Done'
 
-            return redirect('add_huay_type', username)
+            return redirect('list_huay_type', username)
 
     if 'error' in request.session:
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
-    if 'status' in request.session:
-        context['status'] = request.session['status']
-        request.session['status'] = ''  # clear stuck error in session
 
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
@@ -434,7 +392,7 @@ def AddHuayType(request, username):
     context['colorList'] = colorListObject
     context['username'] = username
 
-    return render(request, 'huay_list/add_huay_list.html', context)
+    return render(request, 'huay_type/add_huay_type.html', context)
 
 
 @login_required
@@ -464,6 +422,10 @@ def EditHuayType(request, username, huay_id):
     context['fontList'] = fontListObject
     context['colorList'] = colorListObject
     context['username'] = username
+
+    if 'statusedit' in request.session:
+        context['statusedit'] = request.session['statusedit']
+        request.session['statusedit'] = ''  # clear stuck error in session
 
     return render(request, 'huay_type/edit_huay_type.html', context)
 
@@ -684,12 +646,12 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textB
 
     # * ================= START :  ENV =================
     # ? LOCAL
-    path = os.getcwd()
-    locationTemplate = path + \
-        '/static/images/template-hua/{}-template.jpg'.format(username)
+    # path = os.getcwd()
+    # locationTemplate = path + \
+    #     '/static/images/template-hua/{}-template.jpg'.format(username)
     # ? SERVER
-    # path = '/home/cheetah/random.huay-vip-net'
-    # locationTemplate =  path+'/static/images/template-hua/{}-template.jpg'.format(username)
+    path = '/home/cheetah/random.huay-vip-net'
+    locationTemplate =  path+'/static/images/template-hua/{}-template.jpg'.format(username)
     # * ================= END :  ENV =================
 
     # * ================= START :  SET FONT =================
@@ -1282,7 +1244,6 @@ def HubForEditHuayType(request,username,huay_id):
             # ตัวเลขหลัก 2 ตัว
             mainNumberFont = data.get('main_num_font')
             mainNumberFontColor = data.get('main_num_font_color')
-            mainNumberFontSize = data.get('main_num_font_size')
             mainNumberPosX = data.get('main_number_pos_x')
             mainNumberPosY = data.get('main_number_pos_y')
             mainNumberSize = data.get('main_number_size')
