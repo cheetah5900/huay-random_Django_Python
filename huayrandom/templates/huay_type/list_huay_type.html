@@ -43,7 +43,7 @@
                     style="color:black;">แก้ไข</a>
                 </td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
+                  <a href="/backend/huay/type/del/{{username}}/{{item1}}" class="btn btn-pink" style="color:black;">ลบ</a>
                 </td>
               </tr>
               {%endfor%}
@@ -73,7 +73,7 @@
                     style="color:black;">แก้ไข</a>
                 </td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
+                  <a href="/backend/huay/type/del/{{username}}/{{item1}}" class="btn btn-pink" style="color:black;">ลบ</a>
                 </td>
               </tr>
               {%endfor%}
@@ -82,7 +82,7 @@
           <div class="slot-intro">
             <div class="d-flex justify-content-between">
               <div>
-                <h3 class="title shine-text underline">บ่าย</h3>
+                <h3 class="title shine-text underline">เย็น</h3>
               </div>
             </div>
             <table class="table table-striped">
@@ -103,7 +103,7 @@
                     style="color:black;">แก้ไข</a>
                 </td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
+                  <a href="/backend/huay/type/del/{{username}}/{{item1}}" class="btn btn-pink" style="color:black;">ลบ</a>
                 </td>
               </tr>
               {%endfor%}
@@ -133,7 +133,7 @@
                     style="color:black;">แก้ไข</a>
                 </td>
                 <td class="text-center">
-                  <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
+                  <a href="/backend/huay/type/del/{{username}}/{{item1}}" class="btn btn-pink" style="color:black;">ลบ</a>
                 </td>
               </tr>
               {%endfor%}
@@ -145,6 +145,11 @@
     {% if status %}
     <script>
       swal("เพิ่มข้อมูลสำเร็จ", "เพิ่มข้อมูลสำเร็จ", "success");
+    </script>
+    {% endif %}
+    {% if statusdel %}
+    <script>
+      swal("ลบข้อมูลสำเร็จ", "ลบข้อมูลสำเร็จ", "success");
     </script>
     {% endif %}
     {%endblock content%}

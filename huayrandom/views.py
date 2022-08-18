@@ -329,6 +329,10 @@ def ListHuayType(request, username):
         context['status'] = request.session['status']
         request.session['status'] = ''  # clear stuck status in session
 
+    if 'statusdel' in request.session:
+        context['statusdel'] = request.session['statusdel']
+        request.session['statusdel'] = ''  # clear stuck error in session
+
     context['username'] = username
     context['houseName'] = profileObject.house_name
     context['zipDataForLoopMorning'] = zipDataForLoopMorning
@@ -429,6 +433,14 @@ def EditHuayType(request, username, huay_id):
 
     return render(request, 'huay_type/edit_huay_type.html', context)
 
+
+@login_required
+def DeleteHuayType(request, username, huay_id):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
+    huayTypeObject.delete()
+    request.session['statusdel'] = 'Done' 
+    return redirect('list_huay_type',username)
 
 def Home(request, username):
     context = {}

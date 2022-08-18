@@ -22,6 +22,8 @@ urlpatterns = [
          AddHuayType, name='add_huay_type'),
     path('backend/huay/type/edit/<str:username>/<int:huay_id>',
          EditHuayType, name='edit_huay_type'),
+    path('backend/huay/type/del/<str:username>/<int:huay_id>',
+         DeleteHuayType, name='delete_huay_type'),
 
     path('backend/user/list', ListUser, name='list_user'),
     path('backend/user/add', AddUser, name='add_user'),
