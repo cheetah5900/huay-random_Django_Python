@@ -1672,8 +1672,8 @@ def SetAllRow1(request,username,huay_id,row1_font,row1_font_size,row1_font_color
         item.row_font_size = row1_font_size
         item.row1_color = row1_font_color
         item.row1_separator = row1_separator
-        item.row1_pos_x = row1_pos_x
-        item.row1_pos_y = row1_pos_y
+        item.row1_x = row1_pos_x
+        item.row1_y = row1_pos_y
         item.row1_border_status = row1_border_status
         item.row1_border_color = row1_border_color
         item.row1_border_size = row1_border_size
@@ -1690,8 +1690,8 @@ def SetAllRow2(request,username,huay_id,row2_font_color,row2_separator,row2_pos_
     for item in huayTypeObject:
         item.row2_color = row2_font_color
         item.row2_separator = row2_separator
-        item.row2_pos_x = row2_pos_x
-        item.row2_pos_y = row2_pos_y
+        item.row2_x = row2_pos_x
+        item.row2_y = row2_pos_y
         item.row2_border_status = row2_border_status
         item.row2_border_color = row2_border_color
         item.row2_border_size = row2_border_size
