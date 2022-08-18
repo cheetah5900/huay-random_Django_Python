@@ -18,46 +18,49 @@
           <div class="slot-intro">
             <div class="d-flex justify-content-between">
               <div>
+                <a href="/backend/" class="btn btn-default">ย้อนกลับ</a>
                 <h3 class="title shine-text underline">เลือกรายการ User</h3>
               </div>
               <div class="d-flex flex-end" style="padding-bottom:10px">
                 <a href="/backend/user/add" class="btn btn-light-blue" style="color:black;">เพิ่ม User</a>
               </div>
             </div>
-            <table class="table table-striped">
-              <tr>
-                <th class="text-center shine-text">User</th>
-                <th class="text-center shine-text">เครดิตร้าน</th>
-                <th class="text-center shine-text">วันหมดอายุ</th>
-                <th class="text-center shine-text">แก้ไข</th>
-                <th class="text-center shine-text">ลบ</th>
-              </tr>
-              {%for item in userObject%}
-              <tr>
-                <td class="text-center">
-                  <div class="form-group">
-                    {{item}}
-                  </div>
-                </td>
-                <td class="text-center">
-                  <div class="form-group">
-                    {{item.profilemodel.credit_shop}}
-                  </div>
-                </td>
-                <td class="text-center">
-                  <div class="form-group">
-                    {{item.profilemodel.expire_date|date:"d / m / Y - H:i น."}}
-                  </div>
-                </td>
-                <td class="text-center">
-                  <a href="/backend/user/edit/{{item.username}}" class="btn btn-yellow" style="color:black;">แก้ไข</a>
-                </td>
-                <td class="text-center">
-                  <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
-                </td>
-              </tr>
-              {%endfor%}
-            </table>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <tr>
+                  <th class="text-center shine-text">User</th>
+                  <th class="text-center shine-text">เครดิตร้าน</th>
+                  <th class="text-center shine-text">วันหมดอายุ</th>
+                  <th class="text-center shine-text">แก้ไข</th>
+                  <th class="text-center shine-text">ลบ</th>
+                </tr>
+                {%for item in userObject%}
+                <tr>
+                  <td class="text-center">
+                    <div class="form-group">
+                      {{item}}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      {{item.profilemodel.credit_shop}}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      {{item.profilemodel.expire_date|date:"d / m / Y - H:i น."}}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <a href="/backend/user/edit/{{item.username}}" class="btn btn-yellow" style="color:black;">แก้ไข</a>
+                  </td>
+                  <td class="text-center">
+                    <a href="#" class="btn btn-pink" style="color:black;">ลบ</a>
+                  </td>
+                </tr>
+                {%endfor%}
+              </table>
+            </div>
           </div>
         </div>
       </section>

@@ -1,11 +1,6 @@
 {% extends 'component/layout.html' %}
 
 {%block content%}
-<style>
-  table>tbody>tr>td:first-child {
-    width: 250px;
-  }
-</style>
 <div class="wrap">
   <section class="slot-home-body">
     <div class="container">
@@ -24,6 +19,7 @@
               {%csrf_token%}
 
               <h3>แก้ไข Username : {{data.house_name_}}</h3>
+              <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
                   <td class="text-right">ชื่อบ้าน : </td>
@@ -45,7 +41,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="text-right">รูปแบบการสุ่ม เลขเจาะ : </td>
+                  <td class="text-right">รูปแบบการสุ่ม<br>เลขเจาะ : </td>
                   <td class="text-center">
                     <div class="form-group">
                       <select name="random_mode" class="form-control">
@@ -74,6 +70,7 @@
                   </td>
                 </tr>
               </table>
+              </div>
               <div class="text-center">
                 <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
                 <a class="btn btn-danger" href="/backend/user/list">ยกเลิก</a>
