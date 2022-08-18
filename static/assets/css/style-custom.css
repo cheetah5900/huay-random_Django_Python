@@ -20,7 +20,6 @@ body {
   background-color: brown;
   padding:7px;
   border-radius: 10px;
-
 }
 .header-topic h3{
   margin:0px;
@@ -30,7 +29,6 @@ h4{
 }
 .black-font{
   color:black;
-  font-size: 1px;
 }
 /* SET of pastel button */
 .btn-purple{

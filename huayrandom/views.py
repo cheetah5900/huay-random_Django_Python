@@ -440,183 +440,6 @@ def AddHuayType(request, username):
 @login_required
 def EditHuayType(request, username, huay_id):
     context = {}
-    userObject = User.objects.get(username=username)
-
-    if request.method == 'POST':
-        data = request.POST.copy()
-        huayListId = data.get('huay_list_id')
-        # ชื่อหวย
-        textFont = data.get('text_font')
-        textColor = data.get('text_color')
-        textPosX = data.get('text_pos_x')
-        textPosY = data.get('text_pos_y')
-        textSize = data.get('text_size')
-        textBorderStatus = data.get('text_border_status')
-        textBorderSize = data.get('text_border_size')
-        borderColor = data.get('text_border_color')
-        # ตัวเลขหลัก 2 ตัว
-        mainNumberFont = data.get('main_num_font')
-        mainNumberFontColor = data.get('main_num_font_color')
-        mainNumberFontSize = data.get('main_num_font_size')
-        mainNumberPosX = data.get('main_number_pos_x')
-        mainNumberPosY = data.get('main_number_pos_y')
-        mainNumberSize = data.get('main_number_size')
-        mainNumberBorderStatus = data.get('main_num_border_status')
-        mainNumberBorderSize = data.get('main_num_border_size')
-        mainNumberBorderColor = data.get('main_num_border_color')
-        mainNumberSeparator = data.get('main_num_separator')
-        # ตัวเลขย่อยแถว 1 และ 2
-        numberRowFont = data.get('row_font')
-        numberRowFontsize = data.get('number_row_fontsize')
-        # ตัวเลขย่อยแถว 1
-        row1Color = data.get('row1_color')
-        row1BorderStatus = data.get('row1_border_status')
-        row1BorderColor = data.get('row1_border_color')
-        row1BorderSize = data.get('row1_border_size')
-        numberRow1PosX = data.get('number_row1_pos_x')
-        numberRow1PosY = data.get('number_row1_pos_y')
-        row1Separator = data.get('row1_separator')
-        # ตัวเลขย่อยแถว 2
-        row2Color = data.get('row2_color')
-        row2BorderStatus = data.get('row2_border_status')
-        row2BorderColor = data.get('row2_border_color')
-        row2BorderSize = data.get('row2_border_size')
-        numberRow2PosX = data.get('number_row2_pos_x')
-        numberRow2PosY = data.get('number_row2_pos_y')
-        row2Separator = data.get('row2_separator')
-        # วันที่
-        dataPosX = data.get('date_pos_x')
-        dataPosY = data.get('date_pos_y')
-        dataFont = data.get('date_font')
-        dataFontColor = data.get('date_font_color')
-        dataFontSize = data.get('date_fontsize')
-        dataBorderStatus = data.get('date_border_status')
-        dataBorderSize = data.get('date_border_size')
-        dataBorderColor = data.get('date_border_color')
-        # ตัวเน้น
-        focusPosX = data.get('focus_num_pos_x')
-        focusPosY = data.get('focus_num_pos_y')
-        focusFont = data.get('focus_num_font')
-        focusFontColor = data.get('focus_num_font_color')
-        focusFontSize = data.get('focus_num_font_size')
-        focusBorderSize = data.get('focus_num_border_size')
-        # เลข 3 หลัก ตัวหลัก
-        threeMainStatus = data.get('three_main_status')
-        threeMainPosX = data.get('three_main_pos_x')
-        threeMainPosY = data.get('three_main_pos_y')
-        threeMainFontSize = data.get('three_main_font_size')
-        threeMainSeparator = data.get('three_main_separator')
-        threeMainFontColor = data.get('three_main_font_color')
-        threeMainBorderStatus = data.get('three_main_border_status')
-        threeMainBorderColor = data.get('three_main_border_color')
-        threeMainBorderSize = data.get('three_main_border_size')
-        # เลข 3 หลัก ตัวย่อย
-        threeSubStatus = data.get('three_sub_status')
-        threeSubPosX = data.get('three_sub_pos_x')
-        threeSubPosY = data.get('three_sub_pos_y')
-        threeSubFont = data.get('three_sub_font')
-        threeSubFontSize = data.get('three_sub_font_size')
-        threeSubSeparator = data.get('three_sub_separator')
-        threeSubFontColor = data.get('three_sub_font_color')
-        threeSubBorderStatus = data.get('three_sub_border_status')
-        threeSubBorderColor = data.get('three_sub_border_color')
-        threeSubBorderSize = data.get('three_sub_border_size')
-        # หมายเหตุ
-        remarkStatus = data.get('remark_status')
-        remarkText = data.get('remark_text')
-        remarkFont = data.get('remark_font')
-        remarkFontSize = data.get('remark_font_size')
-        remarkFontColor = data.get('remark_font_color')
-        remarkBorderStatus = data.get('remark_border_status')
-        remarkBorderSize = data.get('remark_border_size')
-        remarkBorderColor = data.get('remark_border_color')
-        remarkPosX = data.get('remark_pos_x')
-        remarkPosY = data.get('remark_pos_y')
-
-        editData = HuayTypeModel.objects.get(id=huayListId, user=userObject)
-
-        editData.user = User.objects.get(username=username)
-        editData.text_font = textFont
-        editData.text_color = textColor
-        editData.text_border_status = textBorderStatus
-        editData.text_border_size = textBorderSize
-        editData.text_border_color = borderColor
-        editData.text_pos_x = textPosX
-        editData.text_pos_y = textPosY
-        editData.text_font_size = textSize
-        editData.date_pos_x = dataPosX
-        editData.date_pos_y = dataPosY
-        editData.date_font = dataFont
-        editData.date_font_color = dataFontColor
-        editData.date_font_size = dataFontSize
-        editData.date_border_status = dataBorderStatus
-        editData.date_border_size = dataBorderSize
-        editData.date_border_color = dataBorderColor
-        editData.main_num_font = mainNumberFont
-        editData.main_num_pos_x = mainNumberPosX
-        editData.main_num_pos_y = mainNumberPosY
-        editData.main_num_font_size = mainNumberSize
-        editData.main_num_font = mainNumberFont
-        editData.main_num_font_color = mainNumberFontColor
-        editData.main_num_border_status = mainNumberBorderStatus
-        editData.main_num_border_size = mainNumberBorderSize
-        editData.main_num_border_color = mainNumberBorderColor
-        editData.main_num_separator = mainNumberSeparator
-        editData.focus_num_pos_x = focusPosX
-        editData.focus_num_pos_y = focusPosY
-        editData.focus_num_font = focusFont
-        editData.focus_num_font_color = focusFontColor
-        editData.focus_num_font_size = focusFontSize
-        editData.row1_x = numberRow1PosX
-        editData.row1_y = numberRow1PosY
-        editData.row1_separator = row1Separator
-        editData.row1_color = row1Color
-        editData.row1_border_status = row1BorderStatus
-        editData.row1_border_color = row1BorderColor
-        editData.row1_border_size = row1BorderSize
-        editData.row2_x = numberRow2PosX
-        editData.row2_y = numberRow2PosY
-        editData.row2_separator = row2Separator
-        editData.row2_color = row2Color
-        editData.row2_border_status = row2BorderStatus
-        editData.row2_border_color = row2BorderColor
-        editData.row2_border_size = row2BorderSize
-        editData.row_font = numberRowFont
-        editData.row_font_size = numberRowFontsize
-        editData.three_main_status = threeMainStatus
-        editData.three_main_pos_x = threeMainPosX
-        editData.three_main_pos_y = threeMainPosY
-        editData.three_main_font_size = threeMainFontSize
-        editData.three_main_separator = threeMainSeparator
-        editData.three_main_font_color = threeMainFontColor
-        editData.three_main_border_status = threeMainBorderStatus
-        editData.three_main_border_color = threeMainBorderColor
-        editData.three_main_border_size = threeMainBorderSize
-        editData.three_sub_status = threeSubStatus
-        editData.three_sub_pos_x = threeSubPosX
-        editData.three_sub_pos_y = threeSubPosY
-        editData.three_sub_font = threeSubFont
-        editData.three_sub_font_size = threeSubFontSize
-        editData.three_sub_separator = threeSubSeparator
-        editData.three_sub_font_color = threeSubFontColor
-        editData.three_sub_border_status = threeSubBorderStatus
-        editData.three_sub_border_color = threeSubBorderColor
-        editData.three_sub_border_size = threeSubBorderSize
-        editData.remark_status = remarkStatus
-        editData.remark_text = remarkText
-        editData.remark_font = remarkFont
-        editData.remark_font_size = remarkFontSize
-        editData.remark_font_color = remarkFontColor
-        editData.remark_border_status = remarkBorderStatus
-        editData.remark_border_size = remarkBorderSize
-        editData.remark_border_color = remarkBorderColor
-        editData.remark_pos_x = remarkPosX
-        editData.remark_pos_y = remarkPosY
-        editData.save()
-
-        request.session['statusedit'] = 'Done'
-
-        return redirect('edit_huay', username, huay_id)
 
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
@@ -642,7 +465,7 @@ def EditHuayType(request, username, huay_id):
     context['colorList'] = colorListObject
     context['username'] = username
 
-    return render(request, 'huay_list/edit_huay_list.html', context)
+    return render(request, 'huay_type/edit_huay_type.html', context)
 
 
 def Home(request, username):
@@ -1197,8 +1020,6 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textB
     return imgLocation
 
 #  สุ่มตัวเลข 0-9
-
-
 def randomNumber():
     result = random.randint(0, 9)
     return result
@@ -1442,3 +1263,527 @@ def RandomNumberForMainThreeNumbers(listUnique, randomMainThreeNumbersList):
         else:
             checkDuplicated = False
     return number
+
+
+def HubForEditHuayType(request,username,huay_id):
+    if 'submit_edit_form' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            huayListId = data.get('huay_list_id')
+            # ชื่อหวย
+            textFont = data.get('text_font')
+            textColor = data.get('text_color')
+            textPosX = data.get('text_pos_x')
+            textPosY = data.get('text_pos_y')
+            textSize = data.get('text_size')
+            textBorderStatus = data.get('text_border_status')
+            textBorderSize = data.get('text_border_size')
+            borderColor = data.get('text_border_color')
+            # ตัวเลขหลัก 2 ตัว
+            mainNumberFont = data.get('main_num_font')
+            mainNumberFontColor = data.get('main_num_font_color')
+            mainNumberFontSize = data.get('main_num_font_size')
+            mainNumberPosX = data.get('main_number_pos_x')
+            mainNumberPosY = data.get('main_number_pos_y')
+            mainNumberSize = data.get('main_number_size')
+            mainNumberBorderStatus = data.get('main_num_border_status')
+            mainNumberBorderSize = data.get('main_num_border_size')
+            mainNumberBorderColor = data.get('main_num_border_color')
+            mainNumberSeparator = data.get('main_num_separator')
+            # ตัวเลขย่อยแถว 1 และ 2
+            numberRowFont = data.get('row_font')
+            numberRowFontsize = data.get('number_row_fontsize')
+            # ตัวเลขย่อยแถว 1
+            row1Color = data.get('row1_color')
+            row1BorderStatus = data.get('row1_border_status')
+            row1BorderColor = data.get('row1_border_color')
+            row1BorderSize = data.get('row1_border_size')
+            numberRow1PosX = data.get('number_row1_pos_x')
+            numberRow1PosY = data.get('number_row1_pos_y')
+            row1Separator = data.get('row1_separator')
+            # ตัวเลขย่อยแถว 2
+            row2Color = data.get('row2_color')
+            row2BorderStatus = data.get('row2_border_status')
+            row2BorderColor = data.get('row2_border_color')
+            row2BorderSize = data.get('row2_border_size')
+            numberRow2PosX = data.get('number_row2_pos_x')
+            numberRow2PosY = data.get('number_row2_pos_y')
+            row2Separator = data.get('row2_separator')
+            # วันที่
+            dataPosX = data.get('date_pos_x')
+            dataPosY = data.get('date_pos_y')
+            dataFont = data.get('date_font')
+            dataFontColor = data.get('date_font_color')
+            dataFontSize = data.get('date_fontsize')
+            dataBorderStatus = data.get('date_border_status')
+            dataBorderSize = data.get('date_border_size')
+            dataBorderColor = data.get('date_border_color')
+            # ตัวเน้น
+            focusPosX = data.get('focus_num_pos_x')
+            focusPosY = data.get('focus_num_pos_y')
+            focusFont = data.get('focus_num_font')
+            focusFontColor = data.get('focus_num_font_color')
+            focusFontSize = data.get('focus_num_font_size')
+            focusBorderStatus = data.get('focus_num_border_status')
+            focusBorderSize = data.get('focus_num_border_size')
+            focusBorderColor = data.get('focus_num_border_color')
+            # เลข 3 หลัก ตัวหลัก
+            threeMainStatus = data.get('three_main_status')
+            threeMainPosX = data.get('three_main_pos_x')
+            threeMainPosY = data.get('three_main_pos_y')
+            threeMainFontSize = data.get('three_main_font_size')
+            threeMainSeparator = data.get('three_main_separator')
+            threeMainFontColor = data.get('three_main_font_color')
+            threeMainBorderStatus = data.get('three_main_border_status')
+            threeMainBorderColor = data.get('three_main_border_color')
+            threeMainBorderSize = data.get('three_main_border_size')
+            # เลข 3 หลัก ตัวย่อย
+            threeSubStatus = data.get('three_sub_status')
+            threeSubPosX = data.get('three_sub_pos_x')
+            threeSubPosY = data.get('three_sub_pos_y')
+            threeSubFont = data.get('three_sub_font')
+            threeSubFontSize = data.get('three_sub_font_size')
+            threeSubSeparator = data.get('three_sub_separator')
+            threeSubFontColor = data.get('three_sub_font_color')
+            threeSubBorderStatus = data.get('three_sub_border_status')
+            threeSubBorderColor = data.get('three_sub_border_color')
+            threeSubBorderSize = data.get('three_sub_border_size')
+            # หมายเหตุ
+            remarkStatus = data.get('remark_status')
+            remarkText = data.get('remark_text')
+            remarkFont = data.get('remark_font')
+            remarkFontSize = data.get('remark_font_size')
+            remarkFontColor = data.get('remark_font_color')
+            remarkBorderStatus = data.get('remark_border_status')
+            remarkBorderSize = data.get('remark_border_size')
+            remarkBorderColor = data.get('remark_border_color')
+            remarkPosX = data.get('remark_pos_x')
+            remarkPosY = data.get('remark_pos_y')
+            
+            userObject = User.objects.get(username=username)
+            editData = HuayTypeModel.objects.get(id=huayListId, user=userObject)
+
+            editData.user = User.objects.get(username=username)
+            editData.text_font = textFont
+            editData.text_color = textColor
+            editData.text_border_status = textBorderStatus
+            editData.text_border_size = textBorderSize
+            editData.text_border_color = borderColor
+            editData.text_pos_x = textPosX
+            editData.text_pos_y = textPosY
+            editData.text_font_size = textSize
+            editData.date_pos_x = dataPosX
+            editData.date_pos_y = dataPosY
+            editData.date_font = dataFont
+            editData.date_font_color = dataFontColor
+            editData.date_font_size = dataFontSize
+            editData.date_border_status = dataBorderStatus
+            editData.date_border_size = dataBorderSize
+            editData.date_border_color = dataBorderColor
+            editData.main_num_font = mainNumberFont
+            editData.main_num_pos_x = mainNumberPosX
+            editData.main_num_pos_y = mainNumberPosY
+            editData.main_num_font_size = mainNumberSize
+            editData.main_num_font = mainNumberFont
+            editData.main_num_font_color = mainNumberFontColor
+            editData.main_num_border_status = mainNumberBorderStatus
+            editData.main_num_border_size = mainNumberBorderSize
+            editData.main_num_border_color = mainNumberBorderColor
+            editData.main_num_separator = mainNumberSeparator
+            editData.focus_num_pos_x = focusPosX
+            editData.focus_num_pos_y = focusPosY
+            editData.focus_num_font = focusFont
+            editData.focus_num_font_color = focusFontColor
+            editData.focus_num_font_size = focusFontSize
+            editData.focus_num_border_status = focusBorderStatus
+            editData.focus_num_border_size = focusBorderSize
+            editData.focus_num_border_size = focusBorderColor
+            editData.focus_num_border_size = focusFontSize
+            editData.row1_x = numberRow1PosX
+            editData.row1_y = numberRow1PosY
+            editData.row1_separator = row1Separator
+            editData.row1_color = row1Color
+            editData.row1_border_status = row1BorderStatus
+            editData.row1_border_color = row1BorderColor
+            editData.row1_border_size = row1BorderSize
+            editData.row2_x = numberRow2PosX
+            editData.row2_y = numberRow2PosY
+            editData.row2_separator = row2Separator
+            editData.row2_color = row2Color
+            editData.row2_border_status = row2BorderStatus
+            editData.row2_border_color = row2BorderColor
+            editData.row2_border_size = row2BorderSize
+            editData.row_font = numberRowFont
+            editData.row_font_size = numberRowFontsize
+            editData.three_main_status = threeMainStatus
+            editData.three_main_pos_x = threeMainPosX
+            editData.three_main_pos_y = threeMainPosY
+            editData.three_main_font_size = threeMainFontSize
+            editData.three_main_separator = threeMainSeparator
+            editData.three_main_font_color = threeMainFontColor
+            editData.three_main_border_status = threeMainBorderStatus
+            editData.three_main_border_color = threeMainBorderColor
+            editData.three_main_border_size = threeMainBorderSize
+            editData.three_sub_status = threeSubStatus
+            editData.three_sub_pos_x = threeSubPosX
+            editData.three_sub_pos_y = threeSubPosY
+            editData.three_sub_font = threeSubFont
+            editData.three_sub_font_size = threeSubFontSize
+            editData.three_sub_separator = threeSubSeparator
+            editData.three_sub_font_color = threeSubFontColor
+            editData.three_sub_border_status = threeSubBorderStatus
+            editData.three_sub_border_color = threeSubBorderColor
+            editData.three_sub_border_size = threeSubBorderSize
+            editData.remark_status = remarkStatus
+            editData.remark_text = remarkText
+            editData.remark_font = remarkFont
+            editData.remark_font_size = remarkFontSize
+            editData.remark_font_color = remarkFontColor
+            editData.remark_border_status = remarkBorderStatus
+            editData.remark_border_size = remarkBorderSize
+            editData.remark_border_color = remarkBorderColor
+            editData.remark_pos_x = remarkPosX
+            editData.remark_pos_y = remarkPosY
+            editData.save()
+
+            request.session['statusedit'] = 'Done'
+
+            return redirect('edit_huay_type', username, huay_id)
+    elif 'huay_name_font_family' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            textFont = data.get('text_font')
+        return redirect('set_all_huay_name_font_family',username,huay_id,textFont)
+    elif 'huay_name_font_color' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            textColor = data.get('text_color')
+        return redirect('set_all_huay_name_font_color',username,huay_id,textColor)
+    elif 'huay_name_font_size' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            textSize = data.get('text_size')
+        return redirect('set_all_huay_name_font_size',username,huay_id,textSize)
+    elif 'huay_name_pos' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            textPosX = data.get('text_pos_x')
+            textPosY = data.get('text_pos_y')
+        return redirect('set_all_huay_name_pos',username,huay_id,textPosX,textPosY)
+    elif 'huay_name_border' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            textBorderStatus = data.get('text_border_status')
+            textBorderSize = data.get('text_border_size')
+            textBorderColor = data.get('text_border_color')
+        return redirect('set_all_huay_name_border',username,huay_id,textBorderStatus,textBorderSize,textBorderColor)
+    elif 'main_num_set_all' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            mainNumFont = data.get('main_num_font')
+            mainNumFontColor = data.get('main_num_font_color')
+            mainNumFontSize = data.get('main_number_size')
+            mainNumSeparator = data.get('main_num_separator')
+            if mainNumSeparator == '':
+                mainNumSeparator = 'pp'
+            mainNumPosX = data.get('main_number_pos_x')
+            mainNumPosY = data.get('main_number_pos_y')
+            mainNumBorderStatus = data.get('main_num_border_status')
+            mainNumBorderColor = data.get('main_num_border_color')
+            mainNumBorderSize = data.get('main_num_border_size')
+        return redirect('set_all_main_num',username,huay_id,
+        mainNumFont,mainNumFontColor,mainNumFontSize,mainNumSeparator,mainNumPosX,mainNumPosY,
+        mainNumBorderStatus,mainNumBorderColor,mainNumBorderSize)
+    elif 'row1_set_all' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            row1Font = data.get('row_font')
+            row1FontSize = data.get('number_row_fontsize')
+            row1FontColor = data.get('row1_color')
+            row1Separator = data.get('row1_separator')
+            if row1Separator == '':
+                row1Separator = 'pp'
+            row1PosX = data.get('number_row1_pos_x')
+            row1PosY = data.get('number_row1_pos_y')
+            row1BorderStatus = data.get('row1_border_status')
+            row1BorderColor = data.get('row1_border_color')
+            row1BorderSize = data.get('row1_border_size')
+        return redirect('set_all_row1',username,huay_id,row1Font,row1FontSize,row1FontColor,row1Separator,row1PosX,row1PosY,row1BorderStatus,row1BorderColor,row1BorderSize)
+
+    elif 'row2_set_all' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            row2FontColor = data.get('row2_color')
+            row2Separator = data.get('row2_separator')
+            if row2Separator == '':
+                row2Separator = 'pp'
+            row2PosX = data.get('number_row2_pos_x')
+            row2PosY = data.get('number_row2_pos_y')
+            row2BorderStatus = data.get('row2_border_status')
+            row2BorderColor = data.get('row2_border_color')
+            row2BorderSize = data.get('row2_border_size')
+        return redirect('set_all_row2',username,huay_id,row2FontColor,row2Separator,row2PosX,row2PosY,row2BorderStatus,row2BorderColor,row2BorderSize)
+    elif 'set_all_focus_num' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            focusNumFont = data.get('focus_num_font')
+            focusNumFontColor = data.get('focus_num_font_color')
+            focusNumFontSize = data.get('focus_num_font_size')
+            focusNumPosX = data.get('focus_num_pos_x')
+            focusNumPosY = data.get('focus_num_pos_y')
+            focusNumBorderStatus = data.get('focus_num_border_status')
+            focusNumBorderSize = data.get('focus_num_border_size')
+            focusNumBorderColor = data.get('focus_num_border_color')
+        return redirect('set_all_focus_num',username,huay_id,focusNumFont,focusNumFontColor,focusNumFontSize,focusNumPosX,focusNumPosY,focusNumBorderStatus,focusNumBorderSize,focusNumBorderColor)
+
+    elif 'set_all_three_main_num' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            threeMainStatus = data.get('three_main_status')
+            threeMainFont = data.get('three_main_font')
+            threeMainFontColor = data.get('three_main_font_color')
+            threeMainFontSize = data.get('three_main_font_size')
+            threeMainSeparator = data.get('three_main_separator')
+            if threeMainSeparator == '':
+                threeMainSeparator = 'pp'
+            threeMainPosX = data.get('three_main_pos_x')
+            threeMainPosY = data.get('three_main_pos_y')
+            threeMainBorderStatus = data.get('three_main_border_status')
+            threeMainBorderSize = data.get('three_main_border_size')
+            threeMainBorderColor = data.get('three_main_border_color')
+        return redirect('set_all_three_main_num',username,huay_id,threeMainStatus,threeMainFont,threeMainFontColor,threeMainFontSize,threeMainSeparator,threeMainPosX,threeMainPosY,threeMainBorderStatus,threeMainBorderSize,threeMainBorderColor)
+
+    elif 'set_all_three_sub_num' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            threeSubStatus = data.get('three_sub_status')
+            threeSubFont = data.get('three_sub_font')
+            threeSubFontColor = data.get('three_sub_font_color')
+            threeSubFontSize = data.get('three_sub_font_size')
+            threeSubSeparator = data.get('three_sub_separator')
+            if threeSubSeparator == '':
+                threeSubSeparator = 'pp'
+            threeSubPosX = data.get('three_sub_pos_x')
+            threeSubPosY = data.get('three_sub_pos_y')
+            threeSubBorderStatus = data.get('three_sub_border_status')
+            threeSubBorderSize = data.get('three_sub_border_size')
+            threeSubBorderColor = data.get('three_sub_border_color')
+        return redirect('set_all_three_sub_num',username,huay_id,threeSubStatus,threeSubFont,threeSubFontColor,threeSubFontSize,threeSubSeparator,threeSubPosX,threeSubPosY,threeSubBorderStatus,threeSubBorderSize,threeSubBorderColor)
+    elif 'set_all_remark' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            remarkStatus = data.get('remark_status')
+            remarkText = data.get('remark_text')
+            remarkFont = data.get('remark_font')
+            remarkFontColor = data.get('remark_font_color')
+            remarkFontSize = data.get('remark_font_size')
+            remarkPosX = data.get('remark_pos_x')
+            remarkPosY = data.get('remark_pos_y')
+            remarkBorderStatus = data.get('remark_border_status')
+            remarkBorderSize = data.get('remark_border_size')
+            remarkBorderColor = data.get('remark_border_color')
+        return redirect('set_all_remark',username,huay_id,remarkStatus,remarkText,remarkFont,remarkFontColor,remarkFontSize,remarkPosX,remarkPosY,remarkBorderStatus,remarkBorderSize,remarkBorderColor)
+    elif 'set_all_date' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            dateFont = data.get('date_font')
+            dateFontColor = data.get('date_font_color')
+            dateFontSize = data.get('date_fontsize')
+            datePosX = data.get('date_pos_x')
+            datePosY = data.get('date_pos_y')
+            dateBorderStatus = data.get('date_border_status')
+            dateBorderSize = data.get('date_border_size')
+            dateBorderColor = data.get('date_border_color')
+        return redirect('set_all_date',username,huay_id,dateFont,dateFontColor,dateFontSize,datePosX,datePosY,dateBorderStatus,dateBorderSize,dateBorderColor)
+
+def SetAllHuayNameFontFamily(request,username,huay_id,text_font):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.text_font = text_font
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+def SetAllHuayNameFontColor(request,username,huay_id,text_color):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.text_color = text_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+def SetAllHuayNameFontSize(request,username,huay_id,text_size):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.text_font_size = text_size
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+def SetAllHuayNamePos(request,username,huay_id,text_pos_x,text_pos_y):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.text_pos_x = text_pos_x
+        item.text_pos_y = text_pos_y
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+def SetAllHuayNameBorder(request,username,huay_id,text_border_status,text_border_size,text_border_color):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.text_border_status = text_border_status
+        item.text_border_size = text_border_size
+        item.text_border_color = text_border_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Main 2 Number
+def SetAllMainNum(request,username,huay_id,main_num_font,main_num_font_color,
+main_num_font_size,main_num_separator,main_num_pos_x,main_num_pos_y,
+main_num_border_status,main_num_border_color,main_num_border_size):
+    if main_num_separator == 'pp':
+        main_num_separator = ' '
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.main_num_font = main_num_font
+        item.main_num_font_color = main_num_font_color
+        item.main_num_font_size = main_num_font_size
+        item.main_num_separator = main_num_separator
+        item.main_num_pos_x = main_num_pos_x
+        item.main_num_pos_y = main_num_pos_y
+        item.main_num_border_status = main_num_border_status
+        item.main_num_border_color = main_num_border_color
+        item.main_num_border_size = main_num_border_size
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Row 1
+def SetAllRow1(request,username,huay_id,row1_font,row1_font_size,row1_font_color,row1_separator,row1_pos_x,row1_pos_y,row1_border_status,row1_border_color,row1_border_size):
+    if row1_separator == 'pp':
+        row1_separator = ' '
+    
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.row_font = row1_font
+        item.row_font_size = row1_font_size
+        item.row1_color = row1_font_color
+        item.row1_separator = row1_separator
+        item.row1_pos_x = row1_pos_x
+        item.row1_pos_y = row1_pos_y
+        item.row1_border_status = row1_border_status
+        item.row1_border_color = row1_border_color
+        item.row1_border_size = row1_border_size
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Row 2
+def SetAllRow2(request,username,huay_id,row2_font_color,row2_separator,row2_pos_x,row2_pos_y,row2_border_status,row2_border_color,row2_border_size):
+    if row2_separator == 'pp':
+        row2_separator = ' '
+    
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.row2_color = row2_font_color
+        item.row2_separator = row2_separator
+        item.row2_pos_x = row2_pos_x
+        item.row2_pos_y = row2_pos_y
+        item.row2_border_status = row2_border_status
+        item.row2_border_color = row2_border_color
+        item.row2_border_size = row2_border_size
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Focus Number
+def SetAllFocusNumber(request,username,huay_id,focus_num_font,focus_num_font_color,focus_num_font_size,focus_num_pos_x,focus_num_pos_y,focus_num_border_status,focus_num_border_size,focus_num_border_color):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.focus_num_font = focus_num_font
+        item.focus_num_font_color = focus_num_font_color
+        item.focus_num_font_size = focus_num_font_size
+        item.focus_num_pos_x = focus_num_pos_x
+        item.focus_num_pos_y = focus_num_pos_y
+        item.focus_num_border_status = focus_num_border_status
+        item.focus_num_border_size = focus_num_border_size
+        item.focus_num_border_color = focus_num_border_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Three Main Number
+def SetAllThreeMainNumber(request,username,huay_id,three_main_status,three_main_font,three_main_font_color,three_main_font_size,three_main_separator,three_main_pos_x,three_main_pos_y,three_main_border_status,three_main_border_size,three_main_border_color):
+    if three_main_separator == '':
+        three_main_separator = 'pp'
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.three_main_status = three_main_status
+        item.three_main_font = three_main_font
+        item.three_main_font_color = three_main_font_color
+        item.three_main_font_size = three_main_font_size
+        item.three_main_separator = three_main_separator
+        item.three_main_pos_x = three_main_pos_x
+        item.three_main_pos_y = three_main_pos_y
+        item.three_main_border_status = three_main_border_status
+        item.three_main_border_size = three_main_border_size
+        item.three_main_border_color = three_main_border_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Three Sub Number
+def SetAllThreeSubNumber(request,username,huay_id,three_sub_status,three_sub_font,three_sub_font_color,three_sub_font_size,three_sub_separator,three_sub_pos_x,three_sub_pos_y,three_sub_border_status,three_sub_border_size,three_sub_border_color):
+    if three_sub_separator == '':
+        three_sub_separator = 'pp'
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.three_sub_status = three_sub_status
+        item.three_sub_font = three_sub_font
+        item.three_sub_font_color = three_sub_font_color
+        item.three_sub_font_size = three_sub_font_size
+        item.three_sub_separator = three_sub_separator
+        item.three_sub_pos_x = three_sub_pos_x
+        item.three_sub_pos_y = three_sub_pos_y
+        item.three_sub_border_status = three_sub_border_status
+        item.three_sub_border_size = three_sub_border_size
+        item.three_sub_border_color = three_sub_border_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* Remark
+def SetAllRemark(request,username,huay_id,remark_status,remark_text,remark_font,remark_font_color,remark_font_size,remark_pos_x,remark_pos_y,remark_border_status,remark_border_size,remark_border_color):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.remark_status = remark_status
+        item.remark_text = remark_text
+        item.remark_font = remark_font
+        item.remark_font_color = remark_font_color
+        item.remark_font_size = remark_font_size
+        item.remark_pos_x = remark_pos_x
+        item.remark_pos_y = remark_pos_y
+        item.remark_border_status = remark_border_status
+        item.remark_border_size = remark_border_size
+        item.remark_border_color = remark_border_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+#* date
+def SetAllDate(request,username,huay_id,date_font,date_font_color,date_font_size,date_pos_x,date_pos_y,date_border_status,date_border_size,date_border_color):
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    for item in huayTypeObject:
+        item.date_font = date_font
+        item.date_font_color = date_font_color
+        item.date_font_size = date_font_size
+        item.date_pos_x = date_pos_x
+        item.date_pos_y = date_pos_y
+        item.date_border_status = date_border_status
+        item.date_border_size = date_border_size
+        item.date_border_color = date_border_color
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)

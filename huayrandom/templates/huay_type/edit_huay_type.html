@@ -16,10 +16,10 @@
           </div>
           <div class="col-sm-6">
             <div class="slot-intro ">
-              <form method="post">
+              <form method="post"action="/backend/huay_type/hub/edit/{{username}}/{{huayId}}">
                 {%csrf_token%}
                 <div class="text-center">
-                  <button type="submit" class="btn btn-default">ยืนยัน</button>
+                  <button type="submit" name="submit_edit_form" class="btn btn-default">ยืนยัน</button>
                   <a class="btn btn-danger" href="/backend/huay/type/list/{{username}}">ยกเลิก</a>
                 </div>
                 <div class="table-responsive" style="height:550px;">
@@ -33,24 +33,30 @@
                       </td>
                     </tr>
                     <tr>
-                      <td class="text-right">Font ข้อความ </td>
+                      <td class="text-right">
+                        <button type="submit" name="huay_name_font_family" class="black-font">Font ข้อความ</button> </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="text_font" class="form-control"> {%for font in fontList%}
-                            <option {%if font.font_name==huayTypeObject.text_font %} selected {%endif%}
+                        <div class="form-group">
+                          <select name="text_font" class="form-control"> {%for font in fontList%}
+                            <option {%if font.font_name == huayTypeObject.text_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}
                           </select>
                         </div>
                       </td>
-                      <td class="text-right">สีข้อความ </td>
+                      <td class="text-right">
+                  <button type="submit" name="huay_name_font_color" class="black-font">สีข้อความ</button>
+                </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="text_color" class="form-control"> {% for item in
-                            colorList%} <option {%if huayTypeObject.text_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="text_color" class="form-control"> {% for item in colorList%} <option {%if huayTypeObject.text_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
                     </tr>
                     <tr>
-                      <td class="text-right">ขนาดข้อความ </td>
+                      <td class="text-right">
+                  <button type="submit" name="huay_name_font_size" class="black-font">ขนาดข้อความ</button>
+                   
+                      </td>
                       <td class="text-center">
                         <div class="form-group"><input value="{{huayTypeObject.text_font_size}}" type="number"
                             class="form-control" placeholder="1" name="text_size">
@@ -59,7 +65,8 @@
                     </tr>
                     <tr>
                       <td colspan="4" class="text-center">
-                        <h4>ตำแหน่ง</h4>
+                        <h4>ตำแหน่ง</h4> 
+                        <button class="black-font" type="submit" name="huay_name_pos">ตั้งค่าทั้งหมด</button>
                       </td>
                     </tr>
                     <tr>
@@ -79,15 +86,16 @@
                     <tr>
                       <td colspan="4" class="text-center">
                         <h4>เส้นขอบ</h4>
+                        <button class="black-font" type="submit" name="huay_name_border">ตั้งค่าทั้งหมด</button>
                       </td>
                     </tr>
                     <tr>
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="text_border_status" class="form-control">
-                            <option {% if huayTypeObject.text_border_status=="on" %} selected {%endif%}value="on">
+                            <option {% if huayTypeObject.text_border_status == "on" %} selected {%endif%}value="on">
                               เปิด</option>
-                            <option {% if huayTypeObject.text_border_status=="off" %} selected {%endif%}value="off">
+                            <option {% if huayTypeObject.text_border_status == "off" %} selected {%endif%}value="off">
                               ปิด</option>
                           </select>
                         </div>
@@ -102,8 +110,7 @@
                     <tr>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="text_border_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.text_border_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="text_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.text_border_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -111,6 +118,7 @@
                   </table>
                   <div class="header-topic">
                     <h3>ตัวเลข 2 หลัก</h3>
+                    <button class="black-font" type="submit" name="main_num_set_all">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -121,15 +129,13 @@
                     <tr>
                       <td class="text-right">Font ตัวเลข </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="main_num_font" class="form-control"> {%for font in
-                            fontList%} <option {%if font.font_name==huayTypeObject.main_num_font %} selected {%endif%}
+                        <div class="form-group"><select name="main_num_font" class="form-control"> {%for font in fontList%} <option {%if font.font_name == huayTypeObject.main_num_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}</select>
                         </div>
                       </td>
                       <td class="text-right">สีตัวเลข </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="main_num_font_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.main_num_font_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="main_num_font_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.main_num_font_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -177,17 +183,16 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="main_num_border_status" class="form-control">
-                            <option {% if huayTypeObject.main_num_border_status=="on" %} selected {%endif%}value="on">
+                            <option {% if huayTypeObject.main_num_border_status == "on" %} selected {%endif%}value="on">
                               เปิด</option>
-                            <option {% if huayTypeObject.main_num_border_status=="off" %} selected {%endif%}value="off">
+                            <option {% if huayTypeObject.main_num_border_status == "off" %} selected {%endif%}value="off">
                               ปิด</option>
                           </select>
                         </div>
                       </td>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="main_num_border_color" class="form-control"> {% for item
-                            in colorList %} <option {%if huayTypeObject.main_num_border_color==item.id %} selected
+                        <div class="form-group"><select name="main_num_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.main_num_border_color == item.id %} selected
                               {%endif%} value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -203,6 +208,7 @@
                   </table>
                   <div class="header-topic">
                     <h3>เลขเจาะชุดที่ 1</h3>
+                    <button class="black-font" type="submit" name="row1_set_all">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -214,7 +220,7 @@
                       <td class="text-right">Font ตัวเลข (ทั้งสองแถว) </td>
                       <td class="text-center">
                         <div class="form-group"><select name="row_font" class="form-control"> {%for font in fontList%}
-                            <option {%if font.font_name==huayTypeObject.row_font %} selected {%endif%}
+                            <option {%if font.font_name == huayTypeObject.row_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}
                           </select>
                         </div>
@@ -229,8 +235,7 @@
                     <tr>
                       <td class="text-right">สีตัวเลข </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="row1_color" class="form-control"> {% for item in
-                            colorList%} <option {%if huayTypeObject.row1_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="row1_color" class="form-control"> {% for item in colorList%} <option {%if huayTypeObject.row1_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -269,17 +274,16 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="row1_border_status" class="form-control">
-                            <option {% if huayTypeObject.row1_border_status=="on" %} selected {%endif%}value="on">เปิด
+                            <option {% if huayTypeObject.row1_border_status == "on" %} selected {%endif%}value="on">เปิด
                             </option>
-                            <option {% if huayTypeObject.row1_border_status=="off" %} selected {%endif%}value="off">ปิด
+                            <option {% if huayTypeObject.row1_border_status == "off" %} selected {%endif%}value="off">ปิด
                             </option>
                           </select>
                         </div>
                       </td>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="row1_border_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.row1_border_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="row1_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.row1_border_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -292,12 +296,11 @@
                         </div>
                       </td>
                     </tr>
-
-
                   </table>
 
                   <div class="header-topic">
                     <h3>เลขเจาะชุดที่ 2</h3>
+                    <button class="black-font" type="submit" name="row2_set_all">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -308,8 +311,7 @@
                     <tr>
                       <td class="text-right">สีตัวเลข</td>
                       <td class="text-center">
-                        <div class="form-group"><select name="row2_color" class="form-control"> {% for item in
-                            colorList%} <option {%if huayTypeObject.row2_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="row2_color" class="form-control"> {% for item in colorList%} <option {%if huayTypeObject.row2_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -348,17 +350,16 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="row2_border_status" class="form-control">
-                            <option {% if huayTypeObject.row2_border_status=="on" %} selected {%endif%}value="on">เปิด
+                            <option {% if huayTypeObject.row2_border_status == "on" %} selected {%endif%}value="on">เปิด
                             </option>
-                            <option {% if huayTypeObject.row2_border_status=="off" %} selected {%endif%}value="off">ปิด
+                            <option {% if huayTypeObject.row2_border_status == "off" %} selected {%endif%}value="off">ปิด
                             </option>
                           </select>
                         </div>
                       </td>
                       <td class="text-right">สีเส้นขอบ</td>
                       <td class="text-center">
-                        <div class="form-group"><select name="row2_border_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.row2_border_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="row2_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.row2_border_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -374,7 +375,8 @@
                   </table>
 
                   <div class="header-topic">
-                    <h3>ตัวเน้น</h3>
+                    <h3>เลขอัด</h3>
+                    <button class="black-font" type="submit" name="set_all_focus_num">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -385,17 +387,15 @@
                     <tr>
                       <td class="text-right">Font ตัวเลข </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="focus_num_font" class="form-control"> {%for font in
-                            fontList%}
-                            <option {%if font.font_name==huayTypeObject.focus_num_font %} selected {%endif%}
+                        <div class="form-group"><select name="focus_num_font" class="form-control"> {%for font in fontList%}
+                            <option {%if font.font_name == huayTypeObject.focus_num_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}
                           </select>
                         </div>
                       </td>
                       <td class="text-right">สีตัวหนังสือ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="focus_num_font_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.focus_num_font_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="focus_num_font_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.focus_num_font_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -436,9 +436,9 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="focus_num_border_status" class="form-control">
-                            <option {% if huayTypeObject.focus_num_border_status=="on" %} selected {%endif%}value="on">
+                            <option {% if huayTypeObject.focus_num_border_status == "on" %} selected {%endif%}value="on">
                               เปิด</option>
-                            <option {% if huayTypeObject.focus_num_border_status=="off" %} selected
+                            <option {% if huayTypeObject.focus_num_border_status == "off" %} selected
                               {%endif%}value="off">
                               ปิด</option>
                           </select>
@@ -454,8 +454,7 @@
                     <tr>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="focus_num_border_color" class="form-control"> {% for item
-                            in colorList %} <option {%if huayTypeObject.focus_border_color==item.id %} selected
+                        <div class="form-group"><select name="focus_num_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.focus_border_color == item.id %} selected
                               {%endif%} value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -463,6 +462,7 @@
                   </table>
                   <div class="header-topic">
                     <h3>เลข 3 หลัก</h3>
+                    <button class="black-font" type="submit" name="set_all_three_main_num">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -474,17 +474,16 @@
                       <td class="text-center">
                         <div class="form-group">
                           <select name="three_main_status" class="form-control">
-                            <option {% if huayTypeObject.three_main_status=="on" %} selected {%endif%}value="on">เปิด
+                            <option {% if huayTypeObject.three_main_status == "on" %} selected {%endif%}value="on">เปิด
                             </option>
-                            <option {% if huayTypeObject.three_main_status=="off" %} selected {%endif%}value="off">ปิด
+                            <option {% if huayTypeObject.three_main_status == "off" %} selected {%endif%}value="off">ปิด
                             </option>
                           </select>
                         </div>
                       </td>
                       <td class="text-right">ฟอนต์ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="three_main_font" class="form-control"> {%for font in
-                            fontList%} <option {%if font.font_name==huayTypeObject.three_main_font %} selected {%endif%}
+                        <div class="form-group"><select name="three_main_font" class="form-control"> {%for font in fontList%} <option {%if font.font_name == huayTypeObject.three_main_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}</select>
                         </div>
                       </td>
@@ -492,8 +491,7 @@
                     <tr>
                       <td class="text-right">สีตัวหนังสือ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="three_main_font_color" class="form-control"> {% for item
-                            in colorList %} <option {%if huayTypeObject.three_main_font_color==item.id %} selected
+                        <div class="form-group"><select name="three_main_font_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.three_main_font_color == item.id %} selected
                               {%endif%} value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -540,9 +538,9 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="three_main_border_status" class="form-control">
-                            <option {% if huayTypeObject.three_main_border_status=="on" %} selected {%endif%}value="on">
+                            <option {% if huayTypeObject.three_main_border_status == "on" %} selected {%endif%}value="on">
                               เปิด</option>
-                            <option {% if huayTypeObject.three_main_border_status=="off" %} selected
+                            <option {% if huayTypeObject.three_main_border_status == "off" %} selected
                               {%endif%}value="off">
                               ปิด</option>
                           </select>
@@ -558,8 +556,7 @@
                     <tr>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="three_main_border_color" class="form-control"> {% for item
-                            in colorList %} <option {%if huayTypeObject.three_main_border_color==item.id %} selected
+                        <div class="form-group"><select name="three_main_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.three_main_border_color == item.id %} selected
                               {%endif%} value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -567,6 +564,7 @@
                   </table>
                   <div class="header-topic">
                     <h3>เลขเจาะ 3 หลัก</h3>
+                    <button class="black-font" type="submit" name="set_all_three_sub_num">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -578,17 +576,16 @@
                       <td class="text-right">แสดงในรูป </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="three_sub_status" class="form-control">
-                            <option {% if huayTypeObject.three_sub_status=="on" %} selected {%endif%}value="on">เปิด
+                            <option {% if huayTypeObject.three_sub_status == "on" %} selected {%endif%}value="on">เปิด
                             </option>
-                            <option {% if huayTypeObject.three_sub_status=="off" %} selected {%endif%}value="off">ปิด
+                            <option {% if huayTypeObject.three_sub_status == "off" %} selected {%endif%}value="off">ปิด
                             </option>
                           </select>
                         </div>
                       </td>
                       <td class="text-right">ฟอนต์ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="three_sub_font" class="form-control"> {%for font in
-                            fontList%} <option {%if font.font_name==huayTypeObject.three_sub_font %} selected {%endif%}
+                        <div class="form-group"><select name="three_sub_font" class="form-control"> {%for font in fontList%} <option {%if font.font_name == huayTypeObject.three_sub_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}</select>
                         </div>
                       </td>
@@ -596,8 +593,7 @@
                     <tr>
                       <td class="text-right">สีตัวหนังสือ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="three_sub_font_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.three_sub_font_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="three_sub_font_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.three_sub_font_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -644,10 +640,10 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ</td>
                       <td class="text-center">
                         <div class="form-group"> <select name="three_sub_border_status" class="form-control">
-                            <option {% if huayTypeObject.three_sub_border_status=="on" %} selected {%endif%}value="on">
+                            <option {% if huayTypeObject.three_sub_border_status == "on" %} selected {%endif%}value="on">
                               เปิด
                             </option>
-                            <option {% if huayTypeObject.three_sub_border_status=="off" %} selected
+                            <option {% if huayTypeObject.three_sub_border_status == "off" %} selected
                               {%endif%}value="off">ปิด
                             </option>
                           </select>
@@ -655,8 +651,7 @@
                       </td>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="three_sub_border_color" class="form-control"> {% for item
-                            in colorList %} <option {%if huayTypeObject.three_sub_border_color==item.id %} selected
+                        <div class="form-group"><select name="three_sub_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.three_sub_border_color == item.id %} selected
                               {%endif%} value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -672,6 +667,7 @@
                   </table>
                   <div class="header-topic">
                     <h3>หมายเหตุ</h3>
+                    <button class="black-font" type="submit" name="set_all_remark">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -683,9 +679,9 @@
                       <td class="text-right">แสดงหมายเหตุ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="remark_status" class="form-control">
-                            <option {% if huayTypeObject.remark_status=="on" %} selected {%endif%}value="on">เปิด
+                            <option {% if huayTypeObject.remark_status == "on" %} selected {%endif%}value="on">เปิด
                             </option>
-                            <option {% if huayTypeObject.remark_status=="off" %} selected {%endif%}value="off">ปิด
+                            <option {% if huayTypeObject.remark_status == "off" %} selected {%endif%}value="off">ปิด
                             </option>
                           </select>
                         </div>
@@ -703,7 +699,7 @@
                         <div class="form-group">
                           <select name="remark_font" class="form-control">
                             {%for font in fontList%}
-                            <option {%if font.id==huayTypeObject.remark_font %} selected {%endif%}
+                            <option {%if font.font_name == huayTypeObject.remark_font %} selected {%endif%}
                               value="{{font.font_name}}">
                               {{font.font_name}}
                             </option>
@@ -713,8 +709,7 @@
                       </td>
                       <td class="text-right">สีตัวหนังสือ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="remark_font_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.remark_font_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="remark_font_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.remark_font_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -755,9 +750,9 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ</td>
                       <td class="text-center">
                         <div class="form-group"> <select name="remark_border_status" class="form-control">
-                            <option {% if huayTypeObject.remark_border_status=="on" %} selected {%endif%}value="on">เปิด
+                            <option {% if huayTypeObject.remark_border_status == "on" %} selected {%endif%}value="on">เปิด
                             </option>
-                            <option {% if huayTypeObject.remark_border_status=="off" %} selected {%endif%}value="off">
+                            <option {% if huayTypeObject.remark_border_status == "off" %} selected {%endif%}value="off">
                               ปิด
                             </option>
                           </select>
@@ -765,8 +760,7 @@
                       </td>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="remark_border_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.remark_border_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="remark_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.remark_border_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -782,6 +776,7 @@
                   </table>
                   <div class="header-topic">
                     <h3>วันที่</h3>
+                    <button class="black-font" type="submit" name="set_all_date">ตั้งค่าทั้งหมด</button>
                   </div>
                   <table class="table">
                     <tr>
@@ -793,15 +788,14 @@
                       <td class="text-right">Font ข้อความ </td>
                       <td class="text-center">
                         <div class="form-group"><select name="date_font" class="form-control"> {%for font in fontList%}
-                            <option {%if font.font_name==huayTypeObject.date_font %} selected {%endif%}
+                            <option {%if font.font_name == huayTypeObject.date_font %} selected {%endif%}
                               value="{{font.font_name}}">{{font.font_name}}</option> {%endfor%}
                           </select>
                         </div>
                       </td>
                       <td class="text-right">สีข้อความ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="date_font_color" class="form-control"> {% for item in
-                            colorList%} <option {%if huayTypeObject.date_font_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="date_font_color" class="form-control"> {% for item in colorList%} <option {%if huayTypeObject.date_font_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
@@ -842,9 +836,9 @@
                       <td class="text-right">เปิด-ปิด เส้นขอบ </td>
                       <td class="text-center">
                         <div class="form-group"> <select name="date_border_status" class="form-control">
-                            <option {% if huayTypeObject.date_border_status=="on" %} selected {%endif%}value="on">
+                            <option {% if huayTypeObject.date_border_status == "on" %} selected {%endif%}value="on">
                               เปิด</option>
-                            <option {% if huayTypeObject.date_border_status=="off" %} selected {%endif%}value="off">
+                            <option {% if huayTypeObject.date_border_status == "off" %} selected {%endif%}value="off">
                               ปิด</option>
                           </select>
                         </div>
@@ -859,8 +853,7 @@
                     <tr>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="date_border_color" class="form-control"> {% for item in
-                            colorList %} <option {%if huayTypeObject.date_border_color==item.id %} selected {%endif%}
+                        <div class="form-group"><select name="date_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.date_border_color == item.id %} selected {%endif%}
                               value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
