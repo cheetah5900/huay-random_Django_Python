@@ -38,8 +38,8 @@
                   <td class="text-center">
                     <div class="form-group">
                       <select name="credit_shop" class="form-control">
-                        <option {%if data.credit_shop==True %} selected {% endif %} value="True">ติด</option>
-                        <option {%if data.credit_shop==False %} selected {% endif %} value="False">ไม่ติด</option>
+                        <option {%if data.credit_shop == True %} selected {% endif %} value="True">ติด</option>
+                        <option {%if data.credit_shop == False %} selected {% endif %} value="False">ไม่ติด</option>
                       </select>
                     </div>
                   </td>
@@ -49,9 +49,9 @@
                   <td class="text-center">
                     <div class="form-group">
                       <select name="random_mode" class="form-control">
-                        <option {%if data.random_mode=="random_any" %} selected {% endif %} value="random_any">
+                        <option {%if data.random_mode == "random_any" %} selected {% endif %} value="random_any">
                           มีหรือไม่มีเลขวิ่ง-รูด ในใบเจาะก็ได้</option>
-                        <option {%if data.random_mode=="force_have_main_number" %} selected {% endif %}
+                        <option {%if data.random_mode == "force_have_main_number" %} selected {% endif %}
                           value="force_have_main_number">บังคับให้มีเลขวิ่ง-รูด ในใบเจาะ</option>
                       </select>
                     </div>
