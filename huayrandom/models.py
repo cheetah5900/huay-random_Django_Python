@@ -130,3 +130,12 @@ class HuayTypeModel(models.Model):
 
     def __str__(self):
         return self.huay_list.short_name
+
+
+class ImageHouseModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image_name = models.CharField(default='None', max_length=255)
+    loocation = models.CharField(default='None', max_length=255)
+    
+    def __str__(self):
+        return self.image_name
