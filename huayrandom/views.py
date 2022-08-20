@@ -181,7 +181,7 @@ def EditUser(request, username):
 @login_required
 def ListHuay(request):
     context = {}
-    huayListObject = HuayListModel.objects.all()
+    huayListObject = HuayListModel.objects.all().order_by('order_number')
 
     context['huayListObject'] = huayListObject
 
@@ -243,6 +243,7 @@ def EditHuayList(request,id):
         pageName = data.get('page_name')
         time = data.get('time')
         link = data.get('link')
+        orderNumber = data.get('order_number')
         if shortName == '' or fullName == '' or pageName == '' or time == '' or link == '':
             request.session['error'] = 'error'
         try:
@@ -250,43 +251,33 @@ def EditHuayList(request,id):
             oldLink = checkDuplicated.link
             if oldLink != link:
                 checkDuplicated = HuayListModel.objects.get(link=link)
-                request.session['error'] = 'error'
+                request.session['errordup'] = 'error'
                 return redirect('edit_huay_list',id)
-            else:
-                editData = HuayListModel.objects.get(id=id)
-                editData.short_name = shortName
-                editData.full_name = fullName
-                editData.page_name = pageName
-                editData.time = time
-                editData.link = link
-                editData.save()
-                request.session['status'] = 'Done'
-                return redirect('list_huay')
         except:
-            editData = HuayListModel.objects.get(id=id)
-            editData.short_name = shortName
-            editData.full_name = fullName
-            editData.page_name = pageName
-            editData.time = time
-            editData.link = link
-            editData.save()
-            request.session['status'] = 'Done'
-            return redirect('list_huay')
+            request.session['error'] = 'error'
+            return redirect('edit_huay_list',id)
+
+        editData = HuayListModel.objects.get(id=id)
+        editData.short_name = shortName
+        editData.full_name = fullName
+        editData.page_name = pageName
+        editData.time = time
+        editData.link = link
+        editData.order_number = orderNumber
+        editData.save()
+        request.session['status'] = 'Done'
+        return redirect('list_huay')
 
     if 'error' in request.session:
         context['error'] = request.session['error']
         request.session['error'] = ''  # clear stuck error in session
-    if 'status' in request.session:
-        context['status'] = request.session['status']
-        request.session['status'] = ''  # clear stuck error in session
+    if 'errordup' in request.session:
+        context['errordup'] = request.session['errordup']
+        request.session['errordup'] = ''  # clear stuck errordup in session
 
     data = HuayListModel.objects.get(id=id)
 
     context['data'] = HuayListModel.objects.get(id=id)
-    context['shortName'] = data.short_name
-    context['fullName'] = data.full_name
-    context['pageName'] = data.page_name
-    context['link'] = data.link
     context['time'] = str(data.time)
 
 
@@ -385,7 +376,7 @@ def AddHuayType(request, username):
     for item in huayFilter:
         huayFilterList.append(item.huay_list.short_name)
 
-    huayAll = HuayListModel.objects.all()
+    huayAll = HuayListModel.objects.all().order_by('order_number')
     huayAllIdList = []
     huayAllNameList = []
     for itemAll in huayAll:
@@ -459,7 +450,7 @@ def Home(request, username):
         request.session['expire'] = 'ตัดสิทธิ์แล้ว'
     else:
         resultCheckExpire = ""
-    try:
+    # try:
         userObject = User.objects.get(username=username)
         profileObject = ProfileModel.objects.get(user=userObject)
 
@@ -469,7 +460,8 @@ def Home(request, username):
         thaiMonth = ConvertToThaiMonth(month)
         expireDateThai = "{} {} {}".format(day, thaiMonth, year)
 
-        huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+        huayTypeObject = HuayTypeModel.objects.filter(user=userObject).order_by('huay_list__order_number')
+
         huayLinkMorningList = []
         btnColorList = []
         huayFullNameMorningList = []
@@ -533,9 +525,9 @@ def Home(request, username):
             request.session['expire'] = ''  # clear stuck error in session
 
         return render(request, 'index.html', context)
-    except:
-        request.session['error'] = 'ไม่มีบ้านดังกล่าว'
-        return redirect('index')
+    # except:
+    #     request.session['error'] = 'ไม่มีบ้านดังกล่าว'
+    #     return redirect('index')
 
 
 def Result(request, username, link):

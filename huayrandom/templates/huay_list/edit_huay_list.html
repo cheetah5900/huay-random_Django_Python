@@ -22,7 +22,7 @@
                   <td class="text-right">ชื่อสั้น : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="short_name" value="{{shortName}}">
+                      <input type="text" class="form-control" name="short_name" value="{{data.short_name}}">
                     </div>
                   </td>
                 </tr>
@@ -30,7 +30,7 @@
                   <td class="text-right">ชื่อยาว : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="full_name" value="{{fullName}}">
+                      <input type="text" class="form-control" name="full_name" value="{{data.full_name}}">
                     </div>
                   </td>
                 </tr>
@@ -38,7 +38,7 @@
                   <td class="text-right">ชื่อหน้า : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="page_name" value="{{pageName}}">
+                      <input type="text" class="form-control" name="page_name" value="{{data.page_name}}">
                     </div>
                   </td>
                 </tr>
@@ -46,7 +46,15 @@
                   <td class="text-right">Link : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="link" value="{{link}}">
+                      <input type="text" class="form-control" name="link" value="{{data.link}}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-right">ลำดับ : </td>
+                  <td class="text-center">
+                    <div class="form-group">
+                      <input type="number" class="form-control" name="order_number" value="{{data.order_number}}">
                     </div>
                   </td>
                 </tr>
@@ -75,9 +83,14 @@
       </section>
 
     </div>
-    {% if error %}
+    {% if errordup %}
     <script>
       swal("Link นี้มีในระบบแล้ว", "Link นี้มีในระบบแล้ว", "error");
+    </script>
+    {% endif %}
+    {% if error %}
+    <script>
+      swal("เกิดข้อผิดพลาด กรุณาติดต่อ Admin", "เกิดข้อผิดพลาด กรุณาติดต่อ Admin", "error");
     </script>
     {% endif %}
     {%endblock content%}

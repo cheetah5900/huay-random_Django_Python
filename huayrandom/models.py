@@ -17,6 +17,7 @@ class ProfileModel(models.Model):
 
 class HuayListModel(models.Model):
     short_name = models.CharField(default='None', max_length=255)
+    order_number = models.IntegerField(default=1,)
     full_name = models.CharField(default='None', max_length=255)
     page_name = models.CharField(default='None', max_length=255)
     time = models.TimeField()
