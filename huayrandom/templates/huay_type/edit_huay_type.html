@@ -859,6 +859,30 @@
                       </td>
                     </tr>
                   </table>
+                  <div class="header-topic">
+                    <h3>รูปพื้นหลัง</h3>
+                    <button class="black-font" type="submit" name="set_all_image">ตั้งค่าทั้งหมด</button>
+                  </div>
+                  <table class="table">
+                    <tr>
+                      <td colspan="4" class="text-center">
+                        <h4>ทั่วไป</h4>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">รูปพื้นหลัง </td>
+                      <td class="text-center">
+                        <div class="form-group">
+                          <select name="image_house" class="form-control"> 
+                            {%for item in imageList%}
+                            <option {%if item.image_name == huayTypeObject.image_house.image_name %} selected {%endif%}
+                              value="{{item.id}}">{{item.image_name}}</option> 
+                              {%endfor%}
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
                   <div class="text-center">
                     <input type="hidden" name="huay_list_id" value="{{huayId}}">
                   </div>

@@ -38,10 +38,19 @@ class ColorListModel(models.Model):
     def __str__(self):
         return self.color_name
 
+class ImageHouseModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image_name = models.CharField(default='None', max_length=255)
+    location = models.CharField(default='None', max_length=255)
+    
+    def __str__(self):
+        return self.image_name
+
 # HuayType
 class HuayTypeModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     huay_list = models.ForeignKey(HuayListModel, on_delete=models.CASCADE)
+    image_house = models.ForeignKey(ImageHouseModel,default=1, on_delete=models.CASCADE)
     date_font = models.CharField(default='supermarket.ttf', max_length=255)
     date_font_size = models.IntegerField(default=30)
     date_font_color = models.IntegerField(default=1)
@@ -131,11 +140,3 @@ class HuayTypeModel(models.Model):
     def __str__(self):
         return self.huay_list.short_name
 
-
-class ImageHouseModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image_name = models.CharField(default='None', max_length=255)
-    loocation = models.CharField(default='None', max_length=255)
-    
-    def __str__(self):
-        return self.image_name

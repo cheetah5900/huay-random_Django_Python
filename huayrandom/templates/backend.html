@@ -27,6 +27,7 @@
                 {%csrf_token%}
                 <tr>
                   <th class="text-center shine-text">ชื่อบ้าน</th>
+                  <th class="text-center shine-text">รายการ</th>
                   <th class="text-center shine-text">ยืนยัน</th>
                 </tr>
                 <tr>
@@ -43,10 +44,14 @@
           </td>
           <td>
             <div class="text-center">
-              <input type="hidden" name="next_page" value="huay">
-              <button type="submit" class="btn btn-default">ยืนยัน</button>
+              <select name="next_page" class="form-control">
+                <option value="huay_type">จัดการหวย</option>
+                <option value="image">จัดการรูปภาพ</option>
+              </select>
             </div>
           </td>
+
+          <td class="text-center"> <button type="submit" class="btn btn-primary">ยืนยัน</button></td>
           </tr>
           </form>
           </table>

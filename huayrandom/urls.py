@@ -25,6 +25,14 @@ urlpatterns = [
     path('backend/huay/type/del/<str:username>/<int:huay_id>',
          DeleteHuayType, name='delete_huay_type'),
 
+
+    path('backend/image/list/<str:username>',
+         ListImage, name='list_image'),
+    path('backend/user/image/add/<str:username>',
+         AddImage, name='add_image'),
+    path('backend/user/image/edit/<str:username>/<int:image_id>',
+         EditImage, name='edit_image'),
+
     path('backend/user/list', ListUser, name='list_user'),
     path('backend/user/add', AddUser, name='add_user'),
     path('backend/user/edit/<str:username>', EditUser, name='edit_user'),
@@ -47,6 +55,7 @@ urlpatterns = [
     path('backend/three_sub_num/<str:username>/<int:huay_id>/<str:three_sub_status>/<str:three_sub_font>/<str:three_sub_font_color>/<int:three_sub_font_size>/<str:three_sub_separator>/<int:three_sub_pos_x>/<int:three_sub_pos_y>/<str:three_sub_border_status>/<int:three_sub_border_size>/<int:three_sub_border_color>', SetAllThreeSubNumber,name="set_all_three_sub_num"),
     path('backend/remark/<str:username>/<int:huay_id>/<str:remark_status>/<str:remark_text>/<str:remark_font>/<str:remark_font_color>/<int:remark_font_size>/<int:remark_pos_x>/<int:remark_pos_y>/<str:remark_border_status>/<int:remark_border_size>/<int:remark_border_color>', SetAllRemark,name="set_all_remark"),
     path('backend/date/<str:username>/<int:huay_id>/<str:date_font>/<str:date_font_color>/<int:date_font_size>/<int:date_pos_x>/<int:date_pos_y>/<str:date_border_status>/<int:date_border_size>/<int:date_border_color>', SetAllDate,name="set_all_date"),
+    path('backend/image/<str:username>/<int:huay_id>/<str:image_house>', SetAllImage,name="set_all_image"),
 
 
 

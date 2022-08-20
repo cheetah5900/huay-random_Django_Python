@@ -11,6 +11,8 @@ import random
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 
 def Index(request):
     context = {}
@@ -60,12 +62,17 @@ def Backend(request):
     if request.method == 'POST':
         data = request.POST.copy()
         houseName = data.get('house_name')
-        if (houseName != ""):
-            return redirect('list_huay_type', houseName)
-
+        nextPage = data.get('next_page')
+        if (houseName != "" and houseName != "none"):
+            if nextPage == "huay_type":
+                return redirect('list_huay_type', houseName)
+            if nextPage == "image":
+                return redirect('list_image', houseName)
         else:
+            request.session['error'] = 'error'
             return redirect('backend')
     profileObject = ProfileModel.objects.all()
+
     context['profileObject'] = profileObject
 
     if 'error' in request.session:
@@ -407,9 +414,10 @@ def EditHuayType(request, username, huay_id):
     profileObject = ProfileModel.objects.get(user=userObject)
     huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
     fontListObject = FontListModel.objects.all()
+    imageObject = ImageHouseModel.objects.filter(user=userObject)
     colorListObject = ColorListModel.objects.all()
 
-    imgLocation = GenerateImageWIthText(username, huayTypeObject.huay_list.full_name, huayTypeObject.text_font, huayTypeObject.main_num_font, huayTypeObject.text_color, huayTypeObject.text_border_status, huayTypeObject.text_border_size, huayTypeObject.text_border_color, huayTypeObject.text_pos_x, huayTypeObject.text_pos_y, huayTypeObject.text_font_size,
+    imgLocation = GenerateImageWIthText(username, huayTypeObject.image_house.location,huayTypeObject.huay_list.full_name, huayTypeObject.text_font, huayTypeObject.main_num_font, huayTypeObject.text_color, huayTypeObject.text_border_status, huayTypeObject.text_border_size, huayTypeObject.text_border_color, huayTypeObject.text_pos_x, huayTypeObject.text_pos_y, huayTypeObject.text_font_size,
                                         huayTypeObject.date_pos_x, huayTypeObject.date_pos_y, huayTypeObject.date_font, huayTypeObject.date_font_size, huayTypeObject.date_font_color, huayTypeObject.date_border_status, huayTypeObject.date_border_color, huayTypeObject.date_border_size, huayTypeObject.main_num_pos_x, huayTypeObject.main_num_pos_y, huayTypeObject.main_num_font_size, huayTypeObject.main_num_border_status, huayTypeObject.main_num_border_color, huayTypeObject.main_num_border_size, huayTypeObject.focus_num_pos_x,
                                         huayTypeObject.focus_num_pos_y, huayTypeObject.focus_num_font_size, huayTypeObject.focus_num_font_color, huayTypeObject.focus_num_border_status, huayTypeObject.focus_num_border_color, huayTypeObject.focus_num_border_size, huayTypeObject.row1_x, huayTypeObject.row1_y, huayTypeObject.row1_border_status, huayTypeObject.row1_border_color, huayTypeObject.row1_border_size,
                                         huayTypeObject.row2_x, huayTypeObject.row2_y,  huayTypeObject.row2_border_status, huayTypeObject.row2_border_color, huayTypeObject.row2_border_size, huayTypeObject.row_font_size, huayTypeObject.main_num_separator, huayTypeObject.row1_separator, huayTypeObject.row2_separator, huayTypeObject.main_num_font_color,
@@ -421,6 +429,7 @@ def EditHuayType(request, username, huay_id):
     context['imgLocation'] = imgLocation
 
     context['huayTypeObject'] = huayTypeObject
+    context['imageList'] = imageObject
     context['data'] = profileObject
     context['huayId'] = huay_id
     context['fontList'] = fontListObject
@@ -553,29 +562,29 @@ def Result(request, username, link):
     context['link'] = link
     context['expireDateThai'] = expireDateThai
 
-    # try:
+    try:
 
-    huayListObject = HuayListModel.objects.get(link=link)
-    data = HuayTypeModel.objects.get(
-        huay_list=huayListObject, user=userObject)
-    profileObject = ProfileModel.objects.get(user=userObject)
+        huayListObject = HuayListModel.objects.get(link=link)
+        data = HuayTypeModel.objects.get(
+            huay_list=huayListObject, user=userObject)
+        profileObject = ProfileModel.objects.get(user=userObject)
 
-    imgLocation = GenerateImageWIthText(username, data.huay_list.full_name, data.text_font, data.main_num_font, data.text_color, data.text_border_status, data.text_border_size, data.text_border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
-                                        data.date_pos_x, data.date_pos_y, data.date_font, data.date_font_size, data.date_font_color, data.date_border_status, data.date_border_color, data.date_border_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
-                                        data.focus_num_pos_y, data.focus_num_font_size, data.focus_num_font_color, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
-                                        data.row2_x, data.row2_y,  data.row2_border_status, data.row2_border_color, data.row2_border_size, data.row_font_size, data.main_num_separator, data.row1_separator, data.row2_separator, data.main_num_font_color,
-                                        data.row1_color, data.row2_color, data.credit_shop_pos_x, data.credit_shop_pos_y, data.credit_shop_border_status, data.credit_shop_border_color, data.credit_shop_border_size, data.three_main_status, data.three_main_font, data.three_main_font_size,
-                                        data.three_main_font_color, data.three_main_border_status, data.three_main_border_size, data.three_main_border_color, data.three_main_pos_x, data.three_main_pos_y, data.three_main_separator, data.three_sub_status, data.three_sub_font,
-                                        data.three_sub_font_size, data.three_sub_font_color, data.three_sub_border_status, data.three_sub_border_size, data.three_sub_border_color, data.three_sub_pos_x, data.three_sub_pos_y, data.three_sub_separator, data.remark_status, data.remark_text,
-                                        data.remark_font, data.remark_font_size, data.remark_font_color, data.remark_border_status, data.remark_border_size, data.remark_border_color, data.remark_pos_x, data.remark_pos_y)
+        imgLocation = GenerateImageWIthText(username, data.image_house.location,data.huay_list.full_name, data.text_font, data.main_num_font, data.text_color, data.text_border_status, data.text_border_size, data.text_border_color, data.text_pos_x, data.text_pos_y, data.text_font_size,
+                                            data.date_pos_x, data.date_pos_y, data.date_font, data.date_font_size, data.date_font_color, data.date_border_status, data.date_border_color, data.date_border_size, data.main_num_pos_x, data.main_num_pos_y, data.main_num_font_size, data.main_num_border_status, data.main_num_border_color, data.main_num_border_size, data.focus_num_pos_x,
+                                            data.focus_num_pos_y, data.focus_num_font_size, data.focus_num_font_color, data.focus_num_border_status, data.focus_num_border_color, data.focus_num_border_size, data.row1_x, data.row1_y, data.row1_border_status, data.row1_border_color, data.row1_border_size,
+                                            data.row2_x, data.row2_y,  data.row2_border_status, data.row2_border_color, data.row2_border_size, data.row_font_size, data.main_num_separator, data.row1_separator, data.row2_separator, data.main_num_font_color,
+                                            data.row1_color, data.row2_color, data.credit_shop_pos_x, data.credit_shop_pos_y, data.credit_shop_border_status, data.credit_shop_border_color, data.credit_shop_border_size, data.three_main_status, data.three_main_font, data.three_main_font_size,
+                                            data.three_main_font_color, data.three_main_border_status, data.three_main_border_size, data.three_main_border_color, data.three_main_pos_x, data.three_main_pos_y, data.three_main_separator, data.three_sub_status, data.three_sub_font,
+                                            data.three_sub_font_size, data.three_sub_font_color, data.three_sub_border_status, data.three_sub_border_size, data.three_sub_border_color, data.three_sub_pos_x, data.three_sub_pos_y, data.three_sub_separator, data.remark_status, data.remark_text,
+                                            data.remark_font, data.remark_font_size, data.remark_font_color, data.remark_border_status, data.remark_border_size, data.remark_border_color, data.remark_pos_x, data.remark_pos_y)
 
-    context['imgLocation'] = imgLocation
-    # except:
-    #     request.session['error'] = 'error'
-    #     if 'error' in request.session:
-    #         context['error'] = request.session['error']
-    #         request.session['error'] = ''  # clear stuck error in session
-    #     return render(request, 'result/index.html', context)
+        context['imgLocation'] = imgLocation
+    except:
+        request.session['error'] = 'error'
+        if 'error' in request.session:
+            context['error'] = request.session['error']
+            request.session['error'] = ''  # clear stuck error in session
+        return render(request, 'result/index.html', context)
     return render(request, 'result/index.html', context)
 
 
@@ -623,7 +632,7 @@ def CheckExpireDate(username):
 # ฟังก์ชั่นสร้างรูปของบ้านเพิ่มทรัพย์
 
 
-def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textBorderStatus, textBorderSize,
+def GenerateImageWIthText(username,templatePath, type, fontText, fontNumber, textColor, textBorderStatus, textBorderSize,
                           textBorderColor, txtPosX, txtPosY, txtFontSize, datePosX, datePosY, dateFont, dateFontSize, dateFontColor, dateBorderStatus, dateBorderColor,
                           dateBorderSize, mainNumberPosX, mainNumberPosY, mainNumberFontSize, mainNumberBorderStatus, mainNumberBorderColor,
                           mainNumberBorderSize, focusNumberX, focusNumberY, focusNumberFontSize, focusNumColor, forcusNumberBorderStatus,
@@ -657,13 +666,15 @@ def GenerateImageWIthText(username, type, fontText, fontNumber, textColor, textB
     threeNumberSet3 = randomResult[16]
 
     # * ================= START :  ENV =================
-    # ? LOCAL
-    # path = os.getcwd()
-    # locationTemplate = path + \
-    #     '/static/images/template-hua/{}-template.jpg'.format(username)
-    # ? SERVER
-    path = '/home/cheetah/random.huay-vip-net'
-    locationTemplate =  path+'/static/images/template-hua/{}-template.jpg'.format(username)
+    
+    if not settings.DEBUG:
+        path = '/home/cheetah/random.huay-vip-net'
+    else:
+        path = os.getcwd()
+            
+    locationTemplate = path + \
+         '/' + templatePath
+
     # * ================= END :  ENV =================
 
     # * ================= START :  SET FONT =================
@@ -1332,11 +1343,14 @@ def HubForEditHuayType(request,username,huay_id):
             remarkBorderColor = data.get('remark_border_color')
             remarkPosX = data.get('remark_pos_x')
             remarkPosY = data.get('remark_pos_y')
+            # พื้นหลัง
+            imageHouseId = data.get('image_house')
+
             
             userObject = User.objects.get(username=username)
             editData = HuayTypeModel.objects.get(id=huayListId, user=userObject)
-
             editData.user = User.objects.get(username=username)
+            editData.image_house = ImageHouseModel.objects.get(id=imageHouseId)
             editData.text_font = textFont
             editData.text_color = textColor
             editData.text_border_status = textBorderStatus
@@ -1568,6 +1582,11 @@ def HubForEditHuayType(request,username,huay_id):
             dateBorderSize = data.get('date_border_size')
             dateBorderColor = data.get('date_border_color')
         return redirect('set_all_date',username,huay_id,dateFont,dateFontColor,dateFontSize,datePosX,datePosY,dateBorderStatus,dateBorderSize,dateBorderColor)
+    elif 'set_all_image' in request.POST:
+        if request.method == 'POST':
+            data = request.POST.copy()
+            imageHouse = data.get('image_house')
+        return redirect('set_all_image',username,huay_id,imageHouse)
 
 def SetAllHuayNameFontFamily(request,username,huay_id,text_font):
     userObject = User.objects.get(username=username)
@@ -1747,6 +1766,7 @@ def SetAllRemark(request,username,huay_id,remark_status,remark_text,remark_font,
 
 #* date
 def SetAllDate(request,username,huay_id,date_font,date_font_color,date_font_size,date_pos_x,date_pos_y,date_border_status,date_border_size,date_border_color):
+
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1760,3 +1780,161 @@ def SetAllDate(request,username,huay_id,date_font,date_font_color,date_font_size
         item.date_border_color = date_border_color
         item.save()
     return redirect('edit_huay_type',username, huay_id)
+
+#* image
+def SetAllImage(request,username,huay_id,image_house):
+
+    userObject = User.objects.get(username=username)
+    huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
+    imageObject = ImageHouseModel.objects.get(id=image_house)
+    for item in huayTypeObject:
+        item.image_house = imageObject
+        item.save()
+    return redirect('edit_huay_type',username, huay_id)
+
+
+@login_required
+def ListImage(request,username):
+    context = {}
+    userObject = User.objects.get(username=username)
+    profileObject = ProfileModel.objects.get(user=userObject)
+    imageHouseObject = ImageHouseModel.objects.filter(user=userObject)
+
+    context['imageHouseObject'] = imageHouseObject
+    context['profileObject'] = profileObject
+    context['username'] = username
+    
+    if 'status' in request.session:
+        context['status'] = request.session['status']
+        request.session['status'] = ''  # clear stuck status in session
+    if 'statusedit' in request.session:
+        context['statusedit'] = request.session['statusedit']
+        request.session['statusedit'] = ''  # clear stuck statusedit in session
+
+    if 'statusdel' in request.session:
+        context['statusdel'] = request.session['statusdel']
+        request.session['statusdel'] = ''  # clear stuck statusdel in session
+
+    return render(request, 'image_house/list_image.html', context)
+
+
+@login_required
+def AddImage(request, username):
+    context = {}
+    context['username'] = username
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        imageName = data.get('image_name')
+        if request.FILES.get('image_file') and imageName != "":
+            myfile = request.FILES['image_file']
+            if not settings.DEBUG:
+                locationSaveFile = '/home/cheetah/random.huay-vip-net/'
+            else:
+                locationSaveFile = ''
+            fs = FileSystemStorage(location=locationSaveFile+'media/'+username+'/')
+            filename, ext = os.path.splitext(myfile.name)
+            #* Check extension if it isn't jpg jpeg or png reject with error
+            if ext != ".jpg" and ext != ".jpeg" and ext != ".png":
+                request.session['errorext'] = 'error'
+                return redirect('add_image',username)
+            #* เพิ่ม Data เข้าไปก่อนให้มี id ขึ้นมา แล้วจะเอา id ล่าสุดนี้ไปตั้งเป็นชื่อรูป
+            addData = ImageHouseModel()
+            addData.user = User.objects.get(username=username)
+            addData.save()
+
+            getLastId = ImageHouseModel.objects.latest('id')
+            fullFileName = username+'_'+str(getLastId.id)+ext
+            fs.save(fullFileName, myfile)            
+            location = 'media/'+username+'/'+fullFileName
+
+            getLastId.image_name = imageName
+            getLastId.location = location
+            getLastId.save()
+            request.session['status'] = 'done'
+            return redirect('list_image', username)
+        else:
+            request.session['errorfill'] = 'errorfill'
+            return redirect('add_image', username)
+
+
+    if 'errorext' in request.session:
+        context['errorext'] = request.session['errorext']
+        request.session['errorext'] = ''  # clear stuck errorext in session
+
+    if 'errorfill' in request.session:
+        context['errorfill'] = request.session['errorfill']
+        request.session['errorfill'] = ''  # clear stuck errorfill in session
+
+
+    return render(request, 'image_house/add_image.html', context)
+
+@login_required
+def EditImage(request, username,image_id):
+    context = {}
+    imageObject = ImageHouseModel.objects.get(id=image_id)
+    context['username'] = username
+    context['imageObject'] = imageObject
+        
+    if request.method == 'POST':
+        data = request.POST.copy()
+        imageName = data.get('image_name')
+
+        if imageName != "":
+            if request.FILES.get('image_file'):
+                myfile = request.FILES['image_file']
+                if not settings.DEBUG:
+                    locationSaveFile = '/home/cheetah/random.huay-vip-net/'
+                else:
+                    locationSaveFile = ''
+
+                timeNow = datetime.now() + relativedelta(hours=7)
+                currentTime = timeNow.strftime("%Y%m%d%H%M")
+
+                fs = FileSystemStorage(location=locationSaveFile+'media/'+username+'/')
+                filename, ext = os.path.splitext(myfile.name)
+
+                #* Check extension if it isn't jpg jpeg or png reject with error
+                if ext != ".jpg" and ext != ".jpeg" and ext != ".png":
+                    request.session['errorext'] = 'error'
+                    return redirect('edit_image',username)
+
+                fullFileName = username+'_'+str(imageObject.id)+'_'+currentTime+ext
+                fs.save(fullFileName, myfile)            
+                location = 'media/'+username+'/'+fullFileName
+
+                imageObject.image_name = imageName
+                imageObject.location = location
+                imageObject.save()
+            else:
+                imageObject.image_name = imageName
+                imageObject.save()
+
+
+            request.session['statusedit'] = 'done'
+            return redirect('list_image', username)
+        else:
+            request.session['errorfill'] = 'errorfill'
+            return redirect('edit_image', username,image_id)
+
+
+
+
+    if 'errorext' in request.session:
+        context['errorext'] = request.session['errorext']
+        request.session['errorext'] = ''  # clear stuck errorext in session
+
+    if 'errorfill' in request.session:
+        context['errorfill'] = request.session['errorfill']
+        request.session['errorfill'] = ''  # clear stuck errorfill in session
+
+
+    return render(request, 'image_house/edit_image.html', context)
+
+
+
+
+
+
+
+

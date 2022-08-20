@@ -5,7 +5,7 @@
   <section class="slot-home-body">
     <div class="container">
       <div>
-        <h1 class="shine-text big-font text-center">เพิ่ม User</h1>
+        <h1 class="shine-text big-font text-center">เพิ่มรูปภาพ</h1>
       </div>
 
       <section class="content">
@@ -15,64 +15,26 @@
             </div>
           </div>
           <div class="slot-intro">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
               {%csrf_token%}
 
-              <h3>เพิ่ม Username</h3>
+              <h3>รูปภาพ</h3>
               <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <td class="text-right">username : </td>
+                  <td class="text-right">ชื่อรูป</td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="username">
-
+                      <input type="text" class="form-control" name="image_name">
                     </div>
                   </td>
                 </tr>
+              
                 <tr>
-                  <td class="text-right">ชื่อบ้าน : </td>
+                  <td class="text-right">อัพโหลดไฟล์ : </td>
                   <td class="text-center">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="house_name">
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">เครดิตร้าน : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <select name="credit_shop" class="form-control">
-                        <option value="True">ติด</option>
-                        <option value="False">ไม่ติด</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">รูปแบบการสุ่ม<br>เลขเจาะ : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <select name="random_mode" class="form-control">
-                        <option value="random_any">มีหรือไม่มีเลขวิ่ง-รูด ในใบเจาะก็ได้</option>
-                        <option value="force_have_main_number">บังคับให้มีเลขวิ่ง-รูด ในใบเจาะ</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">วันหมดอายุ : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input type="date" class="form-control" name="expire_date">
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-right">เวลาหมดอายุ : </td>
-                  <td class="text-center">
-                    <div class="form-group">
-                      <input type="time" class="form-control" name="expire_time">
+                      <input type="file" name="image_file" class="form-control">
                     </div>
                   </td>
                 </tr>
@@ -80,11 +42,21 @@
               </div>
               <div class="text-center">
                 <button type="submit" class="btn btn-default">ส่งข้อมูล</button>
-                <a class="btn btn-danger" href="/backend/user/list">ยกเลิก</a>
+                <a class="btn btn-danger" href="/backend/image/list/{{username}}">ยกเลิก</a>
               </div>
             </form>
           </div>
         </div>
       </section>
     </div>
+    {%if errorext%}
+    <script>
+      swal("ไฟล์ไม่ถูกต้อง", "กรุณาอัพโหลดไฟล์ jpg jpeg png เท่านั้น", "error");
+    </script>
+    {%endif%}
+    {%if errorfill%}
+    <script>
+      swal("กรุณากรอกข้อมูลให้ครบถ้วน", "กรอกข้อมูลและอัพโหลดรูปภาพ", "error");
+    </script>
+    {%endif%}
     {%endblock content%}

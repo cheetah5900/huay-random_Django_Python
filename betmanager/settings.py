@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-7^z^eeg_d))&f84*#2503l5g&(uxjc2(a4e+mx7$$fh!3=mllk
 # ไม่ต้องปิด
 STATIC_URL = '/static/'
 
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/ 'media'
 
 # ? Dev
 DEBUG = True
