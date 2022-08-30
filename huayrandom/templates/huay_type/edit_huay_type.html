@@ -454,7 +454,7 @@
                     <tr>
                       <td class="text-right">สีเส้นขอบ </td>
                       <td class="text-center">
-                        <div class="form-group"><select name="focus_num_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.focus_border_color == item.id %} selected
+                        <div class="form-group"><select name="focus_num_border_color" class="form-control"> {% for item in colorList %} <option {%if huayTypeObject.focus_num_border_color == item.id %} selected
                               {%endif%} value="{{item.id}}">{{item.color_name}}</option> {% endfor %}</select>
                         </div>
                       </td>
