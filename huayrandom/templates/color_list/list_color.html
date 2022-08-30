@@ -1,0 +1,52 @@
+{% extends 'component/layout.html' %}
+
+{%block content%}
+
+<div class="wrap">
+  <section class="slot-home-body">
+    <div class="container">
+      <div>
+        <h1 class="shine-text big-font text-center">จัดการรายการสีในระบบ</h1>
+      </div>
+      <section class="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6 text-left d-block">
+              <a href="/backend/" class="btn btn-default">ย้อนกลับ</a>
+            </div>
+            <div class="col-sm-6 text-right d-block">
+              <a class="btn btn-success font-color-white" href="/backend/color/add">เพิ่มสี</a>
+            </div>
+          </div>
+          <div class="slot-intro">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h3 class="title shine-text underline">รายการสี</h3>
+              </div>
+            </div>
+            <table class="table table-striped">
+              <tr>
+                <th class="text-center shine-text">ชื่อรายการ</th>
+                <th class="text-center shine-text">แก้ไข</th>
+              </tr>
+              {%for item in colorListObject%}
+              <tr>
+                <td class="text-center">
+                  <div class="form-group">
+                    {{item}}
+                  </div>
+                </td>
+                <td class="text-center">
+                  <a href="/backend/color/edit/{{item.id}}" class="btn btn-yellow" style="color:black;">แก้ไข</a>
+                </td>
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    </section>
+    </div>
+    {%endblock content%}

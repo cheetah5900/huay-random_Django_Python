@@ -285,6 +285,63 @@ def EditHuayList(request,id):
 
 
 @login_required
+def ListColor(request):
+    context = {}
+    colorListObject = ColorListModel.objects.all()
+
+    context['colorListObject'] = colorListObject
+
+    return render(request, 'color_list/list_color.html', context)
+
+@login_required
+def AddColor(request):
+    context = {}
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        colorName = data.get('color_name')
+        colorCode = data.get('color_code')
+
+        addData = ColorListModel()
+        addData.color_name = colorName
+        addData.color_code = colorCode
+        addData.save()
+
+        request.session['status'] = 'Done'
+
+        return redirect('list_color')
+
+    return render(request, 'color_list/add_color_list.html', context)
+
+
+
+@login_required
+def EditColor(request, color_id):
+    context = {}
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        colorName = data.get('color_name')
+        colorCode = data.get('color_code')
+
+        editData = ColorListModel.objects.get(id=color_id)
+        editData.color_name = colorName
+        editData.color_code = colorCode
+        editData.save()
+
+        request.session['status'] = 'Done'
+
+        return redirect('list_color')
+
+    colorObject = ColorListModel.objects.get(id=color_id)
+    context['colorObject'] = colorObject
+    
+
+    return render(request, 'color_list/edit_color_list.html', context)
+
+
+
+@login_required
 def ListHuayType(request, username):
     context = {}
     userObject = User.objects.get(username=username)
@@ -1376,8 +1433,7 @@ def HubForEditHuayType(request,username,huay_id):
             editData.focus_num_font_size = focusFontSize
             editData.focus_num_border_status = focusBorderStatus
             editData.focus_num_border_size = focusBorderSize
-            editData.focus_num_border_size = focusBorderColor
-            editData.focus_num_border_size = focusFontSize
+            editData.focus_num_border_color = focusBorderColor
             editData.row1_x = numberRow1PosX
             editData.row1_y = numberRow1PosY
             editData.row1_separator = row1Separator
@@ -1808,7 +1864,6 @@ def ListImage(request,username):
         request.session['statusdel'] = ''  # clear stuck statusdel in session
 
     return render(request, 'image_house/list_image.html', context)
-
 
 @login_required
 def AddImage(request, username):
