@@ -754,7 +754,9 @@ def GenerateImageWIthText(username,templatePath, type, fontText, fontNumber, tex
     imgObj = ImageDraw.Draw(img)
 
     # Set Date
-    cueDateTime = datetime.now() + relativedelta(hours=7, years=543)
+    cueDateTime = datetime.now() + relativedelta(years=543)
+
+    print("CURRENT DATE TIMECURRENT DATE TIMECURRENT DATE TIME" ,cueDateTime)
     curDate = cueDateTime.strftime(r'%d/%m/%y')
 
     # * ================= START :  GET FONT COLOR =================
