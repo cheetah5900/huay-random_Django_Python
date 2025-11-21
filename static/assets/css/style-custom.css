@@ -8,7 +8,7 @@
 body {
   font-family: "Prompt-Light" !important;
   font-size: 10px;
-  background-image: url("/static/images/background/bdg.webp");
+  background-image: url("/static/images/background/bg.webp");
 }
 .table-striped>tbody>tr:nth-of-type(odd){
   background-color: #f9f9f940;

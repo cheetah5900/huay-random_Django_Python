@@ -43,6 +43,11 @@ STATICFILES_DIRS = [
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://huay.ngrok.app',
+    'https://huay.huaygenimg.xyz',
+]
+
 
 # Application definition
 
