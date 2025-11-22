@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 import os
+import glob
+import time
 
 from huayrandom.models import *
 from PIL import Image
@@ -746,7 +748,22 @@ def GenerateImageWIthText(username,templatePath, type, fontText, fontNumber, tex
         path+'/static/assets/fonts/{}'.format(threeSubFont), threeSubFontSize)
     remarkFont = ImageFont.truetype(
         path+'/static/assets/fonts/{}'.format(remarkFont), remarkFontSize)
-    location = path+'/static/images/result-hua/{}-result.jpg'.format(username)
+    # * ================= END :  SET FONT =================
+
+    # 1. Delete old files
+    old_files = glob.glob(path + '/static/images/result-hua/{}-*-result.jpg'.format(username))
+    for f in old_files:
+        try:
+            os.remove(f)
+        except OSError:
+            pass
+    # Also check for the original pattern without timestamp
+    old_legacy_file = path + '/static/images/result-hua/{}-result.jpg'.format(username)
+    if os.path.exists(old_legacy_file):
+        os.remove(old_legacy_file)
+
+    timestamp = int(time.time())
+    location = path+'/static/images/result-hua/{}-{}-result.jpg'.format(username, timestamp)
 
     # * ================= END :  SET FONT =================
 
@@ -1052,7 +1069,7 @@ def GenerateImageWIthText(username,templatePath, type, fontText, fontNumber, tex
     # * ================= END : TEXT =================
 
     img.save(location)
-    imgLocation = '/static/images/result-hua/{}-result.jpg'.format(username)
+    imgLocation = '/static/images/result-hua/{}-{}-result.jpg'.format(username, timestamp)
     return imgLocation
 
 #  สุ่มตัวเลข 0-9
