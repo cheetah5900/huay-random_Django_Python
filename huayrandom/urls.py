@@ -1,8 +1,10 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 from huayrandom.views import *
 
 urlpatterns = [
     path('', Index, name='index'),
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
 
     path('<str:username>', Home, name='home'),
     path('result/<str:username>/<str:link>', Result, name='result'),

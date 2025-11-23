@@ -17,6 +17,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
 def Index(request):
+    print(f"Target: {request.user.username} | Index")
     context = {}
     if request.method == 'POST':
         data = request.POST.copy()
@@ -39,6 +40,7 @@ def Index(request):
 
 
 def Login(request):
+    print(f"Target: {request.user.username} | Login")
     context = {}
     if request.method == 'POST':
         data = request.POST.copy()
@@ -58,6 +60,7 @@ def Login(request):
 
 @login_required
 def Backend(request):
+    print(f"Target: {request.user.username} | Backend")
     context = {}
 
     houseName = ""
@@ -85,6 +88,7 @@ def Backend(request):
 
 @login_required
 def ListUser(request):
+    print(f"Target: {request.user.username} | ListUser")
     context = {}
 
     userObject = User.objects.all()
@@ -95,6 +99,7 @@ def ListUser(request):
 
 @login_required
 def AddUser(request):
+    print(f"Target: {request.user.username} | AddUser")
     context = {}
 
     if request.method == 'POST':
@@ -149,6 +154,7 @@ def AddUser(request):
 
 @login_required
 def EditUser(request, username):
+    print(f"Target: {username} | EditUser")
     context = {}
     userObject = User.objects.get(username=username)
 
@@ -182,6 +188,7 @@ def EditUser(request, username):
 
 @login_required
 def ListHuay(request):
+    print(f"Target: {request.user.username} | ListHuay")
     context = {}
     huayListObject = HuayListModel.objects.all().order_by('order_number')
 
@@ -191,6 +198,7 @@ def ListHuay(request):
 
 @login_required
 def AddHuayList(request):
+    print(f"Target: {request.user.username} | AddHuayList")
     context = {}
 
     if request.method == 'POST':
@@ -235,6 +243,7 @@ def AddHuayList(request):
 
 @login_required
 def EditHuayList(request,id):
+    print(f"Target: {request.user.username} | EditHuayList")
     context = {}
 
     if request.method == 'POST':
@@ -288,6 +297,7 @@ def EditHuayList(request,id):
 
 @login_required
 def ListColor(request):
+    print(f"Target: {request.user.username} | ListColor")
     context = {}
     colorListObject = ColorListModel.objects.all()
 
@@ -297,6 +307,7 @@ def ListColor(request):
 
 @login_required
 def AddColor(request):
+    print(f"Target: {request.user.username} | AddColor")
     context = {}
 
     if request.method == 'POST':
@@ -319,6 +330,7 @@ def AddColor(request):
 
 @login_required
 def EditColor(request, color_id):
+    print(f"Target: {request.user.username} | EditColor")
     context = {}
 
     if request.method == 'POST':
@@ -345,6 +357,7 @@ def EditColor(request, color_id):
 
 @login_required
 def ListHuayType(request, username):
+    print(f"Target: {username} | ListHuayType")
     context = {}
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
@@ -402,6 +415,7 @@ def ListHuayType(request, username):
 
 @login_required
 def AddHuayType(request, username):
+    print(f"Target: {username} | AddHuayType")
     context = {}
 
     if request.method == 'POST':
@@ -458,6 +472,7 @@ def AddHuayType(request, username):
 
 @login_required
 def EditHuayType(request, username, huay_id):
+    print(f"Target: {username} | EditHuayType")
     context = {}
 
     userObject = User.objects.get(username=username)
@@ -495,6 +510,7 @@ def EditHuayType(request, username, huay_id):
 
 @login_required
 def DeleteHuayType(request, username, huay_id):
+    print(f"Target: {username} | DeleteHuayType")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.get(id=huay_id, user=userObject)
     huayTypeObject.delete()
@@ -502,6 +518,7 @@ def DeleteHuayType(request, username, huay_id):
     return redirect('list_huay_type',username)
 
 def Home(request, username):
+    print(f"Target: {username} | Home")
     context = {}
     context['username'] = username
     resultCheckExpire = CheckExpireDate(username)
@@ -590,6 +607,7 @@ def Home(request, username):
 
 
 def Result(request, username, link):
+    print(f"Target: {username} | Result")
     context = {}
     resultCheckExpire = CheckExpireDate(username)
     if resultCheckExpire == "ตัดสิทธิ์แล้ว":
@@ -695,6 +713,7 @@ def GenerateImageWIthText(username,templatePath, type, fontText, fontNumber, tex
                           threeMainBorderColor, threeMainPosX, threeMainPosY, threeMainSeparator, threeSubStatus, threeSubFont, threeSubFontSize, threeSubFontColor,
                           threeSubBorderStatus, threeSubBorderSize, threeSubBorderColor, threeSubPosX, threeSubPosY, threeSubSeparator,
                           remarkStatus, remarkText, remarkFont, remarkFontSize, remarkFontColor, remarkBorderStatus, remarkBorderSize, remarkBorderColor, remarkPosX, remarkPosY):
+    print(f"Target: {username} | GenerateImageWIthText")
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
     randomResult = random2NumberResult(profileObject)
@@ -1319,6 +1338,7 @@ def RandomNumberForMainThreeNumbers(listUnique, randomMainThreeNumbersList):
 
 
 def HubForEditHuayType(request,username,huay_id):
+    print(f"Target: {username} | HubForEditHuayType")
     if 'submit_edit_form' in request.POST:
         if request.method == 'POST':
             data = request.POST.copy()
@@ -1656,6 +1676,7 @@ def HubForEditHuayType(request,username,huay_id):
         return redirect('set_all_image',username,huay_id,imageHouse)
 
 def SetAllHuayNameFontFamily(request,username,huay_id,text_font):
+    print(f"Target: {username} | SetAllHuayNameFontFamily")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1664,6 +1685,7 @@ def SetAllHuayNameFontFamily(request,username,huay_id,text_font):
     return redirect('edit_huay_type',username, huay_id)
 
 def SetAllHuayNameFontColor(request,username,huay_id,text_color):
+    print(f"Target: {username} | SetAllHuayNameFontColor")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1672,6 +1694,7 @@ def SetAllHuayNameFontColor(request,username,huay_id,text_color):
     return redirect('edit_huay_type',username, huay_id)
 
 def SetAllHuayNameFontSize(request,username,huay_id,text_size):
+    print(f"Target: {username} | SetAllHuayNameFontSize")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1680,6 +1703,7 @@ def SetAllHuayNameFontSize(request,username,huay_id,text_size):
     return redirect('edit_huay_type',username, huay_id)
 
 def SetAllHuayNamePos(request,username,huay_id,text_pos_x,text_pos_y):
+    print(f"Target: {username} | SetAllHuayNamePos")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1689,6 +1713,7 @@ def SetAllHuayNamePos(request,username,huay_id,text_pos_x,text_pos_y):
     return redirect('edit_huay_type',username, huay_id)
 
 def SetAllHuayNameBorder(request,username,huay_id,text_border_status,text_border_size,text_border_color):
+    print(f"Target: {username} | SetAllHuayNameBorder")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1702,6 +1727,7 @@ def SetAllHuayNameBorder(request,username,huay_id,text_border_status,text_border
 def SetAllMainNum(request,username,huay_id,main_num_font,main_num_font_color,
 main_num_font_size,main_num_separator,main_num_pos_x,main_num_pos_y,
 main_num_border_status,main_num_border_color,main_num_border_size):
+    print(f"Target: {username} | SetAllMainNum")
     if main_num_separator == 'pp':
         main_num_separator = ' '
     userObject = User.objects.get(username=username)
@@ -1721,6 +1747,7 @@ main_num_border_status,main_num_border_color,main_num_border_size):
 
 #* Row 1
 def SetAllRow1(request,username,huay_id,row1_font,row1_font_size,row1_font_color,row1_separator,row1_pos_x,row1_pos_y,row1_border_status,row1_border_color,row1_border_size):
+    print(f"Target: {username} | SetAllRow1")
     if row1_separator == 'pp':
         row1_separator = ' '
     
@@ -1741,6 +1768,7 @@ def SetAllRow1(request,username,huay_id,row1_font,row1_font_size,row1_font_color
 
 #* Row 2
 def SetAllRow2(request,username,huay_id,row2_font_color,row2_separator,row2_pos_x,row2_pos_y,row2_border_status,row2_border_color,row2_border_size):
+    print(f"Target: {username} | SetAllRow2")
     if row2_separator == 'pp':
         row2_separator = ' '
     
@@ -1759,6 +1787,7 @@ def SetAllRow2(request,username,huay_id,row2_font_color,row2_separator,row2_pos_
 
 #* Focus Number
 def SetAllFocusNumber(request,username,huay_id,focus_num_font,focus_num_font_color,focus_num_font_size,focus_num_pos_x,focus_num_pos_y,focus_num_border_status,focus_num_border_size,focus_num_border_color):
+    print(f"Target: {username} | SetAllFocusNumber")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1775,6 +1804,7 @@ def SetAllFocusNumber(request,username,huay_id,focus_num_font,focus_num_font_col
 
 #* Three Main Number
 def SetAllThreeMainNumber(request,username,huay_id,three_main_status,three_main_font,three_main_font_color,three_main_font_size,three_main_separator,three_main_pos_x,three_main_pos_y,three_main_border_status,three_main_border_size,three_main_border_color):
+    print(f"Target: {username} | SetAllThreeMainNumber")
     if three_main_separator == '':
         three_main_separator = 'pp'
     userObject = User.objects.get(username=username)
@@ -1795,6 +1825,7 @@ def SetAllThreeMainNumber(request,username,huay_id,three_main_status,three_main_
 
 #* Three Sub Number
 def SetAllThreeSubNumber(request,username,huay_id,three_sub_status,three_sub_font,three_sub_font_color,three_sub_font_size,three_sub_separator,three_sub_pos_x,three_sub_pos_y,three_sub_border_status,three_sub_border_size,three_sub_border_color):
+    print(f"Target: {username} | SetAllThreeSubNumber")
     if three_sub_separator == '':
         three_sub_separator = 'pp'
     userObject = User.objects.get(username=username)
@@ -1815,6 +1846,7 @@ def SetAllThreeSubNumber(request,username,huay_id,three_sub_status,three_sub_fon
 
 #* Remark
 def SetAllRemark(request,username,huay_id,remark_status,remark_text,remark_font,remark_font_color,remark_font_size,remark_pos_x,remark_pos_y,remark_border_status,remark_border_size,remark_border_color):
+    print(f"Target: {username} | SetAllRemark")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1833,7 +1865,7 @@ def SetAllRemark(request,username,huay_id,remark_status,remark_text,remark_font,
 
 #* date
 def SetAllDate(request,username,huay_id,date_font,date_font_color,date_font_size,date_pos_x,date_pos_y,date_border_status,date_border_size,date_border_color):
-
+    print(f"Target: {username} | SetAllDate")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     for item in huayTypeObject:
@@ -1850,7 +1882,7 @@ def SetAllDate(request,username,huay_id,date_font,date_font_color,date_font_size
 
 #* image
 def SetAllImage(request,username,huay_id,image_house):
-
+    print(f"Target: {username} | SetAllImage")
     userObject = User.objects.get(username=username)
     huayTypeObject = HuayTypeModel.objects.filter(user=userObject)
     imageObject = ImageHouseModel.objects.get(id=image_house)
@@ -1862,6 +1894,7 @@ def SetAllImage(request,username,huay_id,image_house):
 
 @login_required
 def ListImage(request,username):
+    print(f"Target: {username} | ListImage")
     context = {}
     userObject = User.objects.get(username=username)
     profileObject = ProfileModel.objects.get(user=userObject)
@@ -1886,6 +1919,7 @@ def ListImage(request,username):
 
 @login_required
 def AddImage(request, username):
+    print(f"Target: {username} | AddImage")
     context = {}
     context['username'] = username
 
@@ -1937,6 +1971,7 @@ def AddImage(request, username):
 
 @login_required
 def EditImage(request, username,image_id):
+    print(f"Target: {username} | EditImage")
     context = {}
     imageObject = ImageHouseModel.objects.get(id=image_id)
     context['username'] = username
