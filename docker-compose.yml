@@ -5,8 +5,7 @@ services:
     build: .
     ports:
       - "8001:8001"
-    volumes:
-      - .:/app
+
     environment:
       - DEBUG=True
       # Ensure host allows connection from docker
