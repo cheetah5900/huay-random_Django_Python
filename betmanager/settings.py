@@ -52,7 +52,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://huay.ngrok.app',
     'https://huay.huaygenimg.xyz',
     'https://huay-1.huaygenimg.xyz',
-    'http://192.168.1.253:8001',
 ]
 
 if os.environ.get('CSRF_TRUSTED_ORIGINS'):
