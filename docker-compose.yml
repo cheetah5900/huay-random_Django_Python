@@ -6,8 +6,17 @@ services:
     ports:
       - "8001:8001"
 
+    volumes:
+      - sqlite_data:/app/db_backup
+      - media_data:/app/media
     environment:
       - DEBUG=True
       # Ensure host allows connection from docker
-      - DJANGO_ALLOWED_HOSTS=*     
-    restart: unless-stopped
+      - DJANGO_ALLOWED_HOSTS=*
+      # Path to the database in the volume
+      - DB_PATH=/app/db_backup/db.sqlite3
+    restart: always
+
+volumes:
+  sqlite_data:
+  media_data:

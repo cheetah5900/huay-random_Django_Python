@@ -18,8 +18,12 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy project
 COPY . /app/
 
+# Copy entrypoint script
+COPY entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh
+
 # Expose the port used by Waitress
 EXPOSE 8001
 
-# Run the waitress server
-CMD ["python", "run_waitress.py"]
+# Run the entrypoint script
+CMD ["/app/entrypoint.sh"]

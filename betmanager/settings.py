@@ -21,17 +21,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
+import os
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7^z^eeg_d))&f84*#2503l5g&(uxjc2(a4e+mx7$$fh!3=mllk'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-7^z^eeg_d))&f84*#2503l5g&(uxjc2(a4e+mx7$$fh!3=mllk')
 
 # ไม่ต้องปิด
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR/ 'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# ? Dev
-DEBUG = True
+# ? Dev / Prod determined by Env
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
@@ -48,7 +51,12 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'https://huay.ngrok.app',
     'https://huay.huaygenimg.xyz',
+    'https://huay-1.huaygenimg.xyz',
+    'http://192.168.1.253:8001',
 ]
+
+if os.environ.get('CSRF_TRUSTED_ORIGINS'):
+    CSRF_TRUSTED_ORIGINS.extend(os.environ.get('CSRF_TRUSTED_ORIGINS').split(','))
 
 
 # Application definition
@@ -102,7 +110,7 @@ WSGI_APPLICATION = 'betmanager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': Path(os.environ.get('DB_PATH')) if os.environ.get('DB_PATH') else BASE_DIR / 'db.sqlite3',
     }
 }
 
